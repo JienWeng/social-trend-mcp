@@ -1,0 +1,43 @@
+# Social Trends MCP
+
+> Public social trend collection, PostgreSQL history, REST/WebSocket and stdio MCP tools with evidence-based movement analysis. Default sources require no paid API or AI model.
+
+## Documentation
+- [Setup and operation](https://github.com/JienWeng/social-trend-mcp/blob/main/README.md): prerequisites, setup and service commands.
+- [Supported endpoints and MCP tools](https://github.com/JienWeng/social-trend-mcp/blob/main/docs/ENDPOINTS.md): methods, arguments, persistence and source coverage.
+- [Trend analysis](https://github.com/JienWeng/social-trend-mcp/blob/main/TREND-ANALYSIS.md): evidence rules, verification and limitations.
+- [Repairs and validation](https://github.com/JienWeng/social-trend-mcp/blob/main/CURRENT-STATUS.md): source and reliability status.
+- [Change summary](https://github.com/JienWeng/social-trend-mcp/blob/main/docs/CHANGES.md): implemented repairs and known boundaries.
+
+## Local interfaces
+REST base: http://127.0.0.1:8000. GET /openapi.json is the live schema; GET /docs is interactive documentation. GET /llms.txt serves this guide.
+GET /api/v1/platforms and /api/v1/regions enumerate supported choices. Platform IDs: twitter, tiktok, youtube, instagram, douyin.
+GET /api/v1/trends and /api/v1/trends/{platform} read stored snapshots. GET /api/v1/trends/history/{platform} reads history.
+GET /api/v1/search/exact?q=... and /api/v1/search/discover?q=... fetch observed feeds without persistence.
+POST /api/v1/refresh queues persisted collection and returns 202.
+POST /api/v1/analysis/capture/{platform}?region=global fetches and persists; 200 means captured, 202 means another capture is running, 502 means collection failed and its failure snapshot was recorded.
+GET /api/v1/analysis/trends?region=global&hours=48&limit=20 reads historical movement signals; optional platform. hours:1–720, limit:1–100.
+GET /api/v1/health reports healthy/degraded in its JSON body.
+WebSocket /ws/trends broadcasts committed updates; text ping returns pong. Single-worker operation only.
+
+## MCP
+Transport: stdio via ./start-mcp.sh; there is no HTTP MCP endpoint.
+Tools: get_trends, get_all_trends, exact_search, search_trends (alias), discover_search, list_regions, capture_trends, analyze_trends.
+Direct fetch/search tools use source data/cache and do not save history.
+capture_trends requires platform and optionally region; it persists through the API.
+analyze_trends accepts optional platform, region, hours and limit; it reads shared stored history.
+These last two tools require the API at API_BASE_URL, default http://127.0.0.1:8000.
+
+## Interpretation rules
+Report source scope, actual region, observation times, missing metrics and coverage failures.
+X is a third-party ranking. TikTok is a limited preview; global maps to US. YouTube keyless data is weekly music charts; global maps to US. Instagram is a global public Reels recommendation sample, not a platform-wide trends ranking. Douyin is a China hot list; heat scores are not views.
+Search covers observed feeds, not full-platform content. Empty results do not prove platform-wide absence.
+A rising candidate needs three independent observations over at least one hour, spaced at least 15 minutes, plus sustained rank improvement or comparable metric growth. Repeated source editions count once.
+Use returned evidence and warnings. Confidence is qualitative, not a probability. First appearance in a sample is not proof of a newly emerging topic. Do not claim future virality or exhaustive platform coverage.
+AI can interpret these signals; the service does not call a paid LLM or validate predictive accuracy.
+Collection defaults to every six hours. Do not create synthetic observations in the service database to simulate history.
+
+## Repository layout
+The upstream source is pinned to caicai-yao/social-trends-mcp commit c9f413ad1c8c6b387e8cd1af5f0c709f263ceae2.
+setup.sh clones it into ignored upstream/, applies verification/repairs.patch and restores verification/regression-tests/. The patch contains the implementation changes; upstream/ is not a Git submodule.
+Use ./verification/run_tests.sh for isolated regression checks. Live verification scripts perform network requests and may persist real captures.

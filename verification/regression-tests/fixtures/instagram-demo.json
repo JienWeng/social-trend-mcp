@@ -1,0 +1,389 @@
+{
+  "success": true,
+  "platform": "instagram",
+  "endpoint": "/v1/instagram/reels/trending",
+  "cached": false,
+  "request_id": "req-NbmBu54gO41i5hgt",
+  "data": {
+    "items": [
+      {
+        "post": {
+          "id": "4025294891359995803",
+          "url": "https://www.instagram.com/reel/DfcuGBztQeb/",
+          "content": {
+            "text": "What the 2026 midterm map would look like if only one group of people had voted. All 50 states are redrawn, Democrat vs "
+          },
+          "author": {
+            "username": "deardataa"
+          },
+          "engagement": {
+            "views": 44135847,
+            "likes": 2050711,
+            "comments": 28677,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-07T17:30:53.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "midterms",
+              "electionresults",
+              "exitpolls",
+              "election2026",
+              "genz"
+            ],
+            "mentions": null
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4025226221465582249",
+          "url": "https://www.instagram.com/reel/Dfceev_Czqp/",
+          "content": {
+            "text": "You have my full undivided attention. \n#CrownJewel #TribalChief"
+          },
+          "author": {
+            "username": "romanreigns"
+          },
+          "engagement": {
+            "views": 4444479,
+            "likes": 344444,
+            "comments": 4932,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-07T15:13:48.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "crownjewel",
+              "tribalchief"
+            ],
+            "mentions": null
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4025319742250443455",
+          "url": "https://www.instagram.com/reel/DfczvqANGK_/",
+          "content": {
+            "text": "The Ruler has come for The Vision 👀 #WWECrownJewel"
+          },
+          "author": {
+            "username": "sportscenter"
+          },
+          "engagement": {
+            "views": 2287864,
+            "likes": 62468,
+            "comments": 633,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-07T18:19:16.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "wwecrownjewel"
+            ],
+            "mentions": null
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4025446845599213205",
+          "url": "https://www.instagram.com/reel/DfdQpQOKGaV/",
+          "content": {
+            "text": "Misil de Valverde en Mestalla: el golazo que abrió la goleada del Madrid. 🚀🤍\n\nHoy en Mestalla, el Real Madrid necesita"
+          },
+          "author": {
+            "username": "futboles360"
+          },
+          "engagement": {
+            "views": 1579618,
+            "likes": 164535,
+            "comments": 362,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-07T22:31:52.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "fedevalverde",
+              "realmadrid",
+              "laliga",
+              "halamadrid",
+              "valencia"
+            ],
+            "mentions": null
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4025463779227137401",
+          "url": "https://www.instagram.com/reel/DfdUfq5CPV5/",
+          "content": {
+            "text": "he let the CFP committee hear it. 😭\n\nUCLA got no love in the first College Football Playoff rankings. The Bruins were 8"
+          },
+          "author": {
+            "username": "bestcelebrations"
+          },
+          "engagement": {
+            "views": 719409,
+            "likes": 39338,
+            "comments": 315,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-07T23:06:03.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "uclafootball",
+              "collegefootballplayoff",
+              "cfbplayoffs"
+            ],
+            "mentions": [
+              "@cfbonfox",
+              "@cfbkings"
+            ]
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4025454388864427637",
+          "url": "https://www.instagram.com/reel/DfdSXBbzSZ1/",
+          "content": {
+            "text": "Liv Morgan 👑 WWE Crown Jewel 2026\n\n@yaonlylivvonce #livmorgan #wwe @s_universal"
+          },
+          "author": {
+            "username": "itsalbie"
+          },
+          "engagement": {
+            "views": 394142,
+            "likes": 21542,
+            "comments": 216,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-07T22:47:06.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "livmorgan",
+              "wwe"
+            ],
+            "mentions": [
+              "@yaonlylivvonce",
+              "@s_universal"
+            ]
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4025401764123391332",
+          "url": "https://www.instagram.com/reel/DfdGZO0zjVk/",
+          "content": {
+            "text": "Another Banger by Valverde.\n\nFederico Valverde broke the deadlock in the 28th minute with a clinical strike to set the t"
+          },
+          "author": {
+            "username": "yourblancos"
+          },
+          "engagement": {
+            "views": 278479,
+            "likes": 25702,
+            "comments": 71,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-07T21:02:51.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "valverde",
+              "fedevalverde",
+              "bellingham",
+              "mbappe",
+              "realmadrid"
+            ],
+            "mentions": [
+              "@yourblancos"
+            ]
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4025464166835517299",
+          "url": "https://www.instagram.com/reel/DfdUlT4S3dz/",
+          "content": {
+            "text": "valverde.rocket Pure magic from distance... and one moment of absolute thunder that left Valencia frozen 🇺🇾🤍🚀\nFederi"
+          },
+          "author": {
+            "username": "retro.man77"
+          },
+          "engagement": {
+            "views": 258245,
+            "likes": 23765,
+            "comments": 48,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-07T23:06:46.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "valverde",
+              "realmadrid",
+              "laliga",
+              "halamadrid"
+            ],
+            "mentions": null
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4024555434155851174",
+          "url": "https://www.instagram.com/reel/DfaF9gnuj2m/",
+          "content": {
+            "text": "🔥 The Full Black Nika Takeover Form – Absolute Primal Dominion\n\n📺 Series: One Piece (Final Saga / Elbaf Climax / Manga"
+          },
+          "author": {
+            "username": "animeroarx"
+          },
+          "engagement": {
+            "views": 187436,
+            "likes": 16510,
+            "comments": 61,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-06T17:01:22.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "onepiece",
+              "blacknika",
+              "luffytakeover",
+              "gear5dark",
+              "finalsaga"
+            ],
+            "mentions": [
+              "@animeroarx"
+            ]
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4024795208908589117",
+          "url": "https://www.instagram.com/reel/Dfa8esQsMg9/",
+          "content": {
+            "text": "The New Moon in Scorpio lands Monday, November 9th at 2:02 AM ET (Sunday 11:02 PM PT). The 11th new moon of 2026, in the"
+          },
+          "author": {
+            "username": "stonez_theorganic"
+          },
+          "engagement": {
+            "views": 10660,
+            "likes": 3,
+            "comments": 172,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-07T01:00:47.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "fullmoon",
+              "newmoon",
+              "moonritual",
+              "scorpio"
+            ],
+            "mentions": [
+              "@rafi.flac"
+            ]
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4025914502599260232",
+          "url": "https://www.instagram.com/reel/Dfe6-jvhbhI/",
+          "content": {
+            "text": "🚨 BAD CALL. PERIOD! 🚨\n\nThey may have taken this one away from the Canes, but the story isn't over!\n\nTHE PLAYOFFS ARE C"
+          },
+          "author": {
+            "username": "jefffoxthehost"
+          },
+          "engagement": {
+            "views": 464,
+            "likes": 28,
+            "comments": 1,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-08T14:00:42.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "gocanes",
+              "miamihurricanes",
+              "theu",
+              "collegefootballplayoff",
+              "jefffoxshow",
+              "remixsportsmedia"
+            ],
+            "mentions": null
+          }
+        }
+      },
+      {
+        "post": {
+          "id": "4025519752996923029",
+          "url": "https://www.instagram.com/reel/DfdhOMhsyaV/",
+          "content": {
+            "text": "Valverde Goal Today 💀🔥 || #valverde #goal #realmadrid #today #fyp || Valverde Goal Vs Valencia || Real Madrid Vs Valen"
+          },
+          "author": {
+            "username": "vizyon_kretyen_medya"
+          },
+          "engagement": {
+            "views": 188,
+            "likes": 8,
+            "comments": 0,
+            "shares": null,
+            "saves": null
+          },
+          "published_at": "2026-11-08T00:56:33.000Z",
+          "ext": {
+            "media_type": "video",
+            "hashtags": [
+              "valverde",
+              "goal",
+              "realmadrid",
+              "today",
+              "fyp"
+            ],
+            "mentions": null
+          }
+        }
+      }
+    ]
+  },
+  "pagination": {
+    "next_cursor": null,
+    "has_more": false,
+    "page_size": 12,
+    "typical_page_size": null,
+    "next_page_credits": null
+  }
+}

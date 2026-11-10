@@ -1,0 +1,1480 @@
+{
+  "mcp_capture": {
+    "snapshot": {
+      "id": 82,
+      "platform": "twitter",
+      "status": "success",
+      "region": "global",
+      "error_message": "",
+      "topic_count": 30,
+      "duration_ms": 275,
+      "started_at": "2026-11-10T10:29:30.598893+00:00",
+      "finished_at": "2026-11-10T10:29:30.874350+00:00"
+    },
+    "count": 30,
+    "persisted": true
+  },
+  "analysis": {
+    "region": "global",
+    "generated_at": "2026-11-10T10:29:30.950877+00:00",
+    "method": "observed_momentum_v1",
+    "policy": {
+      "minimum_observations": 3,
+      "minimum_span_hours": 1,
+      "minimum_spacing_minutes": 15,
+      "confidence_is_probability": false,
+      "scope": "observed feeds only; no prediction or platform-wide coverage guarantee"
+    },
+    "platforms": {
+      "twitter": {
+        "status": "ok",
+        "snapshot_id": 82,
+        "snapshot_count": 17,
+        "latest_age_hours": 0.0,
+        "topics": [
+          {
+            "topic_key": "ラブリーズン",
+            "title": "ラブリーズン",
+            "url": "https://twitter.com/search?q=%E3%83%A9%E3%83%96%E3%83%AA%E3%83%BC%E3%82%BA%E3%83%B3",
+            "signal": "falling",
+            "confidence": "moderate",
+            "observations": 3,
+            "raw_observations": 17,
+            "span_hours": 2.058,
+            "first_seen_in_window": false,
+            "rank_change": -2,
+            "metric": {
+              "unit": null,
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "source_context_changed",
+              "third_party_source"
+            ],
+            "quality_events": [],
+            "explanation": "Observed rank or a comparable metric declined across the window.",
+            "evidence": [
+              {
+                "snapshot_id": 48,
+                "observed_at": "2026-11-10T08:26:01.467003+00:00",
+                "rank": 6,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 66,
+                "observed_at": "2026-11-10T08:41:47.867439+00:00",
+                "rank": 6,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 82,
+                "observed_at": "2026-11-10T10:29:30.598893+00:00",
+                "rank": 8,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "atam",
+            "title": "Atam",
+            "url": "https://twitter.com/search?q=Atam",
+            "signal": "falling",
+            "confidence": "moderate",
+            "observations": 3,
+            "raw_observations": 15,
+            "span_hours": 2.058,
+            "first_seen_in_window": false,
+            "rank_change": -11,
+            "metric": {
+              "unit": null,
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "source_context_changed",
+              "third_party_source"
+            ],
+            "quality_events": [],
+            "explanation": "Observed rank or a comparable metric declined across the window.",
+            "evidence": [
+              {
+                "snapshot_id": 48,
+                "observed_at": "2026-11-10T08:26:01.467003+00:00",
+                "rank": 5,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 66,
+                "observed_at": "2026-11-10T08:41:47.867439+00:00",
+                "rank": 5,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 82,
+                "observed_at": "2026-11-10T10:29:30.598893+00:00",
+                "rank": 16,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "hari pahlawan hikmat",
+            "title": "Hari Pahlawan Hikmat",
+            "url": "https://twitter.com/search?q=Hari+Pahlawan+Hikmat",
+            "signal": "falling",
+            "confidence": "moderate",
+            "observations": 3,
+            "raw_observations": 17,
+            "span_hours": 2.058,
+            "first_seen_in_window": false,
+            "rank_change": -21,
+            "metric": {
+              "unit": null,
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "source_context_changed",
+              "third_party_source"
+            ],
+            "quality_events": [],
+            "explanation": "Observed rank or a comparable metric declined across the window.",
+            "evidence": [
+              {
+                "snapshot_id": 48,
+                "observed_at": "2026-11-10T08:26:01.467003+00:00",
+                "rank": 7,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 66,
+                "observed_at": "2026-11-10T08:41:47.867439+00:00",
+                "rank": 7,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 82,
+                "observed_at": "2026-11-10T10:29:30.598893+00:00",
+                "rank": 28,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "saygı",
+            "title": "Saygı",
+            "url": "https://twitter.com/search?q=Sayg%C4%B1",
+            "signal": "falling",
+            "confidence": "moderate",
+            "observations": 3,
+            "raw_observations": 17,
+            "span_hours": 2.058,
+            "first_seen_in_window": false,
+            "rank_change": -17,
+            "metric": {
+              "unit": null,
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "source_context_changed",
+              "third_party_source"
+            ],
+            "quality_events": [],
+            "explanation": "Observed rank or a comparable metric declined across the window.",
+            "evidence": [
+              {
+                "snapshot_id": 48,
+                "observed_at": "2026-11-10T08:26:01.467003+00:00",
+                "rank": 13,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 66,
+                "observed_at": "2026-11-10T08:41:47.867439+00:00",
+                "rank": 13,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 82,
+                "observed_at": "2026-11-10T10:29:30.598893+00:00",
+                "rank": 30,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "bananas mv out now",
+            "title": "BANANAS MV OUT NOW",
+            "url": "https://twitter.com/search?q=BANANAS+MV+OUT+NOW",
+            "signal": "mixed_movement",
+            "confidence": "low",
+            "observations": 3,
+            "raw_observations": 9,
+            "span_hours": 2.058,
+            "first_seen_in_window": false,
+            "rank_change": 6,
+            "metric": {
+              "unit": null,
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "third_party_source"
+            ],
+            "quality_events": [],
+            "explanation": "Net improvement was observed, but intermediate observations did not show sustained growth.",
+            "evidence": [
+              {
+                "snapshot_id": 48,
+                "observed_at": "2026-11-10T08:26:01.467003+00:00",
+                "rank": 10,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 66,
+                "observed_at": "2026-11-10T08:41:47.867439+00:00",
+                "rank": 10,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 82,
+                "observed_at": "2026-11-10T10:29:30.598893+00:00",
+                "rank": 4,
+                "metric_value": null,
+                "metric_unit": null,
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          }
+        ],
+        "topics_analyzed": 30,
+        "rising_candidates": 0,
+        "history_truncated": false
+      },
+      "tiktok": {
+        "status": "ok",
+        "snapshot_id": 78,
+        "snapshot_count": 17,
+        "latest_age_hours": 0.002,
+        "topics": [
+          {
+            "topic_key": "hashtag:7155204034885287979",
+            "title": "piratetoken",
+            "url": "https://www.tiktok.com/tag/piratetoken",
+            "signal": "stable",
+            "confidence": "low",
+            "observations": 5,
+            "raw_observations": 11,
+            "span_hours": 3.09,
+            "first_seen_in_window": false,
+            "rank_change": 0,
+            "metric": {
+              "unit": "views",
+              "change": 0.0,
+              "change_percent": 0.0,
+              "per_hour": 0.0,
+              "window": [
+                null,
+                null,
+                7
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "rolling_window_metric_not_cumulative",
+              "limited_sample_coverage"
+            ],
+            "quality_events": [],
+            "explanation": "No sustained positive movement was established in the observed sample.",
+            "evidence": [
+              {
+                "snapshot_id": 23,
+                "observed_at": "2026-11-10T07:24:00.416780+00:00",
+                "rank": 1,
+                "metric_value": 265103331.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 31,
+                "observed_at": "2026-11-10T07:41:02.921693+00:00",
+                "rank": 1,
+                "metric_value": 265103331.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 46,
+                "observed_at": "2026-11-10T08:26:01.661844+00:00",
+                "rank": 1,
+                "metric_value": 265103331.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 67,
+                "observed_at": "2026-11-10T08:41:48.042262+00:00",
+                "rank": 1,
+                "metric_value": 265103331.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 78,
+                "observed_at": "2026-11-10T10:29:22.778028+00:00",
+                "rank": 1,
+                "metric_value": 265103331.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "hashtag:3002933",
+            "title": "bluewave",
+            "url": "https://www.tiktok.com/tag/bluewave",
+            "signal": "stable",
+            "confidence": "low",
+            "observations": 5,
+            "raw_observations": 11,
+            "span_hours": 3.09,
+            "first_seen_in_window": false,
+            "rank_change": 0,
+            "metric": {
+              "unit": "views",
+              "change": 0.0,
+              "change_percent": 0.0,
+              "per_hour": 0.0,
+              "window": [
+                null,
+                null,
+                7
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "rolling_window_metric_not_cumulative",
+              "limited_sample_coverage"
+            ],
+            "quality_events": [],
+            "explanation": "No sustained positive movement was established in the observed sample.",
+            "evidence": [
+              {
+                "snapshot_id": 23,
+                "observed_at": "2026-11-10T07:24:00.416780+00:00",
+                "rank": 2,
+                "metric_value": 456282611.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 31,
+                "observed_at": "2026-11-10T07:41:02.921693+00:00",
+                "rank": 2,
+                "metric_value": 456282611.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 46,
+                "observed_at": "2026-11-10T08:26:01.661844+00:00",
+                "rank": 2,
+                "metric_value": 456282611.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 67,
+                "observed_at": "2026-11-10T08:41:48.042262+00:00",
+                "rank": 2,
+                "metric_value": 456282611.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 78,
+                "observed_at": "2026-11-10T10:29:22.778028+00:00",
+                "rank": 2,
+                "metric_value": 456282611.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "hashtag:76891",
+            "title": "token",
+            "url": "https://www.tiktok.com/tag/token",
+            "signal": "stable",
+            "confidence": "low",
+            "observations": 5,
+            "raw_observations": 11,
+            "span_hours": 3.09,
+            "first_seen_in_window": false,
+            "rank_change": 0,
+            "metric": {
+              "unit": "views",
+              "change": 0.0,
+              "change_percent": 0.0,
+              "per_hour": 0.0,
+              "window": [
+                null,
+                null,
+                7
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "rolling_window_metric_not_cumulative",
+              "limited_sample_coverage"
+            ],
+            "quality_events": [],
+            "explanation": "No sustained positive movement was established in the observed sample.",
+            "evidence": [
+              {
+                "snapshot_id": 23,
+                "observed_at": "2026-11-10T07:24:00.416780+00:00",
+                "rank": 3,
+                "metric_value": 118017112.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 31,
+                "observed_at": "2026-11-10T07:41:02.921693+00:00",
+                "rank": 3,
+                "metric_value": 118017112.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 46,
+                "observed_at": "2026-11-10T08:26:01.661844+00:00",
+                "rank": 3,
+                "metric_value": 118017112.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 67,
+                "observed_at": "2026-11-10T08:41:48.042262+00:00",
+                "rank": 3,
+                "metric_value": 118017112.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              },
+              {
+                "snapshot_id": 78,
+                "observed_at": "2026-11-10T10:29:22.778028+00:00",
+                "rank": 3,
+                "metric_value": 118017112.0,
+                "metric_unit": "views",
+                "metric_window": [
+                  null,
+                  null,
+                  7
+                ]
+              }
+            ]
+          }
+        ],
+        "topics_analyzed": 3,
+        "rising_candidates": 0,
+        "history_truncated": false
+      },
+      "youtube": {
+        "status": "ok",
+        "snapshot_id": 81,
+        "snapshot_count": 13,
+        "latest_age_hours": 0.0,
+        "topics": [
+          {
+            "topic_key": "youtube.com/watch:fcnDmrtj6Sk",
+            "title": "Dai Dai",
+            "url": "https://www.youtube.com/watch?v=fcnDmrtj6Sk",
+            "signal": "insufficient_history",
+            "confidence": "low",
+            "observations": 1,
+            "raw_observations": 7,
+            "span_hours": 0.0,
+            "first_seen_in_window": false,
+            "rank_change": null,
+            "metric": {
+              "unit": "weekly views",
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                "2026-10-30",
+                "2026-11-05",
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "weekly_music_chart_only"
+            ],
+            "quality_events": [],
+            "explanation": "Need at least three independent observations spanning one hour before flagging momentum.",
+            "evidence": [
+              {
+                "snapshot_id": 81,
+                "observed_at": "2026-11-10T10:29:22.786238+00:00",
+                "rank": 1,
+                "metric_value": 2338755.0,
+                "metric_unit": "weekly views",
+                "metric_window": [
+                  "2026-10-30",
+                  "2026-11-05",
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "youtube.com/watch:XO1h5G6xytU",
+            "title": "POKITO",
+            "url": "https://www.youtube.com/watch?v=XO1h5G6xytU",
+            "signal": "insufficient_history",
+            "confidence": "low",
+            "observations": 1,
+            "raw_observations": 7,
+            "span_hours": 0.0,
+            "first_seen_in_window": false,
+            "rank_change": null,
+            "metric": {
+              "unit": "weekly views",
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                "2026-10-30",
+                "2026-11-05",
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "weekly_music_chart_only"
+            ],
+            "quality_events": [],
+            "explanation": "Need at least three independent observations spanning one hour before flagging momentum.",
+            "evidence": [
+              {
+                "snapshot_id": 81,
+                "observed_at": "2026-11-10T10:29:22.786238+00:00",
+                "rank": 2,
+                "metric_value": 2156958.0,
+                "metric_unit": "weekly views",
+                "metric_window": [
+                  "2026-10-30",
+                  "2026-11-05",
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "youtube.com/watch:9ofUM-_3uQ4",
+            "title": "Tina Tuesday",
+            "url": "https://www.youtube.com/watch?v=9ofUM-_3uQ4",
+            "signal": "insufficient_history",
+            "confidence": "low",
+            "observations": 1,
+            "raw_observations": 7,
+            "span_hours": 0.0,
+            "first_seen_in_window": false,
+            "rank_change": null,
+            "metric": {
+              "unit": "weekly views",
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                "2026-10-30",
+                "2026-11-05",
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "weekly_music_chart_only"
+            ],
+            "quality_events": [],
+            "explanation": "Need at least three independent observations spanning one hour before flagging momentum.",
+            "evidence": [
+              {
+                "snapshot_id": 81,
+                "observed_at": "2026-11-10T10:29:22.786238+00:00",
+                "rank": 3,
+                "metric_value": 1860327.0,
+                "metric_unit": "weekly views",
+                "metric_window": [
+                  "2026-10-30",
+                  "2026-11-05",
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "youtube.com/watch:sOnqjkJTMaA",
+            "title": "Thriller",
+            "url": "https://www.youtube.com/watch?v=sOnqjkJTMaA",
+            "signal": "insufficient_history",
+            "confidence": "low",
+            "observations": 1,
+            "raw_observations": 7,
+            "span_hours": 0.0,
+            "first_seen_in_window": false,
+            "rank_change": null,
+            "metric": {
+              "unit": "weekly views",
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                "2026-10-30",
+                "2026-11-05",
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "weekly_music_chart_only"
+            ],
+            "quality_events": [],
+            "explanation": "Need at least three independent observations spanning one hour before flagging momentum.",
+            "evidence": [
+              {
+                "snapshot_id": 81,
+                "observed_at": "2026-11-10T10:29:22.786238+00:00",
+                "rank": 4,
+                "metric_value": 1708584.0,
+                "metric_unit": "weekly views",
+                "metric_window": [
+                  "2026-10-30",
+                  "2026-11-05",
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "youtube.com/watch:nUsrYVxrDwI",
+            "title": "Choosin' Texas",
+            "url": "https://www.youtube.com/watch?v=nUsrYVxrDwI",
+            "signal": "insufficient_history",
+            "confidence": "low",
+            "observations": 1,
+            "raw_observations": 7,
+            "span_hours": 0.0,
+            "first_seen_in_window": false,
+            "rank_change": null,
+            "metric": {
+              "unit": "weekly views",
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                "2026-10-30",
+                "2026-11-05",
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "weekly_music_chart_only"
+            ],
+            "quality_events": [],
+            "explanation": "Need at least three independent observations spanning one hour before flagging momentum.",
+            "evidence": [
+              {
+                "snapshot_id": 81,
+                "observed_at": "2026-11-10T10:29:22.786238+00:00",
+                "rank": 5,
+                "metric_value": 1694434.0,
+                "metric_unit": "weekly views",
+                "metric_window": [
+                  "2026-10-30",
+                  "2026-11-05",
+                  null
+                ]
+              }
+            ]
+          }
+        ],
+        "topics_analyzed": 30,
+        "rising_candidates": 0,
+        "history_truncated": false
+      },
+      "instagram": {
+        "status": "ok",
+        "snapshot_id": 80,
+        "snapshot_count": 20,
+        "latest_age_hours": 0.002,
+        "topics": [
+          {
+            "topic_key": "instagram.com/reel/DfO4Eo_Pejy",
+            "title": "everything i ate today in thailand 🇹🇭",
+            "url": "https://www.instagram.com/reel/DfO4Eo_Pejy/",
+            "signal": "new_to_sample",
+            "confidence": "low",
+            "observations": 1,
+            "raw_observations": 1,
+            "span_hours": 0.0,
+            "first_seen_in_window": true,
+            "rank_change": null,
+            "metric": {
+              "unit": "likes",
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "recommendation_order_not_ranking",
+              "limited_sample_coverage"
+            ],
+            "quality_events": [],
+            "explanation": "First appearance in this sampled lookback window; origin and wider popularity are unknown.",
+            "evidence": [
+              {
+                "snapshot_id": 80,
+                "observed_at": "2026-11-10T10:29:22.863852+00:00",
+                "rank": null,
+                "metric_value": 27693.0,
+                "metric_unit": "likes",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "instagram.com/reel/DfeYvKmDZDu",
+            "title": "우리가 그리워한 어른 걸그룹💗",
+            "url": "https://www.instagram.com/reel/DfeYvKmDZDu/",
+            "signal": "new_to_sample",
+            "confidence": "low",
+            "observations": 1,
+            "raw_observations": 1,
+            "span_hours": 0.0,
+            "first_seen_in_window": true,
+            "rank_change": null,
+            "metric": {
+              "unit": "likes",
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "recommendation_order_not_ranking",
+              "limited_sample_coverage"
+            ],
+            "quality_events": [],
+            "explanation": "First appearance in this sampled lookback window; origin and wider popularity are unknown.",
+            "evidence": [
+              {
+                "snapshot_id": 80,
+                "observed_at": "2026-11-10T10:29:22.863852+00:00",
+                "rank": null,
+                "metric_value": 267582.0,
+                "metric_unit": "likes",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "instagram.com/reel/DfIJeo9oPkw",
+            "title": "Go get that promotion! 😄",
+            "url": "https://www.instagram.com/reel/DfIJeo9oPkw/",
+            "signal": "new_to_sample",
+            "confidence": "low",
+            "observations": 1,
+            "raw_observations": 1,
+            "span_hours": 0.0,
+            "first_seen_in_window": true,
+            "rank_change": null,
+            "metric": {
+              "unit": "likes",
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "recommendation_order_not_ranking",
+              "limited_sample_coverage"
+            ],
+            "quality_events": [],
+            "explanation": "First appearance in this sampled lookback window; origin and wider popularity are unknown.",
+            "evidence": [
+              {
+                "snapshot_id": 80,
+                "observed_at": "2026-11-10T10:29:22.863852+00:00",
+                "rank": null,
+                "metric_value": 279124.0,
+                "metric_unit": "likes",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "instagram.com/reel/DfctFzCsKgW",
+            "title": "The Merge of souls and cultures✨🙏🏽",
+            "url": "https://www.instagram.com/reel/DfctFzCsKgW/",
+            "signal": "stable",
+            "confidence": "low",
+            "observations": 3,
+            "raw_observations": 3,
+            "span_hours": 2.804,
+            "first_seen_in_window": false,
+            "rank_change": null,
+            "metric": {
+              "unit": "likes",
+              "change": 1261.0,
+              "change_percent": 0.57,
+              "per_hour": 449.699,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "recommendation_order_not_ranking",
+              "limited_sample_coverage"
+            ],
+            "quality_events": [],
+            "explanation": "No sustained positive movement was established in the observed sample.",
+            "evidence": [
+              {
+                "snapshot_id": 34,
+                "observed_at": "2026-11-10T07:41:08.114586+00:00",
+                "rank": null,
+                "metric_value": 221694.0,
+                "metric_unit": "likes",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 54,
+                "observed_at": "2026-11-10T08:29:35.544650+00:00",
+                "rank": null,
+                "metric_value": 222032.0,
+                "metric_unit": "likes",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 80,
+                "observed_at": "2026-11-10T10:29:22.863852+00:00",
+                "rank": null,
+                "metric_value": 222955.0,
+                "metric_unit": "likes",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "instagram.com/reel/Dfe_gjJONVi",
+            "title": "겨울준비완료❤️",
+            "url": "https://www.instagram.com/reel/Dfe_gjJONVi/",
+            "signal": "insufficient_history",
+            "confidence": "low",
+            "observations": 2,
+            "raw_observations": 2,
+            "span_hours": 2.804,
+            "first_seen_in_window": false,
+            "rank_change": null,
+            "metric": {
+              "unit": "likes",
+              "change": 3673.0,
+              "change_percent": 1.3,
+              "per_hour": 1309.869,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [
+              "recommendation_order_not_ranking",
+              "limited_sample_coverage"
+            ],
+            "quality_events": [],
+            "explanation": "Need at least three independent observations spanning one hour before flagging momentum.",
+            "evidence": [
+              {
+                "snapshot_id": 34,
+                "observed_at": "2026-11-10T07:41:08.114586+00:00",
+                "rank": null,
+                "metric_value": 282096.0,
+                "metric_unit": "likes",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 80,
+                "observed_at": "2026-11-10T10:29:22.863852+00:00",
+                "rank": null,
+                "metric_value": 285769.0,
+                "metric_unit": "likes",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          }
+        ],
+        "topics_analyzed": 8,
+        "rising_candidates": 0,
+        "history_truncated": false
+      },
+      "douyin": {
+        "status": "ok",
+        "snapshot_id": 79,
+        "snapshot_count": 7,
+        "latest_age_hours": 0.002,
+        "topics": [
+          {
+            "topic_key": "后会友期二创大赛",
+            "title": "后会友期二创大赛",
+            "url": "https://www.douyin.com/search/%E5%90%8E%E4%BC%9A%E5%8F%8B%E6%9C%9F%E4%BA%8C%E5%88%9B%E5%A4%A7%E8%B5%9B",
+            "signal": "rising_candidate",
+            "confidence": "moderate",
+            "observations": 3,
+            "raw_observations": 5,
+            "span_hours": 2.056,
+            "first_seen_in_window": false,
+            "rank_change": 9,
+            "metric": {
+              "unit": "heat score",
+              "change": 3169.0,
+              "change_percent": 0.04,
+              "per_hour": 1541.44,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [],
+            "quality_events": [],
+            "explanation": "rank improved by 9 positions across 3 observations. This is a sampled momentum candidate, not a prediction.",
+            "evidence": [
+              {
+                "snapshot_id": 47,
+                "observed_at": "2026-11-10T08:26:01.733352+00:00",
+                "rank": 29,
+                "metric_value": 7704808.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 68,
+                "observed_at": "2026-11-10T08:41:48.107171+00:00",
+                "rank": 28,
+                "metric_value": 7704154.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 79,
+                "observed_at": "2026-11-10T10:29:22.864116+00:00",
+                "rank": 20,
+                "metric_value": 7707977.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "我的九尾狐身份被发现了",
+            "title": "我的九尾狐身份被发现了",
+            "url": "https://www.douyin.com/search/%E6%88%91%E7%9A%84%E4%B9%9D%E5%B0%BE%E7%8B%90%E8%BA%AB%E4%BB%BD%E8%A2%AB%E5%8F%91%E7%8E%B0%E4%BA%86",
+            "signal": "new_to_sample",
+            "confidence": "low",
+            "observations": 1,
+            "raw_observations": 1,
+            "span_hours": 0.0,
+            "first_seen_in_window": true,
+            "rank_change": null,
+            "metric": {
+              "unit": "heat score",
+              "change": null,
+              "change_percent": null,
+              "per_hour": null,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [],
+            "quality_events": [],
+            "explanation": "First appearance in this sampled lookback window; origin and wider popularity are unknown.",
+            "evidence": [
+              {
+                "snapshot_id": 79,
+                "observed_at": "2026-11-10T10:29:22.864116+00:00",
+                "rank": 30,
+                "metric_value": 7682385.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "这次真让我装到了",
+            "title": "这次真让我装到了",
+            "url": "https://www.douyin.com/search/%E8%BF%99%E6%AC%A1%E7%9C%9F%E8%AE%A9%E6%88%91%E8%A3%85%E5%88%B0%E4%BA%86",
+            "signal": "falling",
+            "confidence": "moderate",
+            "observations": 3,
+            "raw_observations": 7,
+            "span_hours": 2.056,
+            "first_seen_in_window": false,
+            "rank_change": -5,
+            "metric": {
+              "unit": "heat score",
+              "change": -67679.0,
+              "change_percent": -0.87,
+              "per_hour": -32919.889,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [],
+            "quality_events": [],
+            "explanation": "Observed rank or a comparable metric declined across the window.",
+            "evidence": [
+              {
+                "snapshot_id": 47,
+                "observed_at": "2026-11-10T08:26:01.733352+00:00",
+                "rank": 17,
+                "metric_value": 7768412.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 68,
+                "observed_at": "2026-11-10T08:41:48.107171+00:00",
+                "rank": 15,
+                "metric_value": 8010864.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 79,
+                "observed_at": "2026-11-10T10:29:22.864116+00:00",
+                "rank": 22,
+                "metric_value": 7700733.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "我们的三生三世微电影",
+            "title": "我们的三生三世微电影",
+            "url": "https://www.douyin.com/search/%E6%88%91%E4%BB%AC%E7%9A%84%E4%B8%89%E7%94%9F%E4%B8%89%E4%B8%96%E5%BE%AE%E7%94%B5%E5%BD%B1",
+            "signal": "falling",
+            "confidence": "moderate",
+            "observations": 3,
+            "raw_observations": 7,
+            "span_hours": 2.056,
+            "first_seen_in_window": false,
+            "rank_change": -8,
+            "metric": {
+              "unit": "heat score",
+              "change": -260523.0,
+              "change_percent": -3.27,
+              "per_hour": -126721.555,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [],
+            "quality_events": [],
+            "explanation": "Observed rank or a comparable metric declined across the window.",
+            "evidence": [
+              {
+                "snapshot_id": 47,
+                "observed_at": "2026-11-10T08:26:01.733352+00:00",
+                "rank": 15,
+                "metric_value": 7959500.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 68,
+                "observed_at": "2026-11-10T08:41:48.107171+00:00",
+                "rank": 14,
+                "metric_value": 8055416.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 79,
+                "observed_at": "2026-11-10T10:29:22.864116+00:00",
+                "rank": 23,
+                "metric_value": 7698977.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          },
+          {
+            "topic_key": "嫁金钗收官",
+            "title": "嫁金钗收官",
+            "url": "https://www.douyin.com/search/%E5%AB%81%E9%87%91%E9%92%97%E6%94%B6%E5%AE%98",
+            "signal": "falling",
+            "confidence": "moderate",
+            "observations": 3,
+            "raw_observations": 7,
+            "span_hours": 2.056,
+            "first_seen_in_window": false,
+            "rank_change": -7,
+            "metric": {
+              "unit": "heat score",
+              "change": -44019.0,
+              "change_percent": -0.57,
+              "per_hour": -21411.377,
+              "window": [
+                null,
+                null,
+                null
+              ],
+              "rate_definition": "Net change in reported metric per elapsed hour, not new events per hour"
+            },
+            "warnings": [],
+            "quality_events": [],
+            "explanation": "Observed rank or a comparable metric declined across the window.",
+            "evidence": [
+              {
+                "snapshot_id": 47,
+                "observed_at": "2026-11-10T08:26:01.733352+00:00",
+                "rank": 21,
+                "metric_value": 7732969.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 68,
+                "observed_at": "2026-11-10T08:41:48.107171+00:00",
+                "rank": 19,
+                "metric_value": 7739153.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              },
+              {
+                "snapshot_id": 79,
+                "observed_at": "2026-11-10T10:29:22.864116+00:00",
+                "rank": 28,
+                "metric_value": 7688950.0,
+                "metric_unit": "heat score",
+                "metric_window": [
+                  null,
+                  null,
+                  null
+                ]
+              }
+            ]
+          }
+        ],
+        "topics_analyzed": 30,
+        "rising_candidates": 1,
+        "history_truncated": false
+      }
+    },
+    "summary": {
+      "rising_candidates": 1,
+      "note": "Signals describe stored observations. Limited history, changing sources, sampling and missing metrics restrict conclusions."
+    },
+    "lookback_hours": 48,
+    "history_truncated": false
+  },
+  "source": "actual service PostgreSQL history; no synthetic observations"
+}

@@ -1,0 +1,238 @@
+{
+  "contents": {
+    "sectionListRenderer": {
+      "contents": [
+        {
+          "musicAnalyticsSectionRenderer": {
+            "content": {
+              "perspectiveMetadata": {
+                "requestParams": {
+                  "perspective": "CHART_DETAILS",
+                  "chartParams": {
+                    "countryCode": "us",
+                    "chartType": "CHART_TYPE_VIDEOS",
+                    "chartPeriodType": "CHART_PERIOD_TYPE_WEEKLY"
+                  },
+                  "flags": "MusicCharts__enable_apac_and_shorts_charts_expansion"
+                },
+                "availableChartsInfo": [
+                  {
+                    "chartType": "CHART_TYPE_SHORTS_TRACKS_BY_USAGE",
+                    "chartPeriodType": "CHART_PERIOD_TYPE_WEEKLY",
+                    "earliestEndDate": "2023-11-02",
+                    "latestEndDate": "2026-11-05"
+                  },
+                  {
+                    "chartType": "CHART_TYPE_VIDEOS",
+                    "chartPeriodType": "CHART_PERIOD_TYPE_DAILY",
+                    "earliestEndDate": "2023-11-06",
+                    "latestEndDate": "2026-11-08"
+                  },
+                  {
+                    "chartType": "CHART_TYPE_TRACKS",
+                    "chartPeriodType": "CHART_PERIOD_TYPE_WEEKLY",
+                    "earliestEndDate": "2017-09-21",
+                    "latestEndDate": "2026-11-05"
+                  },
+                  {
+                    "chartType": "CHART_TYPE_SHORTS_TRACKS_BY_USAGE",
+                    "chartPeriodType": "CHART_PERIOD_TYPE_DAILY",
+                    "earliestEndDate": "2023-11-06",
+                    "latestEndDate": "2026-11-08"
+                  },
+                  {
+                    "chartType": "CHART_TYPE_ARTISTS",
+                    "chartPeriodType": "CHART_PERIOD_TYPE_WEEKLY",
+                    "earliestEndDate": "2017-09-21",
+                    "latestEndDate": "2026-11-05"
+                  },
+                  {
+                    "chartType": "CHART_TYPE_VIDEOS",
+                    "chartPeriodType": "CHART_PERIOD_TYPE_WEEKLY",
+                    "earliestEndDate": "2017-09-21",
+                    "latestEndDate": "2026-11-05"
+                  },
+                  {
+                    "chartType": "CHART_TYPE_PODCAST_SHOWS_BY_WATCH_TIME",
+                    "chartPeriodType": "CHART_PERIOD_TYPE_WEEKLY",
+                    "earliestEndDate": "2025-03-18",
+                    "latestEndDate": "2026-11-01"
+                  },
+                  {
+                    "chartType": "CHART_TYPE_TRENDING_VIDEOS"
+                  }
+                ],
+                "backgroundColor": "#F84444"
+              },
+              "videos": [
+                {
+                  "listType": "TOP_VIEWS_CHART",
+                  "videoViews": [
+                    {
+                      "id": "fcnDmrtj6Sk",
+                      "title": "Dai Dai",
+                      "viewCount": "2338755",
+                      "thumbnail": {
+                        "thumbnails": [
+                          {
+                            "url": "https://i.ytimg.com/vi/fcnDmrtj6Sk/default.jpg",
+                            "width": 120,
+                            "height": 90
+                          },
+                          {
+                            "url": "https://i.ytimg.com/vi/fcnDmrtj6Sk/mqdefault.jpg",
+                            "width": 320,
+                            "height": 180
+                          },
+                          {
+                            "url": "https://i.ytimg.com/vi/fcnDmrtj6Sk/hqdefault.jpg",
+                            "width": 480,
+                            "height": 360
+                          },
+                          {
+                            "url": "https://i.ytimg.com/vi/fcnDmrtj6Sk/sddefault.jpg",
+                            "width": 640,
+                            "height": 480
+                          },
+                          {
+                            "url": "https://i.ytimg.com/vi/fcnDmrtj6Sk/maxresdefault.jpg",
+                            "width": 1920,
+                            "height": 1080
+                          }
+                        ]
+                      },
+                      "videoDuration": 241,
+                      "chartEntryMetadata": {
+                        "currentPosition": 1,
+                        "previousPosition": 3,
+                        "percentViewsChange": -0.036374792,
+                        "periodsOnChart": 24
+                      },
+                      "isAvailable": true,
+                      "artists": [
+                        {
+                          "kgMid": "/m/01wj18h",
+                          "name": "Shakira"
+                        },
+                        {
+                          "kgMid": "/m/010xb__l",
+                          "name": "Burna Boy"
+                        }
+                      ],
+                      "isVisible": true,
+                      "releaseDate": {
+                        "year": 2026,
+                        "month": 5,
+                        "day": 23
+                      },
+                      "songwriters": [
+                        "Shakira Isabel Mebarak Ripoll",
+                        "Alexander (A.C) Castillo Vasquez",
+                        "Vanesa Castillo Vasquez",
+                        "Ahmed Saghir",
+                        "Ed Sheeran",
+                        "Jon Bellion",
+                        "Damini Ebunoluwa Ogulu"
+                      ],
+                      "songProducers": [
+                        "Shakira",
+                        "AC"
+                      ],
+                      "shareCardUrl": "https://charts.youtube.com/image/analytics/charts?r=Iq4BCAISVgoHRGFpIERhaRI0aHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9mY25EbXJ0ajZTay9tYXhyZXNkZWZhdWx0LmpwZxoBMSIHU2hha2lyYSIJQnVybmEgQm95GjwKHVdlZWtseSB0b3AgbXVzaWMgdmlkZW9zIGNoYXJ0Eg1Vbml0ZWQgU3RhdGVzGgo1IE5vdiAyMDI2OAMiEgoHIzAwMDAwMBIHI0ZGNTQ1NDAB",
+                      "externalChannelId": "UCGnjeahCJW1AF34HBmQTJ-Q",
+                      "channelName": "shakiraVEVO",
+                      "serializedShareEntity": "CgtmY25EbXJ0ajZTa3LxAggHEh5EYWkgRGFpIGlzICMxIGluIFVuaXRlZCBTdGF0ZXMaP0RhaSBEYWkgb24gVW5pdGVkIFN0YXRlcyB3ZWVrbHkgdG9wIG11c2ljIHZpZGVvcyBvbiBOb3YgNSwgMjAyNjLvAQrsAUlxNEJDQUlTVmdvSFJHRnBJRVJoYVJJMGFIUjBjSE02THk5cExubDBhVzFuTG1OdmJTOTJhUzltWTI1RWJYSjBhalpUYXk5dFlYaHlaWE5rWldaaGRXeDBMbXB3WnhvQk1TSUhVMmhoYTJseVlTSUpRblZ5Ym1FZ1FtOTVHandLSFZkbFpXdHNlU0IwYjNBZ2JYVnphV01nZG1sa1pXOXpJR05vWVhKMEVnMVZibWwwWldRZ1UzUmhkR1Z6R2dvMUlFNXZkaUF5TURJMk9BTWlFZ29ISXpBd01EQXdNQklISTBaR05UUTFOREFCUhpzaGFyZWNhcmRfMTc5Mzg2NTYwMF8xLmpwZ4IClwMSoAJodHRwczovL2NoYXJ0cy55b3V0dWJlLmNvbS9pbWFnZS9hbmFseXRpY3MvY2hhcnRzP3I9SXE0QkNBSVNWZ29IUkdGcElFUmhhUkkwYUhSMGNITTZMeTlwTG5sMGFXMW5MbU52YlM5MmFTOW1ZMjVFYlhKMGFqWlRheTl0WVhoeVpYTmtaV1poZFd4MExtcHdaeG9CTVNJSFUyaGhhMmx5WVNJSlFuVnlibUVnUW05NUdqd0tIVmRsWld0c2VTQjBiM0FnYlhWemFXTWdkbWxrWlc5eklHTm9ZWEowRWcxVmJtbDBaV1FnVTNSaGRHVnpHZ28xSUU1dmRpQXlNREkyT0FNaUVnb0hJekF3TURBd01CSUhJMFpHTlRRMU5EQUIaHkRhaSBEYWkgaXMgIzEgaW4gVW5pdGVkIFN0YXRlcyI_RGFpIERhaSBvbiBVbml0ZWQgU3RhdGVzIHdlZWtseSB0b3AgbXVzaWMgdmlkZW9zIG9uIE5vdiA1LCAyMDI2KhEICSINCgJVUxADGAIg8dHUCQ%3D%3D"
+                    },
+                    {
+                      "id": "XO1h5G6xytU",
+                      "title": "POKITO",
+                      "viewCount": "2156958",
+                      "thumbnail": {
+                        "thumbnails": [
+                          {
+                            "url": "https://i.ytimg.com/vi/XO1h5G6xytU/default.jpg",
+                            "width": 120,
+                            "height": 90
+                          },
+                          {
+                            "url": "https://i.ytimg.com/vi/XO1h5G6xytU/mqdefault.jpg",
+                            "width": 320,
+                            "height": 180
+                          },
+                          {
+                            "url": "https://i.ytimg.com/vi/XO1h5G6xytU/hqdefault.jpg",
+                            "width": 480,
+                            "height": 360
+                          },
+                          {
+                            "url": "https://i.ytimg.com/vi/XO1h5G6xytU/sddefault.jpg",
+                            "width": 640,
+                            "height": 480
+                          },
+                          {
+                            "url": "https://i.ytimg.com/vi/XO1h5G6xytU/maxresdefault.jpg",
+                            "width": 1920,
+                            "height": 1080
+                          }
+                        ]
+                      },
+                      "videoDuration": 248,
+                      "chartEntryMetadata": {
+                        "currentPosition": 2,
+                        "periodsOnChart": 1
+                      },
+                      "isAvailable": true,
+                      "artists": [
+                        {
+                          "kgMid": "/m/0bwjc2c",
+                          "name": "Diljit Dosanjh"
+                        },
+                        {
+                          "kgMid": "/m/01wbl_r",
+                          "name": "Daddy Yankee"
+                        }
+                      ],
+                      "isVisible": true,
+                      "releaseDate": {
+                        "year": 2026,
+                        "month": 10,
+                        "day": 29
+                      },
+                      "songwriters": [
+                        "Daddy Yankee",
+                        "Diljit Dosanjh"
+                      ],
+                      "songProducers": [
+                        "Jeremy Ayala",
+                        "OMB",
+                        "Xound",
+                        "Luny Tunes"
+                      ],
+                      "shareCardUrl": "https://charts.youtube.com/image/analytics/charts?r=IrcBCAISXwoGUE9LSVRPEjRodHRwczovL2kueXRpbWcuY29tL3ZpL1hPMWg1RzZ4eXRVL21heHJlc2RlZmF1bHQuanBnGgEyIg5EaWxqaXQgRG9zYW5qaCIMRGFkZHkgWWFua2VlGjwKHVdlZWtseSB0b3AgbXVzaWMgdmlkZW9zIGNoYXJ0Eg1Vbml0ZWQgU3RhdGVzGgo1IE5vdiAyMDI2OAMiEgoHIzAwMDAwMBIHI0ZGNTQ1NDAB",
+                      "externalChannelId": "UC9TO_oo4c_LrOiKNaY6aysA",
+                      "channelName": "Daddy Yankee",
+                      "serializedShareEntity": "CgtYTzFoNUc2eHl0VXL7AggHEh1QT0tJVE8gaXMgIzIgaW4gVW5pdGVkIFN0YXRlcxo-UE9LSVRPIG9uIFVuaXRlZCBTdGF0ZXMgd2Vla2x5IHRvcCBtdXNpYyB2aWRlb3Mgb24gTm92IDUsIDIwMjYy-wEK-AFJcmNCQ0FJU1h3b0dVRTlMU1ZSUEVqUm9kSFJ3Y3pvdkwya3VlWFJwYldjdVkyOXRMM1pwTDFoUE1XZzFSelo0ZVhSVkwyMWhlSEpsYzJSbFptRjFiSFF1YW5CbkdnRXlJZzVFYVd4cWFYUWdSRzl6WVc1cWFDSU1SR0ZrWkhrZ1dXRnVhMlZsR2p3S0hWZGxaV3RzZVNCMGIzQWdiWFZ6YVdNZ2RtbGtaVzl6SUdOb1lYSjBFZzFWYm1sMFpXUWdVM1JoZEdWekdnbzFJRTV2ZGlBeU1ESTJPQU1pRWdvSEl6QXdNREF3TUJJSEkwWkdOVFExTkRBQlIac2hhcmVjYXJkXzE3OTM4NjU2MDBfMi5qcGeCAqEDEqwCaHR0cHM6Ly9jaGFydHMueW91dHViZS5jb20vaW1hZ2UvYW5hbHl0aWNzL2NoYXJ0cz9yPUlyY0JDQUlTWHdvR1VFOUxTVlJQRWpSb2RIUndjem92TDJrdWVYUnBiV2N1WTI5dEwzWnBMMWhQTVdnMVJ6WjRlWFJWTDIxaGVISmxjMlJsWm1GMWJIUXVhbkJuR2dFeUlnNUVhV3hxYVhRZ1JHOXpZVzVxYUNJTVJHRmtaSGtnV1dGdWEyVmxHandLSFZkbFpXdHNlU0IwYjNBZ2JYVnphV01nZG1sa1pXOXpJR05vWVhKMEVnMVZibWwwWldRZ1UzUmhkR1Z6R2dvMUlFNXZkaUF5TURJMk9BTWlFZ29ISXpBd01EQXdNQklISTBaR05UUTFOREFCGh1QT0tJVE8gaXMgIzIgaW4gVW5pdGVkIFN0YXRlcyI-UE9LSVRPIG9uIFVuaXRlZCBTdGF0ZXMgd2Vla2x5IHRvcCBtdXNpYyB2aWRlb3Mgb24gTm92IDUsIDIwMjYqEQgJIg0KAlVTEAMYAiDx0dQJ"
+                    }
+                  ],
+                  "heroMetadata": {
+                    "title": "Dai Dai",
+                    "subTitle": "Shakira & Burna Boy",
+                    "heroBannerImageUrl": "https://i.ytimg.com/vi/fcnDmrtj6Sk/maxresdefault.jpg",
+                    "sampledColors": {
+                      "textPrimaryColorHex": "#E4E0FA",
+                      "textSecondaryColorHex": "#B3ACDD"
+                    }
+                  },
+                  "chartPeriodType": "CHART_PERIOD_TYPE_WEEKLY",
+                  "endDate": "2026-11-05"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "trackingParams": "CAEQui8iEwid_uTH-vyXAxWVJq0GHTmAN5Q="
+    }
+  },
+  "trackingParams": "CAAQhGciEwid_uTH-vyXAxWVJq0GHTmAN5TKAQTGEGgN"
+}

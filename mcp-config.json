@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "social-trends": {
+      "command": "/home/ubuntu/.t3/projects/social-trend-mcp/start-mcp.sh"
+    }
+  }
+}

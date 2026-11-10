@@ -1,0 +1,226 @@
+{
+  "old_api_pid": 414710,
+  "new_api_pid": 419273,
+  "recovery_seconds": 4.09,
+  "database_snapshots_preserved": true,
+  "before": {
+    "status": "healthy",
+    "platforms": {
+      "twitter": {
+        "total_scrapes": 9,
+        "last_scrape": {
+          "id": 38,
+          "platform": "twitter",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 30,
+          "duration_ms": 2240,
+          "started_at": "2026-11-10T08:23:21.474691+00:00",
+          "finished_at": "2026-11-10T08:23:23.714873+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 154,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "tiktok": {
+        "total_scrapes": 11,
+        "last_scrape": {
+          "id": 36,
+          "platform": "tiktok",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 3,
+          "duration_ms": 217,
+          "started_at": "2026-11-10T08:23:21.642666+00:00",
+          "finished_at": "2026-11-10T08:23:21.860712+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 156,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "youtube": {
+        "total_scrapes": 7,
+        "last_scrape": {
+          "id": 40,
+          "platform": "youtube",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 30,
+          "duration_ms": 6285,
+          "started_at": "2026-11-10T08:23:21.650672+00:00",
+          "finished_at": "2026-11-10T08:23:27.935956+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 149,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "instagram": {
+        "total_scrapes": 13,
+        "last_scrape": {
+          "id": 45,
+          "platform": "instagram",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 8,
+          "duration_ms": 1980,
+          "started_at": "2026-11-10T08:24:49.136470+00:00",
+          "finished_at": "2026-11-10T08:24:51.117411+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 66,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "douyin": {
+        "total_scrapes": 1,
+        "last_scrape": {
+          "id": 37,
+          "platform": "douyin",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 30,
+          "duration_ms": 1585,
+          "started_at": "2026-11-10T08:23:21.707316+00:00",
+          "finished_at": "2026-11-10T08:23:23.293081+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 154,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      }
+    }
+  },
+  "after": {
+    "status": "healthy",
+    "platforms": {
+      "twitter": {
+        "total_scrapes": 9,
+        "last_scrape": {
+          "id": 38,
+          "platform": "twitter",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 30,
+          "duration_ms": 2240,
+          "started_at": "2026-11-10T08:23:21.474691+00:00",
+          "finished_at": "2026-11-10T08:23:23.714873+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 158,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "tiktok": {
+        "total_scrapes": 11,
+        "last_scrape": {
+          "id": 36,
+          "platform": "tiktok",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 3,
+          "duration_ms": 217,
+          "started_at": "2026-11-10T08:23:21.642666+00:00",
+          "finished_at": "2026-11-10T08:23:21.860712+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 160,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "youtube": {
+        "total_scrapes": 7,
+        "last_scrape": {
+          "id": 40,
+          "platform": "youtube",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 30,
+          "duration_ms": 6285,
+          "started_at": "2026-11-10T08:23:21.650672+00:00",
+          "finished_at": "2026-11-10T08:23:27.935956+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 154,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "instagram": {
+        "total_scrapes": 13,
+        "last_scrape": {
+          "id": 45,
+          "platform": "instagram",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 8,
+          "duration_ms": 1980,
+          "started_at": "2026-11-10T08:24:49.136470+00:00",
+          "finished_at": "2026-11-10T08:24:51.117411+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 70,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "douyin": {
+        "total_scrapes": 1,
+        "last_scrape": {
+          "id": 37,
+          "platform": "douyin",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 30,
+          "duration_ms": 1585,
+          "started_at": "2026-11-10T08:23:21.707316+00:00",
+          "finished_at": "2026-11-10T08:23:23.293081+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 158,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      }
+    }
+  }
+}
