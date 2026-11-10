@@ -1,0 +1,32 @@
+# Keep reproducible repairs, focused public evidence and final checks.
+# Raw public pages, scraped scripts, transient logs and browser captures stay local.
+*
+!.gitignore
+!repairs.patch
+!regression-tests/
+!regression-tests/**
+!package_repairs.py
+!patch-validation.json
+!run_tests.sh
+!final_e2e.py
+!final-e2e.json
+!analysis_demo.py
+!analysis_live.py
+!analysis-demo.json
+!analysis-live.json
+!pr-tests.txt
+!all-repairs-tests.log
+!analysis-tests.txt
+!recovery.json
+!orphan-recovery.json
+!check_recovery.py
+!check_orphan_recovery.py
+!docker-runtime.json
+!youtube_report.md
+!youtube_live.json
+!youtube_live.py
+!douyin/
+!douyin/report.json
+!douyin/live.json
+
+!pr-endpoints.json

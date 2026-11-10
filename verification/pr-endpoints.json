@@ -1,0 +1,46 @@
+{
+  "guide_status": 200,
+  "guide_matches_repository": true,
+  "openapi_status": 200,
+  "paths": {
+    "/api/v1/trends": [
+      "get"
+    ],
+    "/api/v1/trends/{platform}": [
+      "get"
+    ],
+    "/api/v1/trends/history/{platform}": [
+      "get"
+    ],
+    "/api/v1/search/exact": [
+      "get"
+    ],
+    "/api/v1/search/discover": [
+      "get"
+    ],
+    "/api/v1/refresh": [
+      "post"
+    ],
+    "/api/v1/regions": [
+      "get"
+    ],
+    "/api/v1/health": [
+      "get"
+    ],
+    "/api/v1/platforms": [
+      "get"
+    ],
+    "/api/v1/analysis/trends": [
+      "get"
+    ],
+    "/api/v1/analysis/capture/{platform}": [
+      "post"
+    ],
+    "/": [
+      "get"
+    ],
+    "/llms.txt": [
+      "get"
+    ]
+  }
+}

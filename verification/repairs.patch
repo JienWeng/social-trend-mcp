@@ -1,0 +1,2949 @@
+diff --git a/.env.example b/.env.example
+index e0fdcaa..1f86f9d 100644
+--- a/.env.example
++++ b/.env.example
+@@ -32,6 +32,14 @@ TIKTOK_PROXY=
+ INSTAGRAM_ACCESS_TOKEN=your_instagram_access_token
+ # 可选：配置代理
+ INSTAGRAM_PROXY=
++# Unverified third-party hashtag suggestions, not platform-wide live trends.
++INSTAGRAM_ALLOW_SUGGESTIONS=false
++# Default: public logged-out browser scraping, no paid API.
++# Other explicit choices: socialcrawl, suggestions, disabled.
++INSTAGRAM_SOURCE=browser
++# Optional metered trending-Reels sample. No Instagram password required.
++# Current endpoint cost: 5 provider credits/call; default refresh = 4 calls/day.
++SOCIALCRAWL_API_KEY=
+ 
+ # ---- 代理配置（可选，用于爬虫）----
+ HTTP_PROXY=
+diff --git a/Dockerfile b/Dockerfile
+index 280d6bf..f4db2bd 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -4,12 +4,15 @@ WORKDIR /app
+ 
+ # 系统依赖
+ RUN apt-get update && apt-get install -y --no-install-recommends \
+-    curl \
++    curl libatomic1 \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Python 依赖
+ COPY requirements.txt .
+-RUN pip install --no-cache-dir -r requirements.txt
++ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
++RUN pip install --no-cache-dir -r requirements.txt \
++    && python -m playwright install --with-deps chromium \
++    && chmod -R a+rX /ms-playwright
+ 
+ # 应用代码
+ COPY . .
+@@ -21,7 +24,7 @@ USER appuser
+ EXPOSE 8000
+ 
+ CMD ["gunicorn", "app.main:app", \
+-     "-w", "4", \
++     "-w", "1", \
+      "-k", "uvicorn.workers.UvicornWorker", \
+      "--bind", "0.0.0.0:8000", \
+      "--timeout", "120", \
+diff --git a/README.md b/README.md
+index 024dbbf..e9b5dcb 100644
+--- a/README.md
++++ b/README.md
+@@ -1,155 +1,67 @@
+-<div align="center">
++# Social Trends MCP — repaired local implementation
+ 
+-# 🌍 Social Trends MCP
++MCP stdio server and PostgreSQL-backed REST service for public social trend feeds. This checkout contains local repairs to caicai-yao/social-trends-mcp; they have not been pushed upstream. The workspace-level setup script reapplies the cumulative patch to the tested upstream commit.
+ 
+-**Real-time trending topics from X, TikTok, YouTube & Instagram — as an MCP Server**
++## Actual source coverage
+ 
+-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
+-[![MCP](https://img.shields.io/badge/MCP-compatible-green.svg)](https://modelcontextprotocol.io)
++- X/Twitter: third-party current topic ranking, with unknown volumes labeled as unavailable.
++- TikTok: official public preview of three hashtags by supported country, with reported post/view metrics and seven-day period. Global maps to US.
++- YouTube without a key: official weekly top music-video charts, not all-category realtime trending videos. US, Japan and UK were tested. Chart dates and weekly view counts are preserved. The optional YouTube Data API path is also retained; no real key was used to validate it.
++- Instagram: logged-out public Reels recommendation sample, rendered with ordinary Chromium. No login or paid API is required. Missing view counts are not invented. Only global sample mode is supported.
++- Douyin: official public mainland-China hot lists, with heat scores and source timestamps. Global and cn select China. Heat is not views.
+ 
+-Ask Claude *"What's trending on TikTok right now?"* and get real answers.
++Public web interfaces may change or deny access. Failures are reported explicitly; the server does not bypass logins/challenges or substitute static tags as verified trends. Broader coverage and multi-worker operation are outside the verified local scope.
+ 
+-[Quick Start](#-quick-start) · [MCP Setup](#-mcp-setup) · [REST API](#-rest-api) · [Docker Deploy](#-docker-deployment) · [Contributing](#-contributing)
++## Run from source
+ 
+-</div>
+-
+----
+-
+-## What is this?
+-
+-A social media trends aggregator that works in **two modes**:
+-
+-1. **MCP Server** — Plug into Claude Desktop, Cursor, or any MCP client. Ask trending questions in natural language.
+-2. **REST API** — Self-hosted API service with auto-refresh every 6 hours, PostgreSQL storage, and WebSocket push.
+-
+-### Supported Platforms
+-
+-| Platform | Method | API Key Required? |
+-|----------|--------|-------------------|
+-| 🎬 YouTube | Data API v3 | ✅ Free (10K units/day) |
+-| 🎵 TikTok | Creative Center API | ❌ No |
+-| 🐦 X (Twitter) | Web scraping fallback | ❌ No (API optional, $200/mo) |
+-| 📸 Instagram | Meta Graph API + fallback | ❌ No (API optional) |
+-
+-> Every scraper has **multi-level fallback** — if one method fails, it automatically tries the next.
+-
+----
+-
+-## ⚡ Quick Start
+-
+-### Use as MCP Server (recommended)
+-
+-**Claude Desktop** — Add to `claude_desktop_config.json`:
+-
+-```json
+-{
+-  "mcpServers": {
+-    "social-trends": {
+-      "command": "uvx",
+-      "args": ["social-trends-mcp"],
+-      "env": {
+-        "YOUTUBE_API_KEY": "your_youtube_api_key"
+-      }
+-    }
+-  }
+-}
+-```
+-
+-Then just ask:
+-- *"What's trending on YouTube right now?"*
+-- *"Show me TikTok trends"*
+-- *"Is AI trending on any social platform?"*
+-- *"Give me a full overview of what's trending globally"*
+-
+-### Install from source
++Python 3.11+ and PostgreSQL are required for REST; MCP does not need a database connection.
+ 
+ ```bash
+-git clone https://github.com/YOUR_USERNAME/social-trends-mcp.git
+-cd social-trends-mcp
+-pip install -e .
++pip install -e '.[browser,dev]'
++python -m playwright install --with-deps chromium
+ python mcp_server.py
+ ```
+ 
+----
+-
+-## 🔧 MCP Tools
++For REST, configure `DATABASE_URL` for your PostgreSQL instance, then:
+ 
+-| Tool | Description |
+-|------|-------------|
+-| `get_trends` | Get trending topics from a specific platform (twitter, tiktok, youtube, instagram) |
+-| `get_all_trends` | Get trends from ALL platforms at once |
+-| `search_trends` | Search for a keyword across all platform trends |
+-
+-### Example: `get_trends`
+-
+-```
+-Input:  { "platform": "youtube", "limit": 10 }
+-Output: Ranked list of trending videos with view counts and URLs
+-```
+-
+-### Example: `search_trends`
+-
+-```
+-Input:  { "query": "AI" }
+-Output: All trending topics mentioning "AI" across every platform
++```bash
++uvicorn app.main:app --host 127.0.0.1 --port 8000
+ ```
+ 
+----
++Startup creates or upgrades the database schema and schedules an initial scrape plus six-hour refreshes. Existing region/configuration data is preserved by the upgrade. The workspace root also supplies `setup.sh` and `manage-service.sh` for persistent local database storage and supervised operation.
+ 
+-## 🌐 REST API
++MCP SDK is constrained to 1.x for API compatibility. The installed `social-trends-mcp` console entry point correctly starts the async server. Browser sources require Playwright's Chromium installation as well as the Python package.
+ 
+-For production use, deploy the full API service with PostgreSQL and auto-refresh.
++## MCP tools
+ 
+-| Method | Path | Description |
+-|--------|------|-------------|
+-| GET | `/api/v1/trends` | All platforms latest data |
+-| GET | `/api/v1/trends/{platform}` | Single platform trends |
+-| GET | `/api/v1/trends/history/{platform}` | Historical trends |
+-| POST | `/api/v1/refresh` | Manual refresh trigger |
+-| GET | `/api/v1/health` | Service health + stats |
+-| GET | `/docs` | Interactive Swagger UI |
+-| WS | `/ws/trends` | WebSocket real-time push |
+-
+----
+-
+-## 🐳 Docker Deployment
+-
+-Full production stack in one command:
+-
+-```bash
+-git clone https://github.com/YOUR_USERNAME/social-trends-mcp.git
+-cd social-trends-mcp
+-cp .env.example .env
+-# Edit .env — at minimum set YOUTUBE_API_KEY
+-
+-docker-compose up -d
+-```
++`get_trends`, `get_all_trends`, `exact_search`, `search_trends` (exact-search alias), `discover_search`, and `list_regions`.
+ 
+-This starts PostgreSQL + App (4 workers) + Nginx.
++Search matches observed current feeds, not every post on the underlying platform. Discovery uses local keyword expansion by default; optional configured LLM expansion is separate and can be metered. Partial source coverage is exposed.
+ 
+----
++## REST
+ 
+-## ⚙️ Configuration
++- GET `/api/v1/trends?region=global&limit=30`
++- GET `/api/v1/trends/twitter?region=jp`
++- GET `/api/v1/trends/history/twitter?region=jp&hours=72`
++- GET `/api/v1/search/exact?q=robotics&platforms=twitter,tiktok`
++- GET `/api/v1/search/discover?q=AI`
++- POST `/api/v1/refresh?platform=twitter&region=jp` (202 accepted)
++- GET `/api/v1/health`, `/api/v1/platforms`, `/api/v1/regions`
++- WS `/ws/trends` (ping/pong and committed `trends_updated` events)
++- GET `/docs`
+ 
+-| Variable | Required | Description |
+-|----------|----------|-------------|
+-| `YOUTUBE_API_KEY` | Recommended | [Get free](https://console.cloud.google.com/apis) — 10K units/day |
+-| `TWITTER_BEARER_TOKEN` | Optional | [$200/mo](https://developer.x.com/) — fallback works without it |
+-| `INSTAGRAM_ACCESS_TOKEN` | Optional | [Meta Developer](https://developers.facebook.com/) — fallback works without it |
+-| `TIKTOK_PROXY` | Optional | Proxy URL if TikTok blocks your IP |
+-| `SCRAPE_INTERVAL_HOURS` | Optional | Auto-refresh interval (default: 6) |
++Snapshots retain their requested region and topics retain their actual source region. Region queries never substitute another country's snapshot. Missing or unsupported data is explicit. Freshness describes retrieval age; source chart/post periods remain separate. Health degrades when a configured feed fails, is missing or becomes stale.
+ 
+-**Zero-config is possible** — every platform has fallback scrapers that work without API keys.
++## Optional configuration
+ 
+----
++`.env.example` lists available settings. `INSTAGRAM_SOURCE=browser` is the default. A SocialCrawl key alone does not activate paid requests: `INSTAGRAM_SOURCE=socialcrawl` must be explicitly selected. There is no automatic paid fallback. Hashtag suggestions are a separate opt-in mode.
+ 
+-## 🤝 Contributing
++`SCRAPE_INTERVAL_HOURS` accepts 1–168. Unknown Compose-only environment-file variables are ignored. Source chains are bounded and duplicate concurrent refreshes for the same platform/region are skipped.
+ 
+-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md).
++The Dockerfile includes Chromium and its runtime libraries, uses a non-root app user and one worker, and excludes local `.env` files from the image. The image was exercised against a fresh database with all five sources healthy. Full Nginx/public HTTPS deployment and shared multi-replica scheduling/event delivery were not verified.
+ 
+-**Easy wins:** Add a new platform (Threads, Bluesky...), improve scraper quality, add MCP tools, translations.
++## Validation
+ 
+-## 📄 License
++The workspace root's `verification/run_tests.sh` runs the full regression suite in an isolated database. `verification/final_e2e.py` verifies all five live feeds, regional histories and refreshes, search, WebSockets and MCP. Workspace `CURRENT-STATUS.md` records the latest results and limitations.
+ 
+-[MIT](LICENSE)
++MIT license; upstream attribution retained in LICENSE and project metadata.
+diff --git a/app/config.py b/app/config.py
+index 66e56b4..9f7831a 100644
+--- a/app/config.py
++++ b/app/config.py
+@@ -1,4 +1,6 @@
+ from pydantic_settings import BaseSettings
++from pydantic import SecretStr, Field
++from typing import Literal
+ from functools import lru_cache
+ 
+ 
+@@ -7,13 +9,14 @@ class Settings(BaseSettings):
+     app_env: str = "development"
+     app_host: str = "0.0.0.0"
+     app_port: int = 8000
++    api_base_url: str = "http://127.0.0.1:8000"
+     secret_key: str = "change-me"
+ 
+     # Database
+     database_url: str = "postgresql+asyncpg://postgres:password@localhost:5432/social_trends"
+ 
+     # Scheduler
+-    scrape_interval_hours: int = 6
++    scrape_interval_hours: int = Field(6, ge=1, le=168)
+ 
+     # Twitter / X
+     twitter_bearer_token: str = ""
+@@ -27,6 +30,9 @@ class Settings(BaseSettings):
+     # Instagram
+     instagram_access_token: str = ""
+     instagram_proxy: str = ""
++    instagram_allow_suggestions: bool = False
++    instagram_source: Literal["browser", "socialcrawl", "suggestions", "disabled"] = "browser"
++    socialcrawl_api_key: SecretStr = SecretStr("")
+ 
+     # LLM for keyword expansion (optional, falls back to local graph)
+     llm_provider: str = ""  # anthropic / openai / empty = local
+@@ -40,7 +46,7 @@ class Settings(BaseSettings):
+     # Logging
+     log_level: str = "INFO"
+ 
+-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
++    model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
+ 
+ 
+ @lru_cache()
+diff --git a/app/database.py b/app/database.py
+index 58ed2dc..4355ec7 100644
+--- a/app/database.py
++++ b/app/database.py
+@@ -29,3 +29,26 @@ async def get_db() -> AsyncSession:
+             raise
+         finally:
+             await session.close()
++
++
++async def initialize_database(target_engine=engine):
++    """Idempotent upgrade for existing installs as well as clean databases."""
++    from sqlalchemy import text
++    from app.models import Base
++    if target_engine.dialect.name == "postgresql":
++        # New enum values must be committed before inserts can use them.
++        async with target_engine.begin() as connection:
++            await connection.execute(text("""DO $$ BEGIN
++                IF EXISTS (SELECT 1 FROM pg_type WHERE typname='platform') THEN
++                    ALTER TYPE platform ADD VALUE IF NOT EXISTS 'DOUYIN';
++                END IF;
++            END $$"""))
++    async with target_engine.begin() as connection:
++        await connection.run_sync(Base.metadata.create_all)
++        if target_engine.dialect.name == "postgresql":
++            await connection.execute(text("ALTER TABLE scrape_snapshots ADD COLUMN IF NOT EXISTS region VARCHAR(50) NOT NULL DEFAULT 'global'"))
++            await connection.execute(text("CREATE INDEX IF NOT EXISTS ix_snapshot_platform_region_time ON scrape_snapshots (platform, region, started_at DESC)"))
++            await connection.execute(text("""INSERT INTO platform_configs (platform, enabled, max_topics, region, updated_at)
++                SELECT 'DOUYIN', 1, 30, 'global', now()
++                WHERE EXISTS (SELECT 1 FROM platform_configs)
++                AND NOT EXISTS (SELECT 1 FROM platform_configs WHERE platform='DOUYIN')"""))
+diff --git a/app/main.py b/app/main.py
+index c4b719c..ad79501 100644
+--- a/app/main.py
++++ b/app/main.py
+@@ -3,13 +3,15 @@ Social Trends Service - 主入口
+ 海外社媒实时话题榜单聚合服务
+ """
+ import logging
++from pathlib import Path
++from fastapi.responses import PlainTextResponse
+ from contextlib import asynccontextmanager
+ 
+ from fastapi import FastAPI
+ from fastapi.middleware.cors import CORSMiddleware
+ 
+ from app.config import get_settings
+-from app.routers import trends_router, ws_router
++from app.routers import trends_router, ws_router, analysis_router
+ from app.scheduler import setup_scheduler, shutdown_scheduler
+ 
+ # 日志配置
+@@ -28,10 +30,8 @@ async def lifespan(app: FastAPI):
+     logger.info("🚀 Social Trends Service 启动中...")
+ 
+     # 初始化数据库表（生产环境建议用 alembic migrate）
+-    from app.database import engine
+-    from app.models import Base
+-    async with engine.begin() as conn:
+-        await conn.run_sync(Base.metadata.create_all)
++    from app.database import engine, initialize_database
++    await initialize_database(engine)
+     logger.info("数据库表已就绪")
+ 
+     # 启动定时任务
+@@ -48,7 +48,7 @@ async def lifespan(app: FastAPI):
+ 
+ app = FastAPI(
+     title="Social Trends Service",
+-    description="海外社媒实时话题榜单聚合服务 - 覆盖 X/TikTok/YouTube/Reddit/Instagram",
++    description="Public social trend feeds: X, TikTok, YouTube music charts, Instagram Reels samples and Douyin",
+     version="1.0.0",
+     lifespan=lifespan,
+ )
+@@ -65,6 +65,7 @@ app.add_middleware(
+ # 注册路由
+ app.include_router(trends_router)
+ app.include_router(ws_router)
++app.include_router(analysis_router)
+ 
+ 
+ @app.get("/")
+@@ -73,5 +74,10 @@ async def root():
+         "service": "Social Trends Service",
+         "version": "1.0.0",
+         "docs": "/docs",
+-        "platforms": ["twitter", "tiktok", "youtube", "instagram"],
++        "platforms": ["twitter", "tiktok", "youtube", "instagram", "douyin"],
+     }
++
++
++@app.get("/llms.txt", response_class=PlainTextResponse)
++async def llms_guide():
++    return Path(__file__).with_name("llms.txt").read_text(encoding="utf-8")
+diff --git a/app/models/models.py b/app/models/models.py
+index fb57a1c..2c0c67a 100644
+--- a/app/models/models.py
++++ b/app/models/models.py
+@@ -1,5 +1,7 @@
+ import enum
++import json
+ from datetime import datetime
++from app.timeutils import utcnow, iso_utc
+ from sqlalchemy import (
+     Column, Integer, String, Text, Float, DateTime,
+     Enum, Index, UniqueConstraint, ForeignKey,
+@@ -16,6 +18,7 @@ class Platform(str, enum.Enum):
+     TIKTOK = "tiktok"
+     YOUTUBE = "youtube"
+     INSTAGRAM = "instagram"
++    DOUYIN = "douyin"
+ 
+ 
+ class ScrapeStatus(str, enum.Enum):
+@@ -44,7 +47,7 @@ class TrendTopic(Base):
+     category = Column(String(100), default="")  # 分类 (如有)
+     region = Column(String(50), default="global")  # 地区
+     extra_data = Column(Text, default="{}")  # JSON扩展字段
+-    created_at = Column(DateTime, default=datetime.utcnow)
++    created_at = Column(DateTime, default=utcnow)
+ 
+     snapshot = relationship("ScrapeSnapshot", back_populates="topics")
+ 
+@@ -66,7 +69,8 @@ class TrendTopic(Base):
+             "volume_label": self.volume_label,
+             "category": self.category,
+             "region": self.region,
+-            "created_at": self.created_at.isoformat() if self.created_at else None,
++            "extra_data": json.loads(self.extra_data or "{}"),
++            "created_at": iso_utc(self.created_at),
+         }
+ 
+ 
+@@ -78,11 +82,12 @@ class ScrapeSnapshot(Base):
+ 
+     id = Column(Integer, primary_key=True, autoincrement=True)
+     platform = Column(Enum(Platform), nullable=False, index=True)
++    region = Column(String(50), nullable=False, default="global", server_default="global", index=True)
+     status = Column(Enum(ScrapeStatus), nullable=False, default=ScrapeStatus.SUCCESS)
+     topic_count = Column(Integer, default=0)
+     error_message = Column(Text, default="")
+     duration_ms = Column(Integer, default=0)  # 爬取耗时(ms)
+-    started_at = Column(DateTime, nullable=False, default=datetime.utcnow)
++    started_at = Column(DateTime, nullable=False, default=utcnow)
+     finished_at = Column(DateTime, default=None)
+ 
+     topics = relationship("TrendTopic", back_populates="snapshot", cascade="all, delete-orphan")
+@@ -96,10 +101,12 @@ class ScrapeSnapshot(Base):
+             "id": self.id,
+             "platform": self.platform.value,
+             "status": self.status.value,
++            "region": self.region,
++            "error_message": self.error_message,
+             "topic_count": self.topic_count,
+             "duration_ms": self.duration_ms,
+-            "started_at": self.started_at.isoformat() if self.started_at else None,
+-            "finished_at": self.finished_at.isoformat() if self.finished_at else None,
++            "started_at": iso_utc(self.started_at),
++            "finished_at": iso_utc(self.finished_at),
+         }
+ 
+ 
+@@ -115,4 +122,4 @@ class PlatformConfig(Base):
+     max_topics = Column(Integer, default=30)  # 最多获取多少条
+     region = Column(String(50), default="global")
+     extra_config = Column(Text, default="{}")  # JSON 扩展配置
+-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
++    updated_at = Column(DateTime, default=utcnow, onupdate=utcnow)
+diff --git a/app/regions.py b/app/regions.py
+index 93109c6..2c94dc3 100644
+--- a/app/regions.py
++++ b/app/regions.py
+@@ -5,6 +5,7 @@
+ 
+ # 统一地区代码 -> 各平台参数的映射
+ REGIONS = {
++    "cn": {"label": "🇨🇳 Mainland China (Douyin)", "douyin": "CN"},
+     "global": {
+         "label": "🌍 Global",
+         "youtube": "US",  # YouTube 没有真正的 global，用 US 代替
+@@ -149,8 +150,25 @@ REGIONS = {
+ 
+ 
+ def get_region(code: str) -> dict:
+-    """获取地区配置，不存在则返回 global"""
+-    return REGIONS.get(code.lower(), REGIONS["global"])
++    code = code.strip().lower()
++    if code not in REGIONS:
++        raise ValueError(f"Unknown region: {code}")
++    return REGIONS[code]
++
++
++def validate_region(platform, code: str) -> str:
++    code = code.strip().lower()
++    get_region(code)
++    name = getattr(platform, "value", platform)
++    if name == "instagram" and code != "global":
++        raise ValueError("Instagram supports a global sample only; use region=global")
++    if name == "douyin" and code not in {"global", "cn"}:
++        raise ValueError("Douyin supports mainland China only; use region=cn or global")
++    if name != "douyin" and code == "cn":
++        raise ValueError(f"{name} does not support region=cn; use platform=douyin for mainland China")
++    if name == "tiktok" and code == "in":
++        raise ValueError("TikTok public preview does not support region=in")
++    return code
+ 
+ 
+ def list_regions() -> list[dict]:
+diff --git a/app/routers/__init__.py b/app/routers/__init__.py
+index d01aede..e6d143d 100644
+--- a/app/routers/__init__.py
++++ b/app/routers/__init__.py
+@@ -2,3 +2,5 @@ from app.routers.trends import router as trends_router
+ from app.routers.websocket import router as ws_router
+ 
+ __all__ = ["trends_router", "ws_router"]
++
++from app.routers.analysis import router as analysis_router
+diff --git a/app/routers/trends.py b/app/routers/trends.py
+index 1fcdb0f..f2373a1 100644
+--- a/app/routers/trends.py
++++ b/app/routers/trends.py
+@@ -1,184 +1,124 @@
+-"""
+-API 路由：榜单 + 精搜 + 泛搜 + 地区
+-"""
+-import logging
++"""Region-aware stored trends and searches of observed public feeds."""
+ from typing import Optional
+-
+-from fastapi import APIRouter, Depends, Query, HTTPException, BackgroundTasks
++from fastapi import APIRouter,Depends,Query,HTTPException,BackgroundTasks
+ from sqlalchemy.ext.asyncio import AsyncSession
+-
+ from app.database import get_db
+ from app.models import Platform
+ from app.services import trend_service
+-from app.regions import list_regions, REGIONS
++from app.regions import list_regions,REGIONS,get_region,validate_region
+ from app.scrapers import get_scraper
+-from app.topic_intelligence import expand_keywords, find_related_from_trends
++from app.collection import collect_trends
++from app.topic_intelligence import expand_keywords,find_related_from_trends
+ 
+-logger = logging.getLogger(__name__)
+-router = APIRouter(prefix="/api/v1", tags=["trends"])
++router=APIRouter(prefix="/api/v1",tags=["trends"])
+ 
+ 
+-# ===== 榜单 =====
++def checked_region(region,platform=None):
++    try:
++        get_region(region)
++        return validate_region(platform,region) if platform else region.strip().lower()
++    except ValueError as error:raise HTTPException(400,str(error)) from None
+ 
+-@router.get("/trends")
+-async def get_all_trends(
+-    region: str = Query("global"),
+-    limit: int = Query(30, ge=1, le=100),
+-    db: AsyncSession = Depends(get_db),
+-):
+-    """全平台最新趋势（支持地区）"""
+-    data = await trend_service.get_latest_trends(db, limit=limit)
+-    return {"success": True, "data": data, "region": region}
+ 
++def selected_platforms(value):
++    if value is None:return list(Platform)
++    names=list(dict.fromkeys(x.strip().lower() for x in value.split(',')))
++    try:return [Platform(x) for x in names]
++    except ValueError:raise HTTPException(400,"Unsupported platform in platforms filter") from None
+ 
+-@router.get("/trends/{platform}")
+-async def get_platform_trends(
+-    platform: str,
+-    region: str = Query("global"),
+-    limit: int = Query(30, ge=1, le=100),
+-    db: AsyncSession = Depends(get_db),
+-):
+-    """单平台趋势（支持地区）"""
+-    try:
+-        p = Platform(platform.lower())
+-    except ValueError:
+-        raise HTTPException(400, f"Unsupported platform: {platform}")
+-    data = await trend_service.get_latest_trends(db, platform=p, limit=limit)
+-    return {"success": True, "data": data.get(p.value, {}), "region": region}
+-
+-
+-@router.get("/trends/history/{platform}")
+-async def get_trend_history(
+-    platform: str, hours: int = Query(72), limit: int = Query(12),
+-    db: AsyncSession = Depends(get_db),
+-):
+-    """历史趋势"""
+-    try:
+-        p = Platform(platform.lower())
+-    except ValueError:
+-        raise HTTPException(400, f"Unsupported: {platform}")
+-    return {"success": True, "data": await trend_service.get_trend_history(db, p, hours, limit)}
+-
+-
+-# ===== 搜索 =====
+-
+-@router.get("/search/exact")
+-async def exact_search(
+-    q: str = Query(..., description="Exact keyword to search"),
+-    region: str = Query("global"),
+-    platforms: Optional[str] = Query(None, description="Comma-separated: youtube,tiktok"),
+-):
+-    """
+-    精搜：精确搜索某个关键词在各平台的热度
+-    返回精确匹配的结果 + 热度数据
+-    """
+-    targets = list(Platform)
+-    if platforms:
+-        targets = [Platform(p.strip()) for p in platforms.split(",") if p.strip() in [x.value for x in Platform]]
+-
+-    all_items = []
+-    for p in targets:
+-        scraper = get_scraper(p, region=region)
+-        if hasattr(scraper, "search"):
+-            try:
+-                items = await scraper.search(q)
+-                for item in items:
+-                    all_items.append((p.value, item))
+-            except Exception:
+-                pass
+-
+-    scored = find_related_from_trends(q, all_items, min_score=5)
+-
+-    return {
+-        "success": True,
+-        "query": q,
+-        "type": "exact",
+-        "region": region,
+-        "total": len(scored),
+-        "results": [
+-            {"title": r.title, "platform": r.platform, "volume": r.volume,
+-             "volume_label": r.volume_label, "url": r.url,
+-             "relevance_score": r.relevance_score, "match_reason": r.match_reason}
+-            for r in scored[:30]
+-        ],
+-    }
+-
+-
+-@router.get("/search/discover")
+-async def discover_search(
+-    q: str = Query(..., description="Topic to explore"),
+-    region: str = Query("global"),
+-    min_relevance: float = Query(10, description="Minimum relevance score 0-100"),
+-):
+-    """
+-    泛搜：输入主题方向，跨平台推荐关联热门话题
+-    基于关键词扩展 + 相关性评分
+-    """
+-    expansion = await expand_keywords(q)
+-
+-    # 从各平台现有趋势中匹配
+-    all_items = []
+-    for p in Platform:
+-        scraper = get_scraper(p, region=region)
+-        result = await scraper.execute()
+-        if result.success:
+-            for item in result.items:
+-                all_items.append((p.value, item))
+-
+-    scored = find_related_from_trends(q, all_items,
+-                                       expanded_keywords=expansion["expanded"],
+-                                       min_score=min_relevance)
+-
+-    return {
+-        "success": True,
+-        "query": q,
+-        "type": "discover",
+-        "region": region,
+-        "keyword_expansion": {
+-            "original": expansion["original"],
+-            "related_terms": expansion["expanded"][:20],
+-            "domains": expansion["domains"],
+-            "source": expansion.get("source", "local"),
+-        },
+-        "total": len(scored),
+-        "results": [
+-            {"title": r.title, "platform": r.platform, "rank": r.rank,
+-             "volume": r.volume, "volume_label": r.volume_label, "url": r.url,
+-             "relevance_score": r.relevance_score, "match_reason": r.match_reason}
+-            for r in scored[:30]
+-        ],
+-    }
+-
+-
+-# ===== 其他 =====
+-
+-@router.post("/refresh")
+-async def manual_refresh(background_tasks: BackgroundTasks,
+-                          platform: Optional[str] = Query(None)):
+-    if platform:
+-        try:
+-            p = Platform(platform.lower())
+-        except ValueError:
+-            raise HTTPException(400, f"Unsupported: {platform}")
+-        background_tasks.add_task(trend_service.scrape_single_platform, p)
+-        return {"success": True, "message": f"Refreshing {platform}"}
+-    background_tasks.add_task(trend_service.run_full_scrape)
+-    return {"success": True, "message": "Refreshing all"}
+-
+-
+-@router.get("/regions")
+-async def get_regions():
+-    """支持的地区列表"""
+-    return {"regions": list_regions(), "total": len(REGIONS)}
+-
+-
+-@router.get("/health")
+-async def health_check(db: AsyncSession = Depends(get_db)):
+-    return {"status": "healthy", "platforms": await trend_service.get_stats(db)}
+-
+-
+-@router.get("/platforms")
++
++def checked_query(query):
++    query=query.strip()
++    if not query:raise HTTPException(422,"Search query must not be blank")
++    return query
++
++
++def checked_platform(platform):
++    try:return Platform(platform.lower())
++    except ValueError:raise HTTPException(400,f"Unsupported platform: {platform}") from None
++
++
++async def fetch(platform,region):
++    return await get_scraper(platform,region=region).execute()
++
++
++def scored_dict(result):
++    return {"title":result.title,"platform":result.platform,"rank":result.rank,
++            "volume":result.volume,"volume_label":result.volume_label,"url":result.url,
++            "relevance_score":result.relevance_score,"match_reason":result.match_reason}
++
++
++@router.get('/trends')
++async def get_all_trends(region:str=Query('global'),limit:int=Query(30,ge=1,le=100),db:AsyncSession=Depends(get_db)):
++    region=checked_region(region)
++    data=await trend_service.get_latest_trends(db,limit=limit,region=region)
++    return {"success":True,"data":data,"region":region}
++
++
++@router.get('/trends/{platform}')
++async def get_platform_trends(platform:str,region:str=Query('global'),limit:int=Query(30,ge=1,le=100),db:AsyncSession=Depends(get_db)):
++    p=checked_platform(platform);region=checked_region(region,p)
++    data=await trend_service.get_latest_trends(db,platform=p,limit=limit,region=region)
++    return {"success":True,"data":data.get(p.value,{}),"region":region}
++
++
++@router.get('/trends/history/{platform}')
++async def get_trend_history(platform:str,region:str=Query('global'),hours:int=Query(72,ge=1,le=8760),limit:int=Query(12,ge=1,le=100),db:AsyncSession=Depends(get_db)):
++    p=checked_platform(platform);region=checked_region(region,p)
++    return {"success":True,"region":region,"data":await trend_service.get_trend_history(db,p,hours,limit,region=region)}
++
++
++@router.get('/search/exact')
++async def exact_search(q:str=Query(...,min_length=1,max_length=200),region:str=Query('global'),platforms:Optional[str]=Query(None)):
++    q=checked_query(q);region=checked_region(region)
++    items,coverage=await collect_trends(selected_platforms(platforms),region,fetch)
++    needle=q.casefold()
++    matches=[(p,item) for p,item in items if needle in item.title.casefold() or needle in item.hashtag.casefold()]
++    scored=find_related_from_trends(q,matches,min_score=1)
++    return {"success":any(x['status']=='ok' for x in coverage.values()),"query":q,"type":"exact",
++            "scope":"observed trend feeds; not full platform search","region":region,"coverage":coverage,
++            "total":len(scored),"results":[scored_dict(x) for x in scored[:30]]}
++
++
++@router.get('/search/discover')
++async def discover_search(q:str=Query(...,min_length=1,max_length=200),region:str=Query('global'),min_relevance:float=Query(10,ge=0,le=100)):
++    q=checked_query(q);region=checked_region(region)
++    expansion=await expand_keywords(q)
++    items,coverage=await collect_trends(list(Platform),region,fetch)
++    scored=find_related_from_trends(q,items,expanded_keywords=expansion['expanded'],min_score=min_relevance)
++    return {"success":any(x['status']=='ok' for x in coverage.values()),"query":q,"type":"discover","region":region,
++            "coverage":coverage,"keyword_expansion":{"original":expansion['original'],"related_terms":expansion['expanded'][:20],
++            "domains":expansion['domains'],"source":expansion.get('source','local')},
++            "total":len(scored),"results":[scored_dict(x) for x in scored[:30]]}
++
++
++@router.post('/refresh',status_code=202)
++async def manual_refresh(background_tasks:BackgroundTasks,platform:Optional[str]=Query(None),region:str=Query('global')):
++    p=checked_platform(platform) if platform else None
++    region=checked_region(region,p)
++    if p:background_tasks.add_task(trend_service.scrape_single_platform,p,region=region)
++    else:background_tasks.add_task(trend_service.run_full_scrape,region=region)
++    return {"success":True,"message":f"Refreshing {platform or 'supported platforms'}","region":region}
++
++
++@router.get('/regions')
++async def get_regions():return {"regions":list_regions(),"total":len(REGIONS)}
++
++
++@router.get('/health')
++async def health_check(db:AsyncSession=Depends(get_db)):
++    stats=await trend_service.get_stats(db)
++    ready=bool(stats) and all(x['last_scrape'] is not None and x['last_scrape']['status']=='success' and x['last_scrape']['topic_count']>0 and not x.get('stale',True) for x in stats.values())
++    return {"status":"healthy" if ready else "degraded","platforms":stats}
++
++
++@router.get('/platforms')
+ async def get_platforms():
+-    labels = {Platform.TWITTER: "X (Twitter)", Platform.TIKTOK: "TikTok",
+-              Platform.YOUTUBE: "YouTube", Platform.INSTAGRAM: "Instagram"}
+-    return {"platforms": [{"name": p.value, "label": labels.get(p, p.value)} for p in Platform]}
++    labels={'twitter':'X (Twitter)','tiktok':'TikTok','youtube':'YouTube','instagram':'Instagram','douyin':'Douyin (抖音)'}
++    def supports(platform):
++        result=[]
++        for code in REGIONS:
++            try:validate_region(platform,code);result.append(code)
++            except ValueError:pass
++        return result
++    return {"platforms":[{"name":p.value,"label":labels[p.value],"regions":supports(p)} for p in Platform]}
+diff --git a/app/routers/websocket.py b/app/routers/websocket.py
+index 691b2b1..2293748 100644
+--- a/app/routers/websocket.py
++++ b/app/routers/websocket.py
+@@ -44,9 +44,9 @@ async def broadcast_update(data: dict):
+     message = json.dumps(data, ensure_ascii=False, default=str)
+     disconnected = set()
+ 
+-    for ws in active_connections:
++    for ws in tuple(active_connections):
+         try:
+-            await ws.send_text(message)
++            await asyncio.wait_for(ws.send_text(message), timeout=5)
+         except Exception:
+             disconnected.add(ws)
+ 
+diff --git a/app/scrapers/__init__.py b/app/scrapers/__init__.py
+index c92f8a9..8bad998 100644
+--- a/app/scrapers/__init__.py
++++ b/app/scrapers/__init__.py
+@@ -4,6 +4,7 @@ from app.scrapers.tiktok_scraper import TikTokScraper
+ from app.scrapers.youtube_scraper import YouTubeScraper
+ from app.scrapers.instagram_scraper import InstagramScraper
+ from app.models import Platform
++from app.scrapers.douyin_scraper import DouyinScraper
+ 
+ # 平台 -> 爬虫类 的注册表
+ SCRAPER_REGISTRY: dict[Platform, type[BaseScraper]] = {
+@@ -11,6 +12,7 @@ SCRAPER_REGISTRY: dict[Platform, type[BaseScraper]] = {
+     Platform.TIKTOK: TikTokScraper,
+     Platform.YOUTUBE: YouTubeScraper,
+     Platform.INSTAGRAM: InstagramScraper,
++    Platform.DOUYIN: DouyinScraper,
+ }
+ 
+ 
+diff --git a/app/scrapers/base.py b/app/scrapers/base.py
+index 0545c45..4680a48 100644
+--- a/app/scrapers/base.py
++++ b/app/scrapers/base.py
+@@ -60,7 +60,8 @@ class BaseScraper(ABC):
+     def __init__(self, proxy: str = "", max_topics: int = 30, region: str = "global"):
+         self.proxy = proxy
+         self.max_topics = max_topics
+-        self.region = region
++        from app.regions import validate_region
++        self.region = validate_region(self.platform, region)
+ 
+     def _get_client(self, **kwargs) -> httpx.AsyncClient:
+         """创建 httpx 异步客户端"""
+@@ -86,6 +87,8 @@ class BaseScraper(ABC):
+             try:
+                 logger.info(f"[{self.platform.value}] 开始爬取 (第{attempt}次)")
+                 items = await self.scrape()
++                if not items:
++                    raise RuntimeError("No valid topics returned by available sources")
+                 duration_ms = int((time.monotonic() - start) * 1000)
+                 logger.info(f"[{self.platform.value}] 成功，获取 {len(items)} 条，耗时 {duration_ms}ms")
+                 return ScrapeResult(
+diff --git a/app/scrapers/instagram_scraper.py b/app/scrapers/instagram_scraper.py
+index c301c75..6fde078 100644
+--- a/app/scrapers/instagram_scraper.py
++++ b/app/scrapers/instagram_scraper.py
+@@ -1,9 +1,14 @@
+ """
+ Instagram 趋势爬取
+-策略链：Meta Graph API → 第三方热门标签站 → 预置常青标签
++默认读取公开 Reels 页面；标注为推荐样本而非全站排名。
+ """
+-import json
+ import logging
++import json
++from datetime import datetime, timezone
++import math
++from uuid import uuid4
++import re
++from urllib.parse import urlparse, unquote, quote
+ from app.models import Platform
+ from app.scrapers.base import BaseScraper, TrendItem
+ from app.config import get_settings
+@@ -13,24 +18,26 @@ logger = logging.getLogger(__name__)
+ 
+ class InstagramScraper(BaseScraper):
+     platform = Platform.INSTAGRAM
++    # Avoid automatically repeating metered provider requests.
++    max_retries = 1
+ 
+     def __init__(self, **kwargs):
+         super().__init__(**kwargs)
+         self.settings = get_settings()
+ 
+     async def scrape(self) -> list[TrendItem]:
+-        token = self.settings.instagram_access_token
+-        if token and token != "your_instagram_access_token":
+-            try:
+-                return await self._scrape_graph_api(token)
+-            except Exception as e:
+-                logger.warning(f"[instagram] Graph API failed: {e}")
++        source = self.settings.instagram_source
++        if source == "socialcrawl":
++            if not self.settings.socialcrawl_api_key.get_secret_value():
++                raise RuntimeError("SOCIALCRAWL_API_KEY is missing for the explicitly selected paid provider")
++            return await self._scrape_socialcrawl()
++        if source == "browser" and not self.settings.instagram_allow_suggestions:
++            return await self._scrape_browser()
++        if source == "disabled":
++            raise RuntimeError("Instagram scraping is disabled")
+ 
+         sources = [
+-            ("display-purposes.com", self._scrape_display_purposes),
+             ("best-hashtags.com", self._scrape_best_hashtags),
+-            ("all-hashtag.com", self._scrape_all_hashtag),
+-            ("evergreen fallback", self._get_evergreen_trends),
+         ]
+         for name, fn in sources:
+             try:
+@@ -44,57 +51,184 @@ class InstagramScraper(BaseScraper):
+ 
+         raise RuntimeError("All Instagram sources failed")
+ 
+-    async def _scrape_graph_api(self, token: str) -> list[TrendItem]:
+-        async with self._get_client() as client:
+-            seeds = ["trending", "viral", "explore", "fashion", "food", "travel", "fitness"]
+-            items = []
+-            for seed in seeds[:8]:
+-                resp = await client.get(
+-                    "https://graph.facebook.com/v19.0/ig_hashtag_search",
+-                    params={"q": seed, "access_token": token},
+-                )
+-                if resp.status_code == 200:
+-                    for tag in resp.json().get("data", []):
+-                        hid = tag.get("id")
+-                        detail = await client.get(
+-                            f"https://graph.facebook.com/v19.0/{hid}",
+-                            params={"fields": "name,media_count", "access_token": token},
+-                        )
+-                        if detail.status_code == 200:
+-                            d = detail.json()
+-                            mc = d.get("media_count", 0)
+-                            name = d.get("name", "")
+-                            items.append(TrendItem(rank=0, title=name, hashtag=f"#{name}",
+-                                url=f"https://www.instagram.com/explore/tags/{name}/",
+-                                volume=float(mc), volume_label=self._fmt(mc) + " posts"))
++    async def _scrape_browser(self) -> list[TrendItem]:
++        """Render the ordinary logged-out public feed locally; no provider API."""
++        if self.region != "global":
++            raise RuntimeError("Instagram public Reels are a global sample, not a country ranking; use region=global")
++        try:
++            from playwright.async_api import async_playwright, TimeoutError as BrowserTimeout
++        except ImportError:
++            raise RuntimeError("Install the browser extra and run python -m playwright install chromium") from None
++        async with async_playwright() as playwright:
++            browser = await playwright.chromium.launch(headless=True)
++            try:
++                page = await browser.new_page(viewport={"width": 1280, "height": 800})
++                # Media playback is unnecessary to read the page's public records.
++                async def route_request(route):
++                    if route.request.resource_type == "media":
++                        await route.abort()
++                    else:
++                        await route.continue_()
++                await page.route("**/*", route_request)
++                await page.goto("https://www.instagram.com/reels/", wait_until="domcontentloaded", timeout=30000)
++                try:
++                    await page.wait_for_function(
++                        """() => [...document.querySelectorAll('script[type="application/json"]')]
++                            .some(s => s.textContent.includes('"like_count"'))""",
++                        timeout=20000,
++                    )
++                except BrowserTimeout:
++                    pass
++                if "/accounts/login" in page.url or "/challenge" in page.url:
++                    raise RuntimeError("Instagram public feed requires login or a challenge; no data collected")
++                items = self._parse_public_page(await page.content())
++                if not items:
++                    raise RuntimeError("Instagram public feed returned no Reel data (login/challenge or changed page)")
++                return items
++            finally:
++                await browser.close()
+ 
+-            items.sort(key=lambda x: x.volume, reverse=True)
+-            for i, item in enumerate(items[:self.max_topics]):
+-                item.rank = i + 1
+-            return items[:self.max_topics]
++    def _parse_public_page(self, html) -> list[TrendItem]:
++        from bs4 import BeautifulSoup
++        soup = BeautifulSoup(html, "lxml")
++        records = []
++        def walk(value):
++            if isinstance(value, dict):
++                if isinstance(value.get("code"), str) and "like_count" in value and isinstance(value.get("user"), dict):
++                    records.append(value)
++                for child in value.values():
++                    walk(child)
++            elif isinstance(value, list):
++                for child in value:
++                    walk(child)
++        for script in soup.select('script[type="application/json"]'):
++            try:
++                walk(json.loads(script.string or script.get_text()))
++            except (ValueError, RecursionError):
++                continue
++        items, seen = [], set()
++        for record in records:
++            code = record["code"]
++            if not re.fullmatch(r"[A-Za-z0-9_-]{5,}", code) or code in seen:
++                continue
++            username = record["user"].get("username")
++            if not isinstance(username, str) or not username:
++                continue
++            caption = record.get("caption") or {}
++            text = caption.get("text", "") if isinstance(caption, dict) else ""
++            if not isinstance(text, str):
++                text = ""
++            views = self._metric(record.get("play_count", record.get("view_count")))
++            likes = self._metric(record.get("like_count"))
++            comments = self._metric(record.get("comment_count"))
++            published_at = None
++            try:
++                published_at = datetime.fromtimestamp(float(record["taken_at"]), timezone.utc).isoformat()
++            except (KeyError, TypeError, ValueError, OSError, OverflowError):
++                pass
++            metric, value = ("views", views) if views is not None else ("likes", likes)
++            seen.add(code)
++            items.append(TrendItem(
++                rank=len(items)+1, title=text.splitlines()[0][:160] if text else f"Reel by @{username}",
++                description="Public Reels recommendation sample; not a global ranking. " + text[:220],
++                url=f"https://www.instagram.com/reel/{code}/", region="global",
++                volume=value if value is not None else 0,
++                volume_label=f"{value:,} {metric}" if value is not None else "",
++                extra_data={"source": "https://www.instagram.com/reels/",
++                            "data_kind": "public_reels_recommendation_sample",
++                            "ranking": "public_feed_order", "author": username,
++                            "published_at": published_at, "views": views,
++                            "likes": likes, "comments": comments},
++            ))
++            if len(items) >= self.max_topics:
++                break
++        return items
+ 
+-    async def _scrape_display_purposes(self) -> list[TrendItem]:
+-        """display-purposes.com 热门标签 API"""
+-        async with self._get_client() as client:
+-            resp = await client.get(
+-                "https://display-purposes.com/api/trending",
+-                headers={"Accept": "application/json"},
+-                timeout=15,
+-            )
+-            resp.raise_for_status()
+-            data = resp.json()
++    async def _scrape_socialcrawl(self) -> list[TrendItem]:
++        if self.region != "global":
++            raise RuntimeError("Instagram provider supplies a global sample, not country rankings; use region=global")
++        endpoint = "https://www.socialcrawl.dev/v1/instagram/reels/trending"
++        async with self._get_client(follow_redirects=False) as client:
++            response = await client.get(endpoint, headers={
++                "x-api-key": self.settings.socialcrawl_api_key.get_secret_value(),
++                "Idempotency-Key": str(uuid4()),
++                "Accept": "application/json",
++            }, timeout=35)
++        if response.status_code != 200:
++            reasons = {401: "invalid API key", 402: "insufficient provider credits",
++                       403: "access denied", 429: "provider rate limit reached"}
++            raise RuntimeError(f"Instagram provider HTTP {response.status_code}: "
++                               + reasons.get(response.status_code, "request failed"))
++        try:
++            data = response.json()
++        except ValueError:
++            raise RuntimeError("Instagram provider returned invalid JSON") from None
++        return self._parse_socialcrawl(data)
+ 
+-            items = []
+-            tags = data if isinstance(data, list) else data.get("tags", data.get("hashtags", []))
+-            for i, tag in enumerate(tags[:self.max_topics]):
+-                name = tag.get("tag", tag.get("name", "")) if isinstance(tag, dict) else str(tag)
+-                name = name.lstrip("#")
+-                if name:
+-                    media = tag.get("media_count", 0) if isinstance(tag, dict) else 0
+-                    items.append(TrendItem(rank=i+1, title=name, hashtag=f"#{name}",
+-                        url=f"https://www.instagram.com/explore/tags/{name}/",
+-                        volume=float(media), volume_label=self._fmt(media) + " posts" if media else ""))
+-            return items
++    def _parse_socialcrawl(self, data) -> list[TrendItem]:
++        if not isinstance(data, dict) or data.get("success") is not True or data.get("platform") != "instagram":
++            raise RuntimeError("Instagram provider returned an unsuccessful or invalid response")
++        body = data.get("data")
++        if not isinstance(body, dict) or not isinstance(body.get("items"), list):
++            raise RuntimeError("Instagram provider response is missing the items list")
++        items, seen = [], set()
++        for row in body["items"]:
++            post = row.get("post") if isinstance(row, dict) else None
++            if not isinstance(post, dict):
++                continue
++            url = post.get("url")
++            if not isinstance(url, str):
++                continue
++            parsed = urlparse(url)
++            if parsed.scheme != "https" or parsed.netloc not in {"www.instagram.com", "instagram.com"}:
++                continue
++            if not re.fullmatch(r"/(?:reel|p)/[A-Za-z0-9_-]+/?", parsed.path):
++                continue
++            canonical = "https://www.instagram.com" + parsed.path.rstrip("/") + "/"
++            if canonical in seen:
++                continue
++            seen.add(canonical)
++            content = post.get("content") or {}
++            author = post.get("author") or {}
++            engagement = post.get("engagement") or {}
++            if not all(isinstance(value, dict) for value in [content, author, engagement]):
++                continue
++            caption = content.get("text") if isinstance(content.get("text"), str) else ""
++            username = author.get("username") if isinstance(author.get("username"), str) else ""
++            metrics = {key: self._metric(engagement.get(key)) for key in ["views", "likes", "comments"]}
++            metric = "views" if metrics["views"] is not None else "likes"
++            value = metrics[metric]
++            items.append(TrendItem(
++                rank=len(items)+1,
++                title=(caption.splitlines()[0][:160] if caption else f"Reel by @{username}" if username else "Instagram Reel"),
++                description="Sampled trending Reels via SocialCrawl; not a global ranking. " + caption[:220],
++                url=canonical, region="global", volume=value if value is not None else 0,
++                volume_label=f"{value:,} {metric}" if value is not None else "",
++                extra_data={
++                    "source": "https://www.socialcrawl.dev/v1/instagram/reels/trending",
++                    "data_kind": "sampled_trending_reels", "coverage": "provider recommendation sample",
++                    "ranking": "provider_feed_order", "author": username,
++                    "published_at": post.get("published_at"),
++                    "provider_cached": data.get("cached"), "provider_age_seconds": data.get("age_s"),
++                    "provider_request_id": data.get("request_id"),
++                    **metrics,
++                },
++            ))
++            if len(items) >= self.max_topics:
++                break
++        if not items:
++            raise RuntimeError("Instagram provider returned no valid Reel records")
++        return items
++
++    @staticmethod
++    def _metric(value):
++        if isinstance(value, bool) or value is None:
++            return None
++        try:
++            number = float(value)
++            return int(number) if math.isfinite(number) and number >= 0 else None
++        except (TypeError, ValueError, OverflowError):
++            return None
+ 
+     async def _scrape_best_hashtags(self) -> list[TrendItem]:
+         from bs4 import BeautifulSoup
+@@ -103,64 +237,33 @@ class InstagramScraper(BaseScraper):
+             resp.raise_for_status()
+             soup = BeautifulSoup(resp.text, "lxml")
+ 
+-            items = []
+-            for selector in [".tag-box a", ".trending-tags a", "a[href*='hashtag']",
+-                             ".p1 a", "a.hashtag"]:
+-                elements = soup.select(selector)
+-                if elements:
+-                    for i, el in enumerate(elements[:self.max_topics]):
+-                        text = el.get_text(strip=True).lstrip("#")
+-                        if text and len(text) > 1:
+-                            items.append(TrendItem(rank=i+1, title=text, hashtag=f"#{text}",
+-                                url=f"https://www.instagram.com/explore/tags/{text}/"))
+-                    break
+-            return items
+-
+-    async def _scrape_all_hashtag(self) -> list[TrendItem]:
+-        from bs4 import BeautifulSoup
+-        async with self._get_client() as client:
+-            resp = await client.get("https://www.all-hashtag.com/hashtag/trending/", timeout=15)
+-            resp.raise_for_status()
+-            soup = BeautifulSoup(resp.text, "lxml")
+-
+-            items = []
+-            for selector in [".hashtag-box span", ".copy-hashtag span", ".top-hashtag a"]:
+-                elements = soup.select(selector)
+-                if elements:
+-                    for i, el in enumerate(elements[:self.max_topics]):
+-                        text = el.get_text(strip=True).lstrip("#")
+-                        if text and len(text) > 1 and " " not in text:
+-                            items.append(TrendItem(rank=i+1, title=text, hashtag=f"#{text}",
+-                                url=f"https://www.instagram.com/explore/tags/{text}/"))
+-                    break
+-            return items
+-
+-    async def _get_evergreen_trends(self) -> list[TrendItem]:
+-        """最终兜底：动态组合的常青热门标签（按类别分组，不会过时）"""
+-        categories = {
+-            "viral": ["viral", "trending", "explore", "fyp", "reels"],
+-            "lifestyle": ["fashion", "food", "travel", "fitness", "beauty"],
+-            "creative": ["photography", "art", "music", "design", "style"],
+-            "mood": ["love", "happy", "motivation", "life", "fun"],
+-        }
+-        items = []
+-        rank = 1
+-        for cat, tags in categories.items():
+-            for tag in tags:
+-                items.append(TrendItem(
+-                    rank=rank,
+-                    title=tag,
+-                    hashtag=f"#{tag}",
+-                    url=f"https://www.instagram.com/explore/tags/{tag}/",
+-                    category=cat,
+-                ))
+-                rank += 1
+-        return items[:self.max_topics]
+-
+-    @staticmethod
+-    def _fmt(n) -> str:
+-        n = int(n) if n else 0
+-        if n >= 1_000_000_000: return f"{n/1e9:.1f}B"
+-        if n >= 1_000_000: return f"{n/1e6:.1f}M"
+-        if n >= 1_000: return f"{n/1e3:.1f}K"
+-        return str(n)
++            items, seen = [], set()
++            # Scope to the publisher's explicit Trending Hashtags card.
++            for heading in soup.find_all(["h2", "h3", "h4"]):
++                if heading.get_text(" ", strip=True).casefold() != "trending hashtags":
++                    continue
++                card = heading.find_parent("article")
++                if card is None:
++                    continue
++                for link in card.select("a[href]"):
++                    parsed = urlparse(link["href"])
++                    if parsed.netloc and parsed.netloc not in {"best-hashtags.com", "www.best-hashtags.com"}:
++                        continue
++                    match = re.fullmatch(r"/?hashtag/([^/]+)/?", parsed.path)
++                    if not match:
++                        continue
++                    tag = unquote(match.group(1))
++                    if not re.fullmatch(r"\w+", tag, re.UNICODE):
++                        continue
++                    if link.get_text(strip=True).lstrip("#").casefold() != tag.casefold():
++                        continue
++                    if tag.casefold() in seen:
++                        continue
++                    seen.add(tag.casefold())
++                    items.append(TrendItem(
++                        rank=len(items)+1, title=tag, hashtag=f"#{tag}",
++                        url=f"https://www.instagram.com/explore/tags/{quote(tag)}/",
++                        description="Third-party hashtag suggestions; live Instagram popularity and freshness not verified.",
++                        extra_data={"source": "https://best-hashtags.com/", "data_kind": "third_party_hashtag_suggestions"},
++                    ))
++            return items[:self.max_topics]
+diff --git a/app/scrapers/tiktok_scraper.py b/app/scrapers/tiktok_scraper.py
+index aeb192a..6e88b82 100644
+--- a/app/scrapers/tiktok_scraper.py
++++ b/app/scrapers/tiktok_scraper.py
+@@ -4,6 +4,9 @@ TikTok 趋势爬取 + 搜索
+ """
+ import json
+ import logging
++import re
++import math
++from urllib.parse import quote, urlparse, unquote
+ from app.models import Platform
+ from app.scrapers.base import BaseScraper, TrendItem
+ from app.regions import get_region
+@@ -12,57 +15,93 @@ logger = logging.getLogger(__name__)
+ 
+ 
+ class TikTokScraper(BaseScraper):
++    # The source chain/browser already handles fallbacks; do not repeat it.
++    max_retries = 1
+     platform = Platform.TIKTOK
+ 
+     async def scrape(self) -> list[TrendItem]:
+         sources = [
++            ("TikTok One public trends", self._scrape_knowledge_api),
+             ("Creative Center", self._scrape_creative_center),
+-            ("Discover page", self._scrape_discover),
+-            ("countik.com", self._scrape_countik),
+         ]
++        if self.region == "global":
++            sources.extend([("Discover page", self._scrape_discover), ("countik.com", self._scrape_countik)])
++        errors = []
+         for name, fn in sources:
+             try:
+                 items = await fn()
+                 if items:
+                     logger.info(f"[tiktok] got {len(items)} from {name}")
+                     return items
++                errors.append(f"{name}: no valid topics")
+             except Exception as e:
++                errors.append(f"{name}: {e}")
+                 logger.warning(f"[tiktok] {name} failed: {e}")
+ 
+-        raise RuntimeError("All TikTok sources failed")
++        raise RuntimeError("All TikTok sources failed: " + "; ".join(errors))
+ 
+     async def search(self, query: str) -> list[TrendItem]:
+-        """搜索 TikTok 上某个话题"""
+-        # Creative Center 支持关键词搜索
++        """Match against the current public preview; this is not full TikTok search."""
++        if not query.strip():
++            return []
+         try:
+-            async with self._get_client() as client:
+-                resp = await client.get(
+-                    "https://ads.tiktok.com/creative_radar_api/v1/popular_trend/hashtag/list",
+-                    params={"page": 1, "limit": 20, "period": 7,
+-                            "country_code": get_region(self.region).get("tiktok", ""),
+-                            "sort_by": "popular", "keyword": query},
+-                    headers={"Referer": "https://ads.tiktok.com/business/creativecenter/"},
+-                    timeout=15,
+-                )
+-                if resp.status_code == 200:
+-                    data = resp.json()
+-                    items = []
+-                    for i, tag in enumerate(data.get("data", {}).get("list", [])[:20]):
+-                        name = tag.get("hashtag_name", "")
+-                        views = tag.get("video_views", 0)
+-                        if name:
+-                            items.append(TrendItem(
+-                                rank=i+1, title=name, hashtag=f"#{name}",
+-                                volume=float(views), volume_label=self._fmt(views) + " views" if views else "",
+-                                url=f"https://www.tiktok.com/tag/{name}", region=self.region))
+-                    if items:
+-                        return items
+-        except Exception as e:
+-            logger.warning(f"[tiktok] search API failed: {e}")
+-
+-        return [TrendItem(rank=1, title=f"Search: {query}",
+-                url=f"https://www.tiktok.com/search?q={query}",
+-                description=f"View TikTok results for '{query}'", region=self.region)]
++            items = await self._scrape_knowledge_api()
++            return [item for item in items if query.casefold() in item.title.casefold()]
++        except Exception as error:
++            logger.warning("[tiktok] public preview search failed: %s", error)
++            return []
++
++    async def _scrape_knowledge_api(self) -> list[TrendItem]:
++        """Current logged-out TikTok One preview (usually three ranked tags)."""
++        country = get_region(self.region).get("tiktok") or "US"
++        source = (
++            "https://ads.tiktok.com/creative/creativeCenter/trends/hashtag"
++            f"?LanguageId=1&region={country}&period=7"
++        )
++        async with self._get_client() as client:
++            response = await client.post(
++                "https://ads.tiktok.com/CreativeOne/KnowledgeAPI/GetHashtagList",
++                json={"timeRange": 7, "countryCode": country,
++                      "page": 1, "limit": min(self.max_topics, 20)},
++                headers={"Referer": source}, timeout=20,
++            )
++            response.raise_for_status()
++            data = response.json()
++        status = data.get("BaseResp", {})
++        if status.get("StatusCode") != 0:
++            raise RuntimeError(
++                f"TikTok One error {status.get('StatusCode', 'unknown')}: "
++                f"{status.get('StatusMessage', 'invalid response')}"
++            )
++        items, seen = [], set()
++        for tag in data.get("items", []):
++            name = tag.get("hashtagName", "")
++            if not re.fullmatch(r"\w+", name, re.UNICODE) or not tag.get("hashtagID"):
++                continue
++            try:
++                views, posts = float(tag["vv"]), int(tag["publishCnt"])
++            except (KeyError, TypeError, ValueError, OverflowError):
++                continue
++            if not math.isfinite(views) or views < 0 or posts < 0 or name.casefold() in seen:
++                continue
++            seen.add(name.casefold())
++            items.append(TrendItem(
++                rank=len(items)+1, title=name, hashtag=f"#{name}",
++                url=f"https://www.tiktok.com/tag/{quote(name)}",
++                volume=views, volume_label=self._fmt(views)+" views",
++                region=country.lower(),
++                description=(f"TikTok One {country}, last 7 days; "
++                             "limited logged-out public preview."),
++                extra_data={
++                    "source": source, "data_kind": "official_public_trends_preview",
++                    "post_count": posts, "period_days": 7,
++                    "requested_region": self.region,
++                    "public_preview_limited": True,
++                    "hashtag_id": tag["hashtagID"],
++                    "popularity_curve": tag.get("popularityCurve", []),
++                },
++            ))
++        return items[:self.max_topics]
+ 
+     async def _scrape_creative_center(self) -> list[TrendItem]:
+         region = get_region(self.region)
+@@ -78,6 +117,8 @@ class TikTokScraper(BaseScraper):
+             )
+             resp.raise_for_status()
+             data = resp.json()
++            if data.get("code", 0) != 0:
++                raise RuntimeError(f"Creative Center error {data.get('code')}: {data.get('msg', 'unknown error')}")
+             hashtag_list = data.get("data", {}).get("list", [])
+ 
+             items = []
+@@ -99,69 +140,46 @@ class TikTokScraper(BaseScraper):
+             resp.raise_for_status()
+             soup = BeautifulSoup(resp.text, "lxml")
+ 
+-            items = []
+-            for script in soup.find_all("script"):
+-                text = script.string or ""
+-                if "__UNIVERSAL_DATA_FOR_REHYDRATION__" in text or "discover" in text.lower():
+-                    try:
+-                        start, end = text.find("{"), text.rfind("}") + 1
+-                        if start >= 0 and end > start:
+-                            keywords = self._find_keywords(json.loads(text[start:end]))
+-                            for i, kw in enumerate(keywords[:self.max_topics]):
+-                                items.append(TrendItem(rank=i+1, title=kw,
+-                                    url=f"https://www.tiktok.com/search?q={kw}", region=self.region))
+-                    except (json.JSONDecodeError, KeyError):
+-                        pass
+-
+-            if not items:
+-                for selector in ["[data-e2e='discover-item'] a", "a[href*='/tag/']", "h2 a"]:
+-                    elements = soup.select(selector)
+-                    if elements:
+-                        for i, el in enumerate(elements[:self.max_topics]):
+-                            title = el.get_text(strip=True)
+-                            if title and len(title) > 1:
+-                                href = el.get("href", "")
+-                                items.append(TrendItem(rank=i+1, title=title,
+-                                    url=href if href.startswith("http") else f"https://www.tiktok.com{href}",
+-                                    region=self.region))
+-                        break
+-            return items
++            # Only explicit hashtag links are evidence; arbitrary JSON names
++            # include language, navigation, and user metadata.
++            return self._hashtag_links(soup, "https://www.tiktok.com/discover", "/tag/")
+ 
+     async def _scrape_countik(self) -> list[TrendItem]:
+         from bs4 import BeautifulSoup
+         async with self._get_client() as client:
+-            resp = await client.get("https://countik.com/popular/tiktok-trending-hashtags", timeout=20)
++            url = "https://countik.com/popular/tiktok-trending-hashtags"
++            resp = await client.get(url, timeout=20)
+             resp.raise_for_status()
+             soup = BeautifulSoup(resp.text, "lxml")
+-
+-            items = []
+-            for selector in [".hashtag-item a", "a[href*='hashtag']", "table td a"]:
+-                elements = soup.select(selector)
+-                if elements:
+-                    for i, el in enumerate(elements[:self.max_topics]):
+-                        title = el.get_text(strip=True).lstrip("#")
+-                        if title and len(title) > 1:
+-                            items.append(TrendItem(rank=i+1, title=title, hashtag=f"#{title}",
+-                                url=f"https://www.tiktok.com/tag/{title}", region=self.region))
+-                    break
+-            return items
+-
+-    def _find_keywords(self, data, depth=0) -> list[str]:
+-        if depth > 5: return []
+-        keywords = []
+-        if isinstance(data, dict):
+-            for key, val in data.items():
+-                if key in ("keyword", "hashtag_name", "name") and isinstance(val, str):
+-                    keywords.append(val)
+-                elif key in ("keywordList", "hashtag_list") and isinstance(val, list):
+-                    for item in val:
+-                        kw = item.get("keyword", item.get("name", "")) if isinstance(item, dict) else str(item) if isinstance(item, str) else ""
+-                        if kw: keywords.append(kw)
+-                else:
+-                    keywords.extend(self._find_keywords(val, depth + 1))
+-        elif isinstance(data, list):
+-            for item in data[:20]: keywords.extend(self._find_keywords(item, depth + 1))
+-        return keywords
++            return self._hashtag_links(soup, url, "/hashtag/")
++
++    def _hashtag_links(self, soup, source, prefix):
++        items, seen = [], set()
++        for link in soup.select("a[href]"):
++            parsed = urlparse(link.get("href", ""))
++            if parsed.netloc and parsed.netloc.lower() not in {
++                "www.tiktok.com", "tiktok.com", "countik.com", "www.countik.com"
++            }:
++                continue
++            path = unquote(parsed.path)
++            if not path.startswith(prefix):
++                continue
++            name = path[len(prefix):].strip("/")
++            label = link.get_text(strip=True).lstrip("#")
++            if not re.fullmatch(r"[\w]+", name, re.UNICODE) or label.casefold() != name.casefold():
++                continue
++            if name.casefold() in seen:
++                continue
++            seen.add(name.casefold())
++            items.append(TrendItem(
++                rank=len(items)+1, title=name, hashtag=f"#{name}",
++                url=f"https://www.tiktok.com/tag/{quote(name)}", region=self.region,
++                description="Third-party/public hashtag listing; popularity and freshness not verified.",
++                extra_data={"source": source, "data_kind": "public_hashtag_listing"},
++            ))
++            if len(items) >= self.max_topics:
++                break
++        return items
+ 
+     @staticmethod
+     def _fmt(n) -> str:
+diff --git a/app/scrapers/twitter_scraper.py b/app/scrapers/twitter_scraper.py
+index 2ef6242..58a11f1 100644
+--- a/app/scrapers/twitter_scraper.py
++++ b/app/scrapers/twitter_scraper.py
+@@ -3,6 +3,7 @@ X (Twitter) 趋势爬取 + 搜索
+ 支持分地区 + 关键词搜索
+ """
+ import logging
++from urllib.parse import urlencode
+ from app.models import Platform
+ from app.scrapers.base import BaseScraper, TrendItem
+ from app.config import get_settings
+@@ -12,6 +13,8 @@ logger = logging.getLogger(__name__)
+ 
+ 
+ class TwitterScraper(BaseScraper):
++    # The source chain/browser already handles fallbacks; do not repeat it.
++    max_retries = 1
+     platform = Platform.TWITTER
+ 
+     def __init__(self, **kwargs):
+@@ -42,14 +45,12 @@ class TwitterScraper(BaseScraper):
+         raise RuntimeError("All Twitter sources failed")
+ 
+     async def search(self, query: str) -> list[TrendItem]:
+-        """搜索 Twitter 上某个话题（无 API 时返回构造的搜索链接）"""
+-        return [TrendItem(
+-            rank=1,
+-            title=f"Search: {query}",
+-            url=f"https://twitter.com/search?q={query}&src=typed_query&f=top",
+-            description=f"View top tweets about '{query}' on X/Twitter",
+-            region=self.region,
+-        )]
++        """Search observed current trends; a link alone is not a match."""
++        if not query.strip():
++            return []
++        items = await self.scrape()
++        q = query.casefold().strip()
++        return [item for item in items if q in item.title.casefold() or q in item.hashtag.casefold()]
+ 
+     async def _scrape_api(self, bearer_token: str) -> list[TrendItem]:
+         region = get_region(self.region)
+@@ -96,8 +97,14 @@ class TwitterScraper(BaseScraper):
+             "my": "https://trends24.in/malaysia/",
+             "au": "https://trends24.in/australia/",
+             "ca": "https://trends24.in/canada/",
++            "vn": "https://trends24.in/vietnam/",
++            "es": "https://trends24.in/spain/",
++            "it": "https://trends24.in/italy/",
++            "mx": "https://trends24.in/mexico/",
+         }
+-        url = region_urls.get(self.region, region_urls["global"])
++        if self.region not in region_urls:
++            raise RuntimeError(f"Source does not support region {self.region}")
++        url = region_urls[self.region]
+ 
+         async with self._get_client() as client:
+             resp = await client.get(url, timeout=20)
+@@ -113,8 +120,10 @@ class TwitterScraper(BaseScraper):
+                         if title and len(title) > 1:
+                             items.append(TrendItem(rank=i+1, title=title,
+                                 hashtag=title if title.startswith("#") else "",
+-                                url=f"https://twitter.com/search?q={title}",
+-                                region=self.region))
++                                url="https://twitter.com/search?" + urlencode({"q": title}),
++                                region=self.region,
++                                description="Third-party trend ranking from trends24.in; volume unavailable.",
++                                extra_data={"source": url, "data_kind": "third_party_trend_ranking", "volume": None}))
+                     break
+             return items
+ 
+@@ -127,7 +136,9 @@ class TwitterScraper(BaseScraper):
+             "kr": "https://getdaytrends.com/south-korea/",
+             "gb": "https://getdaytrends.com/united-kingdom/",
+         }
+-        url = region_urls.get(self.region, region_urls["global"])
++        if self.region not in region_urls:
++            raise RuntimeError(f"Source does not support region {self.region}")
++        url = region_urls[self.region]
+ 
+         async with self._get_client() as client:
+             resp = await client.get(url, timeout=20)
+@@ -142,6 +153,7 @@ class TwitterScraper(BaseScraper):
+                     if title and len(title) > 1 and not title.startswith("http"):
+                         items.append(TrendItem(rank=len(items)+1, title=title,
+                             hashtag=title if title.startswith("#") else "",
+-                            url=f"https://twitter.com/search?q={title}",
+-                            region=self.region))
++                            url="https://twitter.com/search?" + urlencode({"q": title}),
++                            region=self.region,
++                            extra_data={"source": url, "data_kind": "third_party_trend_ranking", "volume": None}))
+             return items[:self.max_topics]
+diff --git a/app/scrapers/youtube_scraper.py b/app/scrapers/youtube_scraper.py
+index 3011424..1fc6a9c 100644
+--- a/app/scrapers/youtube_scraper.py
++++ b/app/scrapers/youtube_scraper.py
+@@ -3,6 +3,8 @@ YouTube 趋势爬取 + 搜索
+ 支持分地区热门视频 + 关键词搜索
+ """
+ import logging
++import re
++from datetime import datetime, timezone, timedelta
+ from app.models import Platform
+ from app.scrapers.base import BaseScraper, TrendItem
+ from app.config import get_settings
+@@ -12,6 +14,8 @@ logger = logging.getLogger(__name__)
+ 
+ 
+ class YouTubeScraper(BaseScraper):
++    # The source chain/browser already handles fallbacks; do not repeat it.
++    max_retries = 1
+     platform = Platform.YOUTUBE
+ 
+     def __init__(self, **kwargs):
+@@ -28,7 +32,7 @@ class YouTubeScraper(BaseScraper):
+         """搜索 YouTube 上某个话题的热门视频"""
+         api_key = self.settings.youtube_api_key
+         if not api_key or api_key == "your_youtube_api_key":
+-            return []
++            raise RuntimeError("YouTube search requires a YouTube Data API key; public charts do not provide keyword search")
+ 
+         region = get_region(self.region)
+         async with self._get_client() as client:
+@@ -41,9 +45,9 @@ class YouTubeScraper(BaseScraper):
+                     "order": "viewCount",
+                     "regionCode": region.get("youtube", "US"),
+                     "maxResults": min(self.max_topics, 20),
+-                    "key": api_key,
+                     "publishedAfter": self._recent_date(),
+                 },
++                headers={"X-Goog-Api-Key": api_key},
+                 timeout=15,
+             )
+             resp.raise_for_status()
+@@ -58,8 +62,11 @@ class YouTubeScraper(BaseScraper):
+                     title=snippet.get("title", ""),
+                     description=snippet.get("description", "")[:200],
+                     url=f"https://www.youtube.com/watch?v={video_id}" if video_id else "",
+-                    region=self.region,
++                    region=region["youtube"].lower(),
+                     extra_data={
++                        "source": "https://www.googleapis.com/youtube/v3/search",
++                        "requested_region": self.region,
++                        "actual_region": region["youtube"].lower(),
+                         "channel": snippet.get("channelTitle", ""),
+                         "published_at": snippet.get("publishedAt", ""),
+                         "thumbnail": snippet.get("thumbnails", {}).get("high", {}).get("url", ""),
+@@ -79,8 +86,8 @@ class YouTubeScraper(BaseScraper):
+                     "chart": "mostPopular",
+                     "regionCode": region_code,
+                     "maxResults": min(self.max_topics, 50),
+-                    "key": api_key,
+                 },
++                headers={"X-Goog-Api-Key": api_key},
+                 timeout=15,
+             )
+             resp.raise_for_status()
+@@ -90,17 +97,23 @@ class YouTubeScraper(BaseScraper):
+             for i, video in enumerate(data.get("items", [])):
+                 snippet = video.get("snippet", {})
+                 stats = video.get("statistics", {})
+-                views = int(stats.get("viewCount", 0))
++                raw_views = str(stats.get("viewCount", ""))
++                views = int(raw_views) if raw_views.isdigit() else None
+                 items.append(TrendItem(
+                     rank=i + 1,
+                     title=snippet.get("title", ""),
+                     description=snippet.get("description", "")[:300],
+                     url=f"https://www.youtube.com/watch?v={video['id']}",
+                     category=snippet.get("categoryId", ""),
+-                    volume=float(views),
+-                    volume_label=self._fmt(views) + " views",
+-                    region=self.region,
++                    volume=float(views) if views is not None else 0,
++                    volume_label=self._fmt(views) + " views" if views is not None else "",
++                    region=region_code.lower(),
+                     extra_data={
++                        "source": "https://www.googleapis.com/youtube/v3/videos",
++                        "chart": "mostPopular",
++                        "requested_region": self.region,
++                        "actual_region": region_code.lower(),
++                        "views_available": views is not None,
+                         "channel": snippet.get("channelTitle", ""),
+                         "channel_id": snippet.get("channelId", ""),
+                         "published_at": snippet.get("publishedAt", ""),
+@@ -112,54 +125,112 @@ class YouTubeScraper(BaseScraper):
+             return items
+ 
+     async def _scrape_web(self) -> list[TrendItem]:
+-        from bs4 import BeautifulSoup
+-        import json
+-        async with self._get_client() as client:
+-            resp = await client.get("https://www.youtube.com/feed/trending", timeout=20)
+-            resp.raise_for_status()
+-            soup = BeautifulSoup(resp.text, "lxml")
+-            items = []
+-            for script in soup.find_all("script"):
+-                text = script.string or ""
+-                if "var ytInitialData" in text:
+-                    start = text.find("{")
+-                    end = text.rfind("}") + 1
+-                    if start >= 0 and end > start:
+-                        try:
+-                            yt_data = json.loads(text[start:end])
+-                            items = self._parse_yt_data(yt_data)
+-                        except (json.JSONDecodeError, KeyError):
+-                            pass
+-                    break
+-            return items[:self.max_topics]
+-
+-    def _parse_yt_data(self, data: dict) -> list[TrendItem]:
+-        items = []
+-        tabs = data.get("contents", {}).get("twoColumnBrowseResultsRenderer", {}).get("tabs", [])
+-        for tab in tabs:
+-            sections = tab.get("tabRenderer", {}).get("content", {}).get("sectionListRenderer", {}).get("contents", [])
+-            for section in sections:
+-                for shelf_item in section.get("itemSectionRenderer", {}).get("contents", []):
+-                    video_list = (shelf_item.get("shelfRenderer", {}).get("content", {})
+-                                  .get("expandedShelfContentsRenderer", {}).get("items", []))
+-                    for v in video_list:
+-                        r = v.get("videoRenderer", {})
+-                        if r:
+-                            title_runs = r.get("title", {}).get("runs", [])
+-                            title = title_runs[0].get("text", "") if title_runs else ""
+-                            vid = r.get("videoId", "")
+-                            items.append(TrendItem(
+-                                rank=len(items) + 1, title=title,
+-                                url=f"https://www.youtube.com/watch?v={vid}",
+-                                volume_label=r.get("viewCountText", {}).get("simpleText", ""),
+-                                region=self.region,
+-                            ))
+-        return items
++        """Read the public weekly music-video chart using ordinary Chromium.
++
++        This is a music chart, not the retired all-category Trending feed.
++        Playwright and its Chromium installation are optional runtime prerequisites.
++        No login, API key, stealth settings, or challenge bypass is used.
++        """
++        region_code = get_region(self.region)["youtube"].lower()
++        url = f"https://charts.youtube.com/charts/TopVideos/{region_code}/weekly"
++        try:
++            from playwright.async_api import async_playwright
++        except ImportError:
++            raise RuntimeError("YouTube public charts require Playwright and installed Chromium") from None
++        async with async_playwright() as playwright:
++            launch_options = {"headless": True}
++            if self.proxy:
++                launch_options["proxy"] = {"server": self.proxy}
++            browser = await playwright.chromium.launch(**launch_options)
++            try:
++                page = await browser.new_page(locale="en-US")
++                # The chart's own public page loads this JSON. Capture that response
++                # instead of relying on presentation markup or replaying private APIs.
++                async with page.expect_response(
++                    lambda response: (
++                        response.request.method == "POST"
++                        and response.url.split("?")[0] == "https://charts.youtube.com/youtubei/v1/browse"
++                    ), timeout=45000,
++                ) as pending:
++                    await page.goto(url, wait_until="domcontentloaded", timeout=45000)
++                response = await pending.value
++                if not response.ok:
++                    raise RuntimeError(f"YouTube public chart returned HTTP {response.status}")
++                data = await response.json()
++                return self._parse_chart_data(data)
++            finally:
++                await browser.close()
++
++    def _parse_chart_data(self, data: dict) -> list[TrendItem]:
++        expected_region = get_region(self.region)["youtube"].lower()
++        source = f"https://charts.youtube.com/charts/TopVideos/{expected_region}/weekly"
++        sections = data.get("contents", {}).get("sectionListRenderer", {}).get("contents", [])
++        for section in sections:
++            content = section.get("musicAnalyticsSectionRenderer", {}).get("content", {})
++            metadata = content.get("perspectiveMetadata", {})
++            params = metadata.get("requestParams", {}).get("chartParams", {})
++            if params.get("countryCode", "").lower() != expected_region:
++                raise RuntimeError("YouTube public chart region does not match requested region")
++            if (params.get("chartType") != "CHART_TYPE_VIDEOS"
++                    or params.get("chartPeriodType") != "CHART_PERIOD_TYPE_WEEKLY"):
++                raise RuntimeError("YouTube returned an unexpected chart type or period")
++            # The current/latest page has no explicit date in its request params.
++            end_date = params.get("endDate") or next((
++                chart.get("latestEndDate", "")
++                for chart in metadata.get("availableChartsInfo", [])
++                if chart.get("chartType") == "CHART_TYPE_VIDEOS"
++                and chart.get("chartPeriodType") == "CHART_PERIOD_TYPE_WEEKLY"
++            ), "")
++            try:
++                start_date = (datetime.strptime(end_date, "%Y-%m-%d") - timedelta(days=6)).date().isoformat()
++            except (ValueError, TypeError):
++                raise RuntimeError("YouTube weekly chart has no valid chart date") from None
++            fetched_at = datetime.now(timezone.utc).isoformat()
++            items, seen = [], set()
++            for group in content.get("videos", []):
++                if group.get("listType") != "TOP_VIEWS_CHART":
++                    continue
++                for video in group.get("videoViews", []):
++                    video_id, title = video.get("id", ""), video.get("title", "")
++                    rank = video.get("chartEntryMetadata", {}).get("currentPosition")
++                    if (not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id)
++                            or not isinstance(title, str) or not title.strip()
++                            or not isinstance(rank, int) or rank < 1
++                            or video_id in seen or video.get("isVisible") is False
++                            or video.get("isAvailable") is False):
++                        continue
++                    seen.add(video_id)
++                    raw_views = str(video.get("viewCount", ""))
++                    views = int(raw_views) if raw_views.isdigit() else None
++                    thumbnails = video.get("thumbnail", {}).get("thumbnails", [])
++                    items.append(TrendItem(
++                        rank=rank, title=title,
++                        description=f"Weekly top music videos ({start_date} to {end_date}); music category only.",
++                        url=f"https://www.youtube.com/watch?v={video_id}",
++                        category="music", region=expected_region,
++                        volume=float(views) if views is not None else 0,
++                        volume_label=f"{views:,} weekly views" if views is not None else "",
++                        extra_data={
++                            "source": source, "data_kind": "youtube_weekly_music_video_chart",
++                            "chart": "Weekly top music videos", "chart_period": "weekly",
++                            "chart_start_date": start_date, "chart_end_date": end_date,
++                            "requested_region": self.region, "actual_region": expected_region,
++                            "fetched_at": fetched_at, "views_available": views is not None,
++                            "view_count": views,
++                            "channel": video.get("channelName", ""),
++                            "artists": [artist.get("name", "") for artist in video.get("artists", [])],
++                            "thumbnail": thumbnails[-1].get("url", "") if thumbnails else "",
++                        },
++                    ))
++            if not items:
++                raise RuntimeError("YouTube weekly music-video chart returned no valid videos")
++            return sorted(items, key=lambda item: item.rank)[:self.max_topics]
++        raise RuntimeError("YouTube public chart response did not contain chart data")
+ 
+     @staticmethod
+     def _recent_date() -> str:
+         from datetime import datetime, timedelta
+-        d = datetime.utcnow() - timedelta(days=7)
++        d = datetime.now(timezone.utc) - timedelta(days=7)
+         return d.strftime("%Y-%m-%dT00:00:00Z")
+ 
+     @staticmethod
+diff --git a/app/services/trend_service.py b/app/services/trend_service.py
+index 1678387..a7f78c8 100644
+--- a/app/services/trend_service.py
++++ b/app/services/trend_service.py
+@@ -12,25 +12,43 @@ from sqlalchemy.ext.asyncio import AsyncSession
+ from app.models import Platform, ScrapeStatus, TrendTopic, ScrapeSnapshot, PlatformConfig
+ from app.scrapers import get_scraper, ScrapeResult
+ from app.database import async_session_factory
++from app.config import get_settings
++from app.timeutils import utcnow
++from app.regions import get_region, validate_region
+ 
+ logger = logging.getLogger(__name__)
+ 
+ 
++def freshness(snapshot):
++    maximum = get_settings().scrape_interval_hours * 7200
++    if snapshot is None:
++        return {"state": "missing", "age_seconds": None, "max_age_seconds": maximum}
++    timestamp = snapshot.finished_at or snapshot.started_at
++    age = max(0, int((utcnow() - timestamp).total_seconds()))
++    state = "unavailable" if snapshot.status != ScrapeStatus.SUCCESS else "stale" if age > maximum else "fresh"
++    return {"state": state, "age_seconds": age, "max_age_seconds": maximum}
++
++
+ class TrendService:
+     """趋势数据服务"""
+ 
+-    async def run_full_scrape(self) -> dict:
++    def __init__(self):
++        self._locks = {}
++
++    async def run_full_scrape(self, region: str | None = None) -> dict:
+         """
+         执行全平台爬取（由定时任务调用）
+         并发爬取所有启用的平台，结果写入 DB
+         """
+         async with async_session_factory() as session:
+             enabled_platforms = await self._get_enabled_platforms(session)
++            configs = (await session.execute(select(PlatformConfig))).scalars().all()
++            regions = {config.platform: config.region for config in configs}
+ 
+         logger.info(f"开始全平台爬取，启用平台: {[p.value for p in enabled_platforms]}")
+ 
+         # 并发执行所有平台的爬取
+-        tasks = [self._scrape_and_save(platform) for platform in enabled_platforms]
++        tasks = [self.scrape_single_platform(platform, region if region is not None else regions.get(platform, "global")) for platform in enabled_platforms]
+         results = await asyncio.gather(*tasks, return_exceptions=True)
+ 
+         summary = {}
+@@ -44,21 +62,24 @@ class TrendService:
+         logger.info(f"全平台爬取完成: {summary}")
+         return summary
+ 
+-    async def _scrape_and_save(self, platform: Platform) -> dict:
++    async def _scrape_and_save(self, platform: Platform, region: str = "global") -> dict:
+         """爬取单个平台并保存到数据库"""
+-        scraper = get_scraper(platform)
++        region = validate_region(platform, region)
++        started_at = utcnow()
++        scraper = get_scraper(platform, region=region)
+         result: ScrapeResult = await scraper.execute()
+ 
+         async with async_session_factory() as session:
+             # 创建快照记录
+             snapshot = ScrapeSnapshot(
+                 platform=platform,
++                region=region,
+                 status=ScrapeStatus.SUCCESS if result.success else ScrapeStatus.FAILED,
+                 topic_count=len(result.items),
+                 error_message=result.error_message,
+                 duration_ms=result.duration_ms,
+-                started_at=datetime.utcnow(),
+-                finished_at=datetime.utcnow(),
++                started_at=started_at,
++                finished_at=utcnow(),
+             )
+             session.add(snapshot)
+             await session.flush()  # 获取 snapshot.id
+@@ -83,16 +104,37 @@ class TrendService:
+                 session.add(topic)
+ 
+             await session.commit()
++            payload = {
++                "type": "trends_updated", "platform": platform.value,
++                "snapshot": snapshot.to_dict(),
++                "topics": [],
++            }
++            # Query committed rows so websocket payload and REST agree.
++            rows = await session.execute(select(TrendTopic).where(
++                TrendTopic.snapshot_id == snapshot.id).order_by(TrendTopic.rank))
++            payload["topics"] = [topic.to_dict() for topic in rows.scalars().all()]
+ 
++        from app.routers.websocket import broadcast_update
++        await broadcast_update(payload)
+         return {
+             "success": result.success,
++            "snapshot_id": snapshot.id,
++            "platform": platform.value,
++            "region": region,
+             "count": len(result.items),
+             "duration_ms": result.duration_ms,
++            "error_message": result.error_message,
+         }
+ 
+-    async def scrape_single_platform(self, platform: Platform) -> dict:
++    async def scrape_single_platform(self, platform: Platform, region: str = "global") -> dict:
+         """手动触发单平台爬取"""
+-        return await self._scrape_and_save(platform)
++        region = validate_region(platform, region)
++        key = (platform.value, region)
++        lock = self._locks.setdefault(key, asyncio.Lock())
++        if lock.locked():
++            return {"success": False, "skipped": True, "reason": "already_running", "region": region}
++        async with lock:
++            return await self._scrape_and_save(platform, region)
+ 
+     # ===== 查询方法 =====
+ 
+@@ -101,18 +143,26 @@ class TrendService:
+         session: AsyncSession,
+         platform: Optional[Platform] = None,
+         limit: int = 30,
++        region: str = "global",
+     ) -> dict:
+         """获取最新的趋势数据"""
++        region = region.strip().lower()
++        get_region(region)
+         result = {}
+         platforms = [platform] if platform else list(Platform)
+ 
+         for p in platforms:
+-            # 找到该平台最新的成功快照
++            try:
++                validate_region(p, region)
++            except ValueError as error:
++                result[p.value] = {"topics": [], "snapshot": None, "freshness": {"state": "unsupported"}, "error": str(error)}
++                continue
++            # Use the latest attempt; do not silently serve old success after failure.
+             snapshot_q = (
+                 select(ScrapeSnapshot)
+                 .where(
+                     ScrapeSnapshot.platform == p,
+-                    ScrapeSnapshot.status == ScrapeStatus.SUCCESS,
++                    ScrapeSnapshot.region == region,
+                 )
+                 .order_by(desc(ScrapeSnapshot.started_at))
+                 .limit(1)
+@@ -121,7 +171,7 @@ class TrendService:
+             snapshot = snapshot_result.scalar_one_or_none()
+ 
+             if not snapshot:
+-                result[p.value] = {"topics": [], "snapshot": None}
++                result[p.value] = {"topics": [], "snapshot": None, "freshness": freshness(None)}
+                 continue
+ 
+             # 获取该快照下的话题
+@@ -137,6 +187,7 @@ class TrendService:
+             result[p.value] = {
+                 "topics": [t.to_dict() for t in topics],
+                 "snapshot": snapshot.to_dict(),
++                "freshness": freshness(snapshot),
+             }
+ 
+         return result
+@@ -147,14 +198,16 @@ class TrendService:
+         platform: Platform,
+         hours: int = 72,
+         limit: int = 10,
++        region: str = "global",
+     ) -> list[dict]:
+         """获取指定平台的历史趋势（按快照分组）"""
+-        since = datetime.utcnow() - timedelta(hours=hours)
++        since = utcnow() - timedelta(hours=hours)
+ 
+         snapshots_q = (
+             select(ScrapeSnapshot)
+             .where(
+                 ScrapeSnapshot.platform == platform,
++                ScrapeSnapshot.region == region,
+                 ScrapeSnapshot.status == ScrapeStatus.SUCCESS,
+                 ScrapeSnapshot.started_at >= since,
+             )
+@@ -182,16 +235,20 @@ class TrendService:
+     async def get_stats(self, session: AsyncSession) -> dict:
+         """服务统计信息"""
+         stats = {}
+-        for p in Platform:
++        enabled = await self._get_enabled_platforms(session)
++        configs = (await session.execute(select(PlatformConfig))).scalars().all()
++        regions = {config.platform: config.region for config in configs}
++        for p in enabled:
++            region = regions.get(p, "global")
+             count_q = select(func.count(ScrapeSnapshot.id)).where(
+-                ScrapeSnapshot.platform == p
++                ScrapeSnapshot.platform == p, ScrapeSnapshot.region == region
+             )
+             count_result = await session.execute(count_q)
+             total_scrapes = count_result.scalar() or 0
+ 
+             last_q = (
+                 select(ScrapeSnapshot)
+-                .where(ScrapeSnapshot.platform == p)
++                .where(ScrapeSnapshot.platform == p, ScrapeSnapshot.region == region)
+                 .order_by(desc(ScrapeSnapshot.started_at))
+                 .limit(1)
+             )
+@@ -201,6 +258,9 @@ class TrendService:
+             stats[p.value] = {
+                 "total_scrapes": total_scrapes,
+                 "last_scrape": last_snapshot.to_dict() if last_snapshot else None,
++                "region": region,
++                "freshness": freshness(last_snapshot),
++                "stale": freshness(last_snapshot)["state"] != "fresh",
+             }
+         return stats
+ 
+@@ -208,12 +268,12 @@ class TrendService:
+ 
+     async def _get_enabled_platforms(self, session: AsyncSession) -> list[Platform]:
+         """获取所有启用的平台"""
+-        q = select(PlatformConfig).where(PlatformConfig.enabled == 1)
++        q = select(PlatformConfig)
+         result = await session.execute(q)
+         configs = result.scalars().all()
+ 
+         if configs:
+-            return [c.platform for c in configs]
++            return [c.platform for c in configs if c.enabled == 1]
+         # 如果没有配置记录，默认全部启用
+         return list(Platform)
+ 
+diff --git a/app/topic_intelligence.py b/app/topic_intelligence.py
+index 3452474..d22bb30 100644
+--- a/app/topic_intelligence.py
++++ b/app/topic_intelligence.py
+@@ -208,7 +208,7 @@ def score_relevance(query: str, title: str, description: str = "",
+             reasons.append(f"partial ({matched}/{len(qw)} words)")
+ 
+     # 热度加分
+-    if volume > 0:
++    if volume > 0 and score > 0:
+         import math
+         vb = min(math.log10(max(volume, 1)) * 2, 15)
+         score += vb
+@@ -228,7 +228,7 @@ def find_related_from_trends(query: str, trend_items: list,
+             hashtag=item.hashtag, volume=item.volume,
+             expanded_keywords=expanded_keywords,
+         )
+-        if score >= min_score:
++        if score > 0 and score >= min_score:
+             results.append(ScoredTopic(
+                 title=item.title, platform=platform_name, rank=item.rank,
+                 volume=item.volume, volume_label=item.volume_label,
+@@ -240,7 +240,7 @@ def find_related_from_trends(query: str, trend_items: list,
+     seen = set()
+     unique = []
+     for r in results:
+-        key = r.title.lower()
++        key = (r.platform, r.title.lower(), r.url)
+         if key not in seen:
+             seen.add(key)
+             unique.append(r)
+diff --git a/mcp_server.py b/mcp_server.py
+index 2c2ad0e..706affb 100644
+--- a/mcp_server.py
++++ b/mcp_server.py
+@@ -10,7 +10,10 @@ MCP tools:
+ """
+ import asyncio
+ import logging
++import json
++import httpx
+ from datetime import datetime
++from app.timeutils import utcnow
+ 
+ from mcp.server import Server
+ from mcp.server.stdio import stdio_server
+@@ -19,7 +22,8 @@ from mcp.types import Tool, TextContent
+ from app.scrapers import get_scraper
+ from app.scrapers.base import ScrapeResult
+ from app.models import Platform
+-from app.regions import REGIONS, get_region, get_region_codes
++from app.regions import REGIONS, get_region, get_region_codes, validate_region
++from app.collection import collect_trends
+ from app.topic_intelligence import expand_keywords, find_related_from_trends, ScoredTopic
+ 
+ logging.basicConfig(level=logging.INFO)
+@@ -38,13 +42,15 @@ def _ck(platform: str, region: str) -> str:
+ 
+ async def _fetch(platform: Platform, region: str = "global") -> ScrapeResult:
+     key = _ck(platform.value, region)
+-    now = datetime.utcnow()
++    validate_region(platform, region)
++    now = utcnow()
+     if key in _cache_time and (now - _cache_time[key]).total_seconds() < CACHE_TTL and key in _cache:
+         return _cache[key]
+     scraper = get_scraper(platform, region=region)
+     result = await scraper.execute()
+-    _cache[key] = result
+-    _cache_time[key] = now
++    if result.success and result.items:
++        _cache[key] = result
++        _cache_time[key] = now
+     return result
+ 
+ 
+@@ -53,7 +59,7 @@ def _fmt_trends(items, platform: str, region: str) -> str:
+         return f"No data for {platform} in {region}."
+     label = get_region(region).get("label", region)
+     lines = [f"🔥 {platform.upper()} — {label} ({len(items)} topics)",
+-             f"Updated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}", "-" * 50]
++             "Fetched: " + (_cache_time[_ck(platform, region)].strftime("%Y-%m-%d %H:%M UTC") if _ck(platform, region) in _cache_time else "unknown"), "-" * 50]
+     for item in items:
+         vol = f" | {item.volume_label}" if item.volume_label else ""
+         tag = f" {item.hashtag}" if item.hashtag else ""
+@@ -89,7 +95,7 @@ async def list_tools() -> list[Tool]:
+         Tool(name="get_trends",
+              description="Get trending topics from a specific platform and region.",
+              inputSchema={"type": "object", "properties": {
+-                 "platform": {"type": "string", "enum": ["twitter", "tiktok", "youtube", "instagram"]},
++                 "platform": {"type": "string", "enum": [p.value for p in Platform]},
+                  "region": {"type": "string", "description": f"Region: {', '.join(rc)}", "default": "global"},
+                  "limit": {"type": "integer", "default": 20, "minimum": 1, "maximum": 50},
+              }, "required": ["platform"]}),
+@@ -98,7 +104,7 @@ async def list_tools() -> list[Tool]:
+              description="Get trending topics from ALL platforms at once for a region.",
+              inputSchema={"type": "object", "properties": {
+                  "region": {"type": "string", "default": "global"},
+-                 "limit": {"type": "integer", "default": 10},
++                 "limit": {"type": "integer", "default": 10, "minimum": 1, "maximum": 50},
+              }}),
+ 
+         Tool(name="exact_search",
+@@ -107,18 +113,36 @@ async def list_tools() -> list[Tool]:
+                  "query": {"type": "string", "description": "Exact keyword to search"},
+                  "region": {"type": "string", "default": "global"},
+                  "platforms": {"type": "array", "items": {"type": "string",
+-                     "enum": ["twitter", "tiktok", "youtube", "instagram"]},
++                     "enum": [p.value for p in Platform]},
+                      "description": "Platforms to search (default: all)"},
+              }, "required": ["query"]}),
+ 
++        Tool(name="search_trends", description="Search observed current trend feeds (alias of exact_search); not full-platform search.",
++             inputSchema={"type":"object","properties":{
++                 "query":{"type":"string","minLength":1,"maxLength":200},
++                 "region":{"type":"string","default":"global"},
++                 "platforms":{"type":"array","items":{"type":"string","enum":[p.value for p in Platform]},"minItems":1}
++             },"required":["query"]}),
++
+         Tool(name="discover_search",
+              description="Discovery Search: given a broad topic or theme, find related trending topics across all platforms. Uses keyword expansion and relevance scoring to discover what's hot around a subject. Use when the user wants to explore a topic area broadly.",
+              inputSchema={"type": "object", "properties": {
+                  "query": {"type": "string", "description": "Topic or theme to explore (e.g. 'AI', 'K-pop', 'crypto')"},
+                  "region": {"type": "string", "default": "global"},
+-                 "min_relevance": {"type": "number", "description": "Minimum relevance score 0-100 (default: 10)", "default": 10},
++                 "min_relevance": {"type": "number", "minimum": 0, "maximum": 100, "description": "Minimum relevance score 0-100 (default: 10)", "default": 10},
+              }, "required": ["query"]}),
+ 
++        Tool(name="analyze_trends", description="Analyze shared stored history for observed momentum candidates, with evidence and limitations. Requires the local REST backend; never a prediction.",
++             inputSchema={"type":"object","properties":{
++                 "platform":{"type":"string","enum":[p.value for p in Platform]},
++                 "region":{"type":"string","default":"global"},
++                 "hours":{"type":"integer","minimum":1,"maximum":720,"default":48},
++                 "limit":{"type":"integer","minimum":1,"maximum":100,"default":20}}}),
++        Tool(name="capture_trends", description="Fetch and persist one observation in shared PostgreSQL history through the REST backend. Use before future analysis; repeated rapid captures do not create independent history.",
++             inputSchema={"type":"object","properties":{
++                 "platform":{"type":"string","enum":[p.value for p in Platform]},
++                 "region":{"type":"string","default":"global"}},"required":["platform"]}),
++
+         Tool(name="list_regions",
+              description="List all supported countries and regions.",
+              inputSchema={"type": "object", "properties": {}}),
+@@ -127,139 +151,106 @@ async def list_tools() -> list[Tool]:
+ 
+ @server.call_tool()
+ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
+-
+-    if name == "get_trends":
+-        p_str = arguments.get("platform", "").lower()
+-        region = arguments.get("region", "global").lower()
+-        limit = arguments.get("limit", 20)
++    try:
++        return await _call_tool(name, arguments)
++    except (ValueError, TypeError) as error:
++        return [TextContent(type="text", text=f"Invalid request: {error}")]
++
++
++async def _call_tool(name: str, arguments: dict) -> list[TextContent]:
++    region = arguments.get("region", "global").strip().lower()
++    get_region(region)
++    if name in {"analyze_trends", "capture_trends"}:
++        from app.config import get_settings
++        platform = Platform(arguments['platform']) if arguments.get('platform') else None
++        if platform is not None:
++            validate_region(platform, region)
++        if name == "capture_trends" and platform is None:
++            raise ValueError("capture_trends requires a platform")
++        params = {"region": region}
++        if name == "analyze_trends":
++            hours, limit = arguments.get('hours',48), arguments.get('limit',20)
++            if isinstance(hours,bool) or not isinstance(hours,int) or not 1<=hours<=720:
++                raise ValueError("hours must be between 1 and 720")
++            if isinstance(limit,bool) or not isinstance(limit,int) or not 1<=limit<=100:
++                raise ValueError("limit must be between 1 and 100")
++            params.update(hours=hours,limit=limit)
++            if platform:params['platform']=platform.value
++            method,path='GET','/api/v1/analysis/trends'
++        else:
++            method,path='POST',f'/api/v1/analysis/capture/{platform.value}'
+         try:
+-            p = Platform(p_str)
+-        except ValueError:
+-            return [TextContent(type="text", text=f"Unknown platform: {p_str}")]
+-        result = await _fetch(p, region)
+-        if not result.success:
+-            return [TextContent(type="text", text=f"Failed: {result.error_message}")]
+-        return [TextContent(type="text", text=_fmt_trends(result.items[:limit], p_str, region))]
+-
+-    elif name == "get_all_trends":
+-        region = arguments.get("region", "global").lower()
+-        limit = arguments.get("limit", 10)
+-        sections = []
+-        for p in Platform:
+-            result = await _fetch(p, region)
+-            if result.success and result.items:
+-                sections.append(_fmt_trends(result.items[:limit], p.value, region))
+-            else:
+-                sections.append(f"❌ {p.value}: {result.error_message or 'No data'}")
+-        return [TextContent(type="text", text=("\n\n" + "=" * 60 + "\n\n").join(sections))]
+-
+-    elif name == "exact_search":
+-        query = arguments.get("query", "")
+-        region = arguments.get("region", "global").lower()
+-        platform_filter = arguments.get("platforms", None)
+-
+-        if not query:
+-            return [TextContent(type="text", text="Please provide a search query.")]
+-
++            async with httpx.AsyncClient(timeout=90) as client:
++                response=await client.request(method,get_settings().api_base_url.rstrip('/')+path,params=params)
++                if response.status_code not in {200,202,502}:
++                    response.raise_for_status()
++                return [TextContent(type='text',text=json.dumps(response.json(),ensure_ascii=False))]
++        except (httpx.HTTPError, ValueError):
++            return [TextContent(type='text',text='Shared analysis backend unavailable. Start ./manage-service.sh start and check API_BASE_URL. No result was fabricated.')]
++    if name == "list_regions":
++        lines = ["Supported regions (availability varies by platform):"]
++        lines.extend(f"{code}: {info['label']}" for code, info in REGIONS.items())
++        lines.append("Instagram: global sample only. Douyin: cn or global selects mainland China. TikTok/YouTube global maps to US.")
++        return [TextContent(type="text", text="\n".join(lines))]
++    if name in {"get_trends", "get_all_trends"}:
++        limit = arguments.get("limit", 20 if name == "get_trends" else 10)
++        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 50:
++            raise ValueError("limit must be an integer between 1 and 50")
++        if name == "get_trends":
++            platform = Platform(arguments.get("platform", "").lower())
++            validate_region(platform, region)
++            result = await _fetch(platform, region)
++            text = _fmt_trends(result.items[:limit], platform.value, region) if result.success else f"Failed: {result.error_message}"
++        else:
++            items, coverage = await collect_trends(list(Platform), region, _fetch)
++            sections = []
++            for platform in Platform:
++                rows = [item for p, item in items if p == platform.value]
++                state = coverage[platform.value]
++                sections.append(_fmt_trends(rows[:limit], platform.value, region) if rows else f"{platform.value}: {state['status']} — {state.get('error', 'No data')}")
++            text = "\n\n".join(sections)
++        return [TextContent(type="text", text=text)]
++    if name not in {"exact_search", "search_trends", "discover_search"}:
++        raise ValueError(f"Unknown tool: {name}")
++    query = arguments.get("query", "").strip()
++    if not query or len(query) > 200:
++        raise ValueError("query must contain 1 to 200 nonblank characters")
++    values = arguments.get("platforms")
++    if values is None:
+         targets = list(Platform)
+-        if platform_filter:
+-            targets = [Platform(p) for p in platform_filter if p in [x.value for x in Platform]]
+-
+-        # 精搜：先从平台的 search 方法获取，再从趋势中精确匹配
+-        all_items = []
+-        for p in targets:
+-            # 平台原生搜索
+-            scraper = get_scraper(p, region=region)
+-            if hasattr(scraper, "search"):
+-                try:
+-                    items = await scraper.search(query)
+-                    for item in items:
+-                        all_items.append((p.value, item))
+-                except Exception as e:
+-                    logger.warning(f"Search on {p.value} failed: {e}")
+-
+-            # 从趋势中精确匹配
+-            result = await _fetch(p, region)
+-            if result.success:
+-                q = query.lower()
+-                for item in result.items:
+-                    if q in item.title.lower() or q in item.hashtag.lower():
+-                        all_items.append((p.value, item))
+-
+-        # 评分排序
+-        scored = find_related_from_trends(query, all_items, min_score=5)
+-
+-        if not scored:
+-            return [TextContent(type="text",
+-                text=f"No exact matches for '{query}'.\n\nDirect links:\n"
+-                     f"• X: https://twitter.com/search?q={query}\n"
+-                     f"• TikTok: https://www.tiktok.com/search?q={query}\n"
+-                     f"• YouTube: https://youtube.com/results?search_query={query}\n"
+-                     f"• Instagram: https://instagram.com/explore/tags/{query.replace(' ', '')}/")]
+-
+-        return [TextContent(type="text", text=_fmt_scored(scored, query, region, "exact"))]
+-
+-    elif name == "discover_search":
+-        query = arguments.get("query", "")
+-        region = arguments.get("region", "global").lower()
+-        min_rel = arguments.get("min_relevance", 10)
+-
+-        if not query:
+-            return [TextContent(type="text", text="Please provide a topic to explore.")]
+-
+-        # 关键词扩展（LLM + 本地图谱）
++    else:
++        if not isinstance(values, list) or not values:
++            raise ValueError("platforms must be a nonempty array")
++        targets = list(dict.fromkeys(Platform(value) for value in values))
++    items, coverage = await collect_trends(targets, region, _fetch)
++    warnings = [f"{p}: {state['status']} — {state.get('error', '')}" for p, state in coverage.items() if state['status'] != 'ok']
++    if name in {"exact_search", "search_trends"}:
++        needle = query.casefold()
++        items = [(p,item) for p,item in items if needle in item.title.casefold() or needle in item.hashtag.casefold()]
++        scored = find_related_from_trends(query, items, min_score=1)
++        text = _fmt_scored(scored, query, region, "exact") + "\nScope: observed current feeds only; not full-platform search."
++    else:
++        minimum = arguments.get("min_relevance", 10)
++        if isinstance(minimum, bool) or not isinstance(minimum, (float,int)) or not 0 <= minimum <= 100:
++            raise ValueError("min_relevance must be between 0 and 100")
+         expansion = await expand_keywords(query)
++        scored = find_related_from_trends(query, items, expanded_keywords=expansion['expanded'], min_score=minimum)
++        text = f"Keyword expansion: {expansion['source']} — {', '.join(expansion['expanded'][:20])}\n"
++        text += _fmt_scored(scored, query, region, "discover")
++    if warnings:
++        text += "\nPartial coverage:\n" + "\n".join(warnings)
++    return [TextContent(type="text", text=text)]
+ 
+-        # 收集全平台趋势数据
+-        all_items = []
+-        for p in Platform:
+-            result = await _fetch(p, region)
+-            if result.success:
+-                for item in result.items:
+-                    all_items.append((p.value, item))
+-
+-        # 关联匹配 + 评分（传入扩展后的关键词）
+-        scored = find_related_from_trends(query, all_items,
+-                                           expanded_keywords=expansion["expanded"],
+-                                           min_score=min_rel)
+-
+-        # 构建输出
+-        lines = []
+-        source_label = {"llm": "🤖 LLM", "llm+local": "🤖 LLM + 📚 Local", "local": "📚 Local"}
+-        lines.append(f"🧠 Keyword expansion for '{query}' (source: {source_label.get(expansion['source'], expansion['source'])})")
+-        if expansion["expanded"]:
+-            lines.append(f"   Related terms: {', '.join(expansion['expanded'][:20])}")
+-        if expansion["domains"]:
+-            lines.append(f"   Domains: {', '.join(expansion['domains'])}")
+-        lines.append("")
+-
+-        if scored:
+-            lines.append(_fmt_scored(scored, query, region, "discover"))
+-        else:
+-            lines.append(f"No trending topics found related to '{query}' in current data.")
+-            lines.append(f"\nExpanded keywords searched: {', '.join(expansion['all_keywords'][:20])}")
+-            lines.append(f"\nTry broader terms or check direct links:")
+-            lines.append(f"• X: https://twitter.com/search?q={query}")
+-            lines.append(f"• TikTok: https://www.tiktok.com/search?q={query}")
+-            lines.append(f"• YouTube: https://youtube.com/results?search_query={query}")
+-
+-        return [TextContent(type="text", text="\n".join(lines))]
+-
+-    elif name == "list_regions":
+-        lines = ["🌍 Supported Regions\n"]
+-        for code, info in REGIONS.items():
+-            lines.append(f"  {info['label']}  →  code: {code}")
+-        lines.append(f"\nTotal: {len(REGIONS)} regions")
+-        return [TextContent(type="text", text="\n".join(lines))]
+ 
+-    return [TextContent(type="text", text=f"Unknown tool: {name}")]
+-
+-
+-async def main():
++async def _run_server():
+     logger.info("Starting Social Trends MCP Server v2 (regions + exact/discover search)...")
+     async with stdio_server() as (read_stream, write_stream):
+         await server.run(read_stream, write_stream, server.create_initialization_options())
+ 
+ 
++def main():
++    asyncio.run(_run_server())
++
++
+ if __name__ == "__main__":
+-    asyncio.run(main())
++    main()
+diff --git a/pyproject.toml b/pyproject.toml
+index 70471ae..d5e6ab0 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -17,7 +17,7 @@ classifiers = [
+ ]
+ 
+ dependencies = [
+-    "mcp[cli]>=1.2.0",
++    "mcp[cli]>=1.2.0,<2",
+     "fastapi>=0.115.0",
+     "uvicorn[standard]>=0.34.0",
+     "httpx>=0.28.0",
+@@ -34,6 +34,7 @@ dependencies = [
+ ]
+ 
+ [project.optional-dependencies]
++browser = ["playwright>=1.50,<2"]
+ dev = [
+     "pytest>=8.0",
+     "pytest-asyncio>=0.25.0",
+@@ -48,3 +49,6 @@ build-backend = "hatchling.build"
+ 
+ [tool.hatch.build.targets.wheel]
+ packages = ["app", "mcp_server.py"]
++
++[tool.pytest.ini_options]
++asyncio_default_fixture_loop_scope = "function"
+diff --git a/requirements.txt b/requirements.txt
+index f9fe8e5..3d0a4fb 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -4,7 +4,7 @@ uvicorn[standard]==0.34.0
+ gunicorn==23.0.0
+ 
+ # MCP Server
+-mcp[cli]>=1.2.0
++mcp[cli]>=1.2.0,<2
+ 
+ # Database
+ sqlalchemy[asyncio]==2.0.36
+@@ -32,3 +32,6 @@ orjson==3.10.12
+ pytest==8.3.4
+ pytest-asyncio==0.25.0
+ httpx  # also used for test client
++
++# Public Instagram browser scraper
++playwright>=1.50,<2
+diff --git a/.dockerignore b/.dockerignore
+new file mode 100644
+index 0000000..3dc3384
+--- /dev/null
++++ b/.dockerignore
+@@ -0,0 +1,11 @@
++.git
++.env
++.env.*
++!.env.example
++.venv
++venv
++__pycache__
++**/__pycache__
++*.pyc
++.pytest_cache
++tests
+diff --git a/app/collection.py b/app/collection.py
+new file mode 100644
+index 0000000..6935ec8
+--- /dev/null
++++ b/app/collection.py
+@@ -0,0 +1,23 @@
++"""Collect real scraper results concurrently with explicit per-platform coverage."""
++import asyncio
++from app.regions import validate_region
++
++async def collect_trends(platforms, region, fetch):
++    async def one(platform):
++        try:
++            validate_region(platform, region)
++            result = await fetch(platform, region)
++            if not result.success:
++                return [], {"status": "failed", "error": result.error_message}
++            return [(platform.value, item) for item in result.items], {
++                "status": "ok", "count": len(result.items),
++                "source_regions": sorted({item.region for item in result.items}),
++            }
++        except ValueError as error:
++            return [], {"status": "unsupported", "error": str(error)}
++        except Exception as error:
++            return [], {"status": "failed", "error": str(error)}
++    results = await asyncio.gather(*(one(platform) for platform in platforms))
++    items = [item for rows, _ in results for item in rows]
++    coverage = {platform.value: status for platform, (_, status) in zip(platforms, results)}
++    return items, coverage
+diff --git a/app/llms.txt b/app/llms.txt
+new file mode 100644
+index 0000000..b20c46f
+--- /dev/null
++++ b/app/llms.txt
+@@ -0,0 +1,43 @@
++# Social Trends MCP
++
++> Public social trend collection, PostgreSQL history, REST/WebSocket and stdio MCP tools with evidence-based movement analysis. Default sources require no paid API or AI model.
++
++## Documentation
++- [Setup and operation](https://github.com/JienWeng/social-trend-mcp/blob/main/README.md): prerequisites, setup and service commands.
++- [Supported endpoints and MCP tools](https://github.com/JienWeng/social-trend-mcp/blob/main/docs/ENDPOINTS.md): methods, arguments, persistence and source coverage.
++- [Trend analysis](https://github.com/JienWeng/social-trend-mcp/blob/main/TREND-ANALYSIS.md): evidence rules, verification and limitations.
++- [Repairs and validation](https://github.com/JienWeng/social-trend-mcp/blob/main/CURRENT-STATUS.md): source and reliability status.
++- [Change summary](https://github.com/JienWeng/social-trend-mcp/blob/main/docs/CHANGES.md): implemented repairs and known boundaries.
++
++## Local interfaces
++REST base: http://127.0.0.1:8000. GET /openapi.json is the live schema; GET /docs is interactive documentation. GET /llms.txt serves this guide.
++GET /api/v1/platforms and /api/v1/regions enumerate supported choices. Platform IDs: twitter, tiktok, youtube, instagram, douyin.
++GET /api/v1/trends and /api/v1/trends/{platform} read stored snapshots. GET /api/v1/trends/history/{platform} reads history.
++GET /api/v1/search/exact?q=... and /api/v1/search/discover?q=... fetch observed feeds without persistence.
++POST /api/v1/refresh queues persisted collection and returns 202.
++POST /api/v1/analysis/capture/{platform}?region=global fetches and persists; 200 means captured, 202 means another capture is running, 502 means collection failed and its failure snapshot was recorded.
++GET /api/v1/analysis/trends?region=global&hours=48&limit=20 reads historical movement signals; optional platform. hours:1–720, limit:1–100.
++GET /api/v1/health reports healthy/degraded in its JSON body.
++WebSocket /ws/trends broadcasts committed updates; text ping returns pong. Single-worker operation only.
++
++## MCP
++Transport: stdio via ./start-mcp.sh; there is no HTTP MCP endpoint.
++Tools: get_trends, get_all_trends, exact_search, search_trends (alias), discover_search, list_regions, capture_trends, analyze_trends.
++Direct fetch/search tools use source data/cache and do not save history.
++capture_trends requires platform and optionally region; it persists through the API.
++analyze_trends accepts optional platform, region, hours and limit; it reads shared stored history.
++These last two tools require the API at API_BASE_URL, default http://127.0.0.1:8000.
++
++## Interpretation rules
++Report source scope, actual region, observation times, missing metrics and coverage failures.
++X is a third-party ranking. TikTok is a limited preview; global maps to US. YouTube keyless data is weekly music charts; global maps to US. Instagram is a global public Reels recommendation sample, not a platform-wide trends ranking. Douyin is a China hot list; heat scores are not views.
++Search covers observed feeds, not full-platform content. Empty results do not prove platform-wide absence.
++A rising candidate needs three independent observations over at least one hour, spaced at least 15 minutes, plus sustained rank improvement or comparable metric growth. Repeated source editions count once.
++Use returned evidence and warnings. Confidence is qualitative, not a probability. First appearance in a sample is not proof of a newly emerging topic. Do not claim future virality or exhaustive platform coverage.
++AI can interpret these signals; the service does not call a paid LLM or validate predictive accuracy.
++Collection defaults to every six hours. Do not create synthetic observations in the service database to simulate history.
++
++## Repository layout
++The upstream source is pinned to caicai-yao/social-trends-mcp commit c9f413ad1c8c6b387e8cd1af5f0c709f263ceae2.
++setup.sh clones it into ignored upstream/, applies verification/repairs.patch and restores verification/regression-tests/. The patch contains the implementation changes; upstream/ is not a Git submodule.
++Use ./verification/run_tests.sh for isolated regression checks. Live verification scripts perform network requests and may persist real captures.
+diff --git a/app/routers/analysis.py b/app/routers/analysis.py
+new file mode 100644
+index 0000000..cdac242
+--- /dev/null
++++ b/app/routers/analysis.py
+@@ -0,0 +1,32 @@
++"""Shared PostgreSQL-backed captures and evidence-based analysis."""
++from fastapi import APIRouter,Depends,Query
++from fastapi.responses import JSONResponse
++from sqlalchemy import select
++from sqlalchemy.ext.asyncio import AsyncSession
++from app.database import get_db
++from app.models import ScrapeSnapshot,TrendTopic
++from app.services import trend_service
++from app.services.trend_analysis import analyze_database
++from app.routers.trends import checked_platform,checked_region
++
++router=APIRouter(prefix='/api/v1/analysis',tags=['analysis'])
++
++
++@router.get('/trends')
++async def analyze_trends(platform:str|None=Query(None),region:str=Query('global'),hours:int=Query(48,ge=1,le=720),limit:int=Query(20,ge=1,le=100),db:AsyncSession=Depends(get_db)):
++    target=checked_platform(platform) if platform else None
++    region=checked_region(region,target)
++    return await analyze_database(db,platform=target,region=region,hours=hours,limit=limit)
++
++
++@router.post('/capture/{platform}')
++async def capture_trends(platform:str,region:str=Query('global'),db:AsyncSession=Depends(get_db)):
++    target=checked_platform(platform);region=checked_region(region,target)
++    result=await trend_service.scrape_single_platform(target,region=region)
++    if result.get('skipped'):
++        return JSONResponse(status_code=202,content={**result,'persisted':False,'state':'capture_already_running'})
++    if not result['success']:
++        return JSONResponse(status_code=502,content={**result,'persisted':True,'state':'failure_recorded'})
++    snapshot=await db.get(ScrapeSnapshot,result['snapshot_id'])
++    topics=(await db.execute(select(TrendTopic).where(TrendTopic.snapshot_id==snapshot.id).order_by(TrendTopic.rank))).scalars().all()
++    return {'persisted':True,'state':'captured','snapshot':snapshot.to_dict(),'topics':[topic.to_dict() for topic in topics]}
+diff --git a/app/scrapers/douyin_scraper.py b/app/scrapers/douyin_scraper.py
+new file mode 100644
+index 0000000..4dd6393
+--- /dev/null
++++ b/app/scrapers/douyin_scraper.py
+@@ -0,0 +1,90 @@
++"""Logged-out official Douyin hot lists for mainland China.
++
++These undocumented public endpoints need no API key. ``hot_value`` is a
++platform heat score, not a view count. Global requests select the China board.
++"""
++import logging
++import math
++from datetime import datetime
++from urllib.parse import quote
++from zoneinfo import ZoneInfo
++
++from app.models import Platform
++from app.scrapers.base import BaseScraper, TrendItem
++
++logger = logging.getLogger(__name__)
++
++
++class DouyinScraper(BaseScraper):
++    platform = Platform.DOUYIN
++    # Each scrape tries two sources once; do not multiply failures with base retries.
++    max_retries = 1
++    timeout = 10
++    BILLBOARD_URL = 'https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/'
++    HOT_SEARCH_URL = 'https://www.iesdouyin.com/aweme/v1/hot/search/list/'
++
++    def __init__(self, proxy: str = '', max_topics: int = 30, region: str = 'global'):
++        if region not in {'global', 'cn'}:
++            raise ValueError('Douyin supports only global and cn (mainland China)')
++        super().__init__(proxy=proxy, max_topics=max_topics, region=region)
++
++    async def scrape(self) -> list[TrendItem]:
++        errors = []
++        for source in (self.BILLBOARD_URL, self.HOT_SEARCH_URL):
++            try:
++                async with self._get_client() as client:
++                    response = await client.get(source, timeout=self.timeout)
++                    response.raise_for_status()
++                    payload = response.json()
++                if not isinstance(payload, dict) or payload.get('status_code') != 0:
++                    raise ValueError('Invalid Douyin response or nonzero status_code')
++                data = payload if source == self.BILLBOARD_URL else payload.get('data')
++                items = self._parse_list(data, source)
++                if items:
++                    return items
++                raise ValueError('No valid hot topics in source')
++            except Exception as error:
++                errors.append(f'{source}: {error}')
++                logger.warning('[douyin] %s failed: %s', source, error)
++        raise RuntimeError('All Douyin public sources failed: ' + '; '.join(errors))
++
++    def _parse_list(self, data: dict, source: str) -> list[TrendItem]:
++        if not isinstance(data, dict) or not isinstance(data.get('word_list'), list):
++            raise ValueError('Missing Douyin word_list')
++        # Source active_time is a China wall-clock time, separate from retrieval time.
++        source_time = datetime.strptime(data.get('active_time', ''), '%Y-%m-%d %H:%M:%S')
++        source_timestamp = source_time.replace(tzinfo=ZoneInfo('Asia/Shanghai')).isoformat()
++        items, seen = [], set()
++        for row in data['word_list']:
++            if not isinstance(row, dict) or not isinstance(row.get('word'), str):
++                continue
++            title = row['word'].strip()
++            score = row.get('hot_value')
++            if not title or title in seen or isinstance(score, bool):
++                continue
++            try:
++                score = float(score)
++            except (TypeError, ValueError, OverflowError):
++                continue
++            if not math.isfinite(score) or score < 0:
++                continue
++            seen.add(title)
++            items.append(TrendItem(
++                rank=len(items) + 1,
++                title=title,
++                url=f'https://www.douyin.com/search/{quote(title, safe="")}',
++                volume=score,
++                volume_label=f'{score:g} heat score' if score < 1e6 else f'{score:.0f} heat score',
++                region='cn',
++                description='Official Douyin mainland China hot list; heat score is not views.',
++                extra_data={
++                    'source': source,
++                    'source_timestamp': source_timestamp,
++                    'data_kind': 'official_public_hot_list',
++                    'metric': 'heat_score',
++                    'requested_region': self.region,
++                },
++            ))
++            if len(items) >= self.max_topics:
++                break
++        return items
+diff --git a/app/services/trend_analysis.py b/app/services/trend_analysis.py
+new file mode 100644
+index 0000000..5149b3a
+--- /dev/null
++++ b/app/services/trend_analysis.py
+@@ -0,0 +1,194 @@
++"""Evidence-based movement signals over stored observations; never predictions."""
++from collections import defaultdict
++from datetime import datetime,timezone,timedelta
++import math,re,unicodedata
++from urllib.parse import urlparse,parse_qs
++from sqlalchemy import select,desc
++from app.models import Platform,ScrapeSnapshot,TrendTopic
++from app.timeutils import utcnow,iso_utc
++from app.regions import validate_region
++
++
++def timestamp(value):
++    if isinstance(value,str):value=datetime.fromisoformat(value.replace('Z','+00:00'))
++    if value.tzinfo:value=value.astimezone(timezone.utc).replace(tzinfo=None)
++    return value
++
++
++def identity(platform,item):
++    metadata=item.get('extra_data') or {}
++    if metadata.get('hashtag_id'):return 'hashtag:'+str(metadata['hashtag_id'])
++    url=item.get('url','');parsed=urlparse(url)
++    if platform in {'youtube','instagram'} and parsed.netloc:
++        return parsed.netloc.lower().removeprefix('www.')+parsed.path.rstrip('/')+(':'+parse_qs(parsed.query).get('v',[''])[0] if platform=='youtube' else '')
++    return unicodedata.normalize('NFKC',item.get('title','')).casefold().strip().lstrip('#')
++
++
++def metric_context(item):
++    metadata=item.get('extra_data') or {}
++    kind=metadata.get('data_kind','unknown')
++    label=item.get('volume_label','').casefold()
++    unit=next((unit for unit in ['heat score','weekly views','views','likes','posts'] if unit in label),None)
++    if metadata.get('volume') is None and 'volume' in metadata and not label:unit=None
++    if kind=='youtube_weekly_music_video_chart':unit='weekly views'
++    if metadata.get('views_available') is False:unit=None
++    period=(metadata.get('chart_start_date'),metadata.get('chart_end_date'),metadata.get('period_days'))
++    return (unit,period)
++
++
++def measurement(item):
++    if metric_context(item)[0] is None:return None
++    try:
++        value=float(item.get('volume'))
++        return value if math.isfinite(value) and value>=0 else None
++    except (ValueError,TypeError):return None
++
++
++def source_context(item):
++    meta=item.get('extra_data') or {}
++    return meta.get('data_kind','unknown'),meta.get('source','unknown'),item.get('region','global')
++
++
++def independent(observations):
++    """At most one point per 15 minutes and per explicit source edition."""
++    result=[];editions=set()
++    for observation in reversed(observations):
++        meta=observation['item'].get('extra_data') or {}
++        edition=meta.get('source_timestamp')
++        if meta.get('data_kind')=='youtube_weekly_music_video_chart':edition=meta.get('chart_end_date')
++        if edition and edition in editions:continue
++        if result and (result[-1]['time']-observation['time']).total_seconds()<900:continue
++        result.append(observation)
++        if edition:editions.add(edition)
++    return list(reversed(result))
++
++
++def analyze_history(history,region='global',now=None,limit=20):
++    now=timestamp(now or utcnow());groups=defaultdict(list)
++    for row in history:
++        if row['snapshot'].get('region','global')==region:
++            groups[row['snapshot']['platform']].append(row)
++    output={'region':region,'generated_at':iso_utc(now),'method':'observed_momentum_v1',
++            'policy':{'minimum_observations':3,'minimum_span_hours':1,'minimum_spacing_minutes':15,
++                      'confidence_is_probability':False,'scope':'observed feeds only; no prediction or platform-wide coverage guarantee'},
++            'platforms':{}}
++    for platform,rows in groups.items():
++        rows.sort(key=lambda row:(timestamp(row['snapshot']['started_at']),row['snapshot']['id']))
++        latest=rows[-1];snapshot=latest['snapshot'];age=max(0,(now-timestamp(snapshot.get('finished_at') or snapshot['started_at'])).total_seconds())
++        state={'status':'ok','snapshot_id':snapshot['id'],'snapshot_count':len(rows),'latest_age_hours':round(age/3600,3),'topics':[]}
++        output['platforms'][platform]=state
++        if snapshot['status']!='success':
++            state.update(status='unavailable',error=snapshot.get('error_message','Latest collection failed'));continue
++        if age>43200:state['status']='stale'
++        observed=defaultdict(list)
++        successful=[row for row in rows if row['snapshot']['status']=='success']
++        for row in successful:
++            seen=set()
++            for item in row['topics']:
++                key=identity(platform,item)
++                if key in seen:continue
++                seen.add(key)
++                observed[key].append({'item':item,'time':timestamp(row['snapshot']['started_at']),'snapshot_id':row['snapshot']['id']})
++        for current in latest['topics']:
++            key=identity(platform,current);raw=observed[key]
++            same=[row for row in raw if source_context(row['item'])==source_context(current)]
++            points=independent(same);warnings=[];quality_events=[]
++            for before,after in zip(same,same[1:]):
++                context=metric_context(after['item'])
++                a,b=measurement(before['item']),measurement(after['item'])
++                if (context==metric_context(before['item']) and context[0] not in {None,'heat score','weekly views'}
++                    and not context[1][2] and a is not None and b is not None and b<a):
++                    quality_events.append({'type':'metric_decreased_or_reset','from_value':a,'to_value':b,
++                        'from_snapshot_id':before['snapshot_id'],'to_snapshot_id':after['snapshot_id'],
++                        'observed_at':iso_utc(after['time'])})
++            if quality_events:warnings.append('metric_decreased_or_reset')
++            if len(same)!=len(raw):warnings.append('source_context_changed')
++            first,last=points[0],points[-1]
++            span=(last['time']-first['time']).total_seconds()/3600
++            kind=(current.get('extra_data') or {}).get('data_kind','unknown')
++            ranked=kind not in {'public_reels_recommendation_sample','sampled_trending_reels','third_party_hashtag_suggestions','public_hashtag_listing'}
++            if not ranked:warnings.append('recommendation_order_not_ranking')
++            if kind=='youtube_weekly_music_video_chart':warnings.append('weekly_music_chart_only')
++            if kind=='third_party_trend_ranking':warnings.append('third_party_source')
++            if (current.get('extra_data') or {}).get('period_days'):warnings.append('rolling_window_metric_not_cumulative')
++            if kind in {'official_public_trends_preview','public_reels_recommendation_sample','sampled_trending_reels'}:warnings.append('limited_sample_coverage')
++            contexts=[metric_context(point['item']) for point in points]
++            comparable=len(set(contexts))==1 and contexts[-1][0] is not None
++            if len(set(contexts))>1:warnings.append('metric_context_changed')
++            values=[measurement(point['item']) for point in points]
++            comparable=comparable and all(value is not None for value in values)
++            delta=percent=per_hour=None
++            if comparable and len(points)>=2:
++                delta=values[-1]-values[0]
++                percent=round(delta/values[0]*100,2) if values[0]>0 else None
++                per_hour=round(delta/span,3) if span else None
++            if quality_events:delta=percent=per_hour=None
++            ranks=[point['item'].get('rank') for point in points]
++            valid_ranks=ranked and all(isinstance(rank,int) and rank>0 for rank in ranks)
++            rank_change=ranks[0]-ranks[-1] if valid_ranks and len(ranks)>=2 else None
++            sustained_rank=valid_ranks and len(ranks)>=3 and all(b<a for a,b in zip(ranks,ranks[1:])) and rank_change>=2
++            sustained_metric=comparable and len(values)>=3 and all(b>a for a,b in zip(values,values[1:])) and percent is not None and percent>=25
++            enough=len(points)>=3 and span>=1
++            signal='stable';confidence='low'
++            explanation='No sustained positive movement was established in the observed sample.'
++            if len(raw)==1 and len(successful)>1:
++                signal='new_to_sample';explanation='First appearance in this sampled lookback window; origin and wider popularity are unknown.'
++            elif not enough:
++                signal='insufficient_history';explanation='Need at least three independent observations spanning one hour before flagging momentum.'
++            elif 'metric_decreased_or_reset' in warnings:
++                signal='insufficient_evidence';explanation='A measurement decreased or reset; it is unsafe to calculate a growth signal from these points.'
++            elif sustained_rank or sustained_metric:
++                signal='rising_candidate';confidence='moderate'
++                reasons=[]
++                if sustained_rank:reasons.append(f'rank improved by {rank_change} positions across {len(points)} observations')
++                if sustained_metric:reasons.append(f'observed {contexts[-1][0]} increased {percent}% over {span:.2f} hours')
++                explanation='; '.join(reasons)+'. This is a sampled momentum candidate, not a prediction.'
++            elif (rank_change is not None and rank_change<=-2) or (percent is not None and percent<=-25):
++                signal='falling';confidence='moderate';explanation='Observed rank or a comparable metric declined across the window.'
++            elif (rank_change is not None and rank_change>=2) or (percent is not None and percent>=25):
++                signal='mixed_movement';explanation='Net improvement was observed, but intermediate observations did not show sustained growth.'
++            if state['status']=='stale':
++                warnings.append('stale_latest_observation');signal='insufficient_evidence';confidence='low'
++            state['topics'].append({'topic_key':key,'title':current['title'],'url':current.get('url',''),'signal':signal,'confidence':confidence,
++                'observations':len(points),'raw_observations':len(raw),'span_hours':round(span,3),
++                'first_seen_in_window':len(raw)==1,'rank_change':rank_change,'metric':{'unit':contexts[-1][0],
++                'change':delta,'change_percent':percent,'per_hour':per_hour,'window':contexts[-1][1],
++                'rate_definition':'Net change in reported metric per elapsed hour, not new events per hour'},'warnings':warnings,'quality_events':quality_events,'explanation':explanation,
++                'evidence':[{'snapshot_id':point['snapshot_id'],'observed_at':iso_utc(point['time']),
++                             'rank':point['item'].get('rank') if ranked else None,'metric_value':measurement(point['item']),
++                             'metric_unit':metric_context(point['item'])[0],'metric_window':metric_context(point['item'])[1]} for point in points]})
++        priority={'rising_candidate':0,'new_to_sample':1,'falling':2,'mixed_movement':3,'stable':3,'insufficient_history':4,'insufficient_evidence':5}
++        state['topics'].sort(key=lambda item:priority[item['signal']])
++        state['topics_analyzed']=len(state['topics'])
++        state['rising_candidates']=sum(topic['signal']=='rising_candidate' for topic in state['topics'])
++        state['topics']=state['topics'][:limit]
++    output['summary']={'rising_candidates':sum(state.get('rising_candidates',0) for state in output['platforms'].values()),
++                       'note':'Signals describe stored observations. Limited history, changing sources, sampling and missing metrics restrict conclusions.'}
++    return output
++
++
++async def analyze_database(session,platform=None,region='global',hours=48,limit=20):
++    targets=[platform] if platform else list(Platform)
++    snapshots=[];truncated={}
++    cutoff=utcnow()-timedelta(hours=hours)
++    for target in targets:
++        query=select(ScrapeSnapshot).where(ScrapeSnapshot.region==region,
++            ScrapeSnapshot.platform==target,ScrapeSnapshot.started_at>=cutoff)
++        rows=(await session.execute(query.order_by(desc(ScrapeSnapshot.started_at),desc(ScrapeSnapshot.id)).limit(501))).scalars().all()
++        truncated[target.value]=len(rows)>500
++        snapshots.extend(rows[:500])
++    by_id=defaultdict(list)
++    if snapshots:
++        topics=(await session.execute(select(TrendTopic).where(TrendTopic.snapshot_id.in_([row.id for row in snapshots])).order_by(TrendTopic.rank))).scalars().all()
++        for topic in topics:by_id[topic.snapshot_id].append(topic.to_dict())
++    result=analyze_history([{'snapshot':row.to_dict(),'topics':by_id[row.id]} for row in snapshots],region=region,limit=limit)
++    for target in targets:
++        try:
++            validate_region(target,region)
++        except ValueError as error:
++            result['platforms'][target.value]={'status':'unsupported','error':str(error),'topics':[]}
++            continue
++        result['platforms'].setdefault(target.value,{'status':'insufficient_history','snapshot_count':0,'topics':[]})
++        result['platforms'][target.value]['history_truncated']=truncated[target.value]
++    result['lookback_hours']=hours;result['history_truncated']=any(truncated.values())
++    return result
+diff --git a/app/timeutils.py b/app/timeutils.py
+new file mode 100644
+index 0000000..bccf004
+--- /dev/null
++++ b/app/timeutils.py
+@@ -0,0 +1,8 @@
++"""UTC helpers compatible with the existing timestamp-without-timezone schema."""
++from datetime import datetime,timezone
++
++def utcnow():
++    return datetime.now(timezone.utc).replace(tzinfo=None)
++
++def iso_utc(value):
++    return value.replace(tzinfo=timezone.utc).isoformat() if value else None

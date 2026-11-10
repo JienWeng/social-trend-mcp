@@ -1,0 +1,2857 @@
+{
+  "initial": {
+    "twitter": {
+      "snapshot": {
+        "id": 57,
+        "platform": "twitter",
+        "status": "success",
+        "region": "global",
+        "error_message": "",
+        "topic_count": 30,
+        "duration_ms": 1704,
+        "started_at": "2026-11-10T08:34:07.870036+00:00",
+        "finished_at": "2026-11-10T08:34:09.574217+00:00"
+      },
+      "count": 30
+    },
+    "tiktok": {
+      "snapshot": {
+        "id": 56,
+        "platform": "tiktok",
+        "status": "success",
+        "region": "global",
+        "error_message": "",
+        "topic_count": 3,
+        "duration_ms": 219,
+        "started_at": "2026-11-10T08:34:08.050261+00:00",
+        "finished_at": "2026-11-10T08:34:08.270350+00:00"
+      },
+      "count": 3
+    },
+    "youtube": {
+      "snapshot": {
+        "id": 60,
+        "platform": "youtube",
+        "status": "success",
+        "region": "global",
+        "error_message": "",
+        "topic_count": 30,
+        "duration_ms": 10475,
+        "started_at": "2026-11-10T08:34:08.058616+00:00",
+        "finished_at": "2026-11-10T08:34:18.534224+00:00"
+      },
+      "count": 30
+    },
+    "instagram": {
+      "snapshot": {
+        "id": 59,
+        "platform": "instagram",
+        "status": "success",
+        "region": "global",
+        "error_message": "",
+        "topic_count": 8,
+        "duration_ms": 4116,
+        "started_at": "2026-11-10T08:34:08.121726+00:00",
+        "finished_at": "2026-11-10T08:34:12.238217+00:00"
+      },
+      "count": 8
+    },
+    "douyin": {
+      "snapshot": {
+        "id": 58,
+        "platform": "douyin",
+        "status": "success",
+        "region": "global",
+        "error_message": "",
+        "topic_count": 30,
+        "duration_ms": 1459,
+        "started_at": "2026-11-10T08:34:08.122018+00:00",
+        "finished_at": "2026-11-10T08:34:09.581486+00:00"
+      },
+      "count": 30
+    }
+  },
+  "regional": {
+    "twitter": {
+      "topics": [
+        {
+          "id": 812,
+          "platform": "twitter",
+          "rank": 1,
+          "title": "#ヒートテックがあったから",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%23%E3%83%92%E3%83%BC%E3%83%88%E3%83%86%E3%83%83%E3%82%AF%E3%81%8C%E3%81%82%E3%81%A3%E3%81%9F%E3%81%8B%E3%82%89",
+          "hashtag": "#ヒートテックがあったから",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636748+00:00"
+        },
+        {
+          "id": 813,
+          "platform": "twitter",
+          "rank": 2,
+          "title": "#スターバックスを1か月間毎日楽しめる",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%23%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%90%E3%83%83%E3%82%AF%E3%82%B9%E3%82%921%E3%81%8B%E6%9C%88%E9%96%93%E6%AF%8E%E6%97%A5%E6%A5%BD%E3%81%97%E3%82%81%E3%82%8B",
+          "hashtag": "#スターバックスを1か月間毎日楽しめる",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636755+00:00"
+        },
+        {
+          "id": 814,
+          "platform": "twitter",
+          "rank": 3,
+          "title": "ラブリーズン",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%83%A9%E3%83%96%E3%83%AA%E3%83%BC%E3%82%BA%E3%83%B3",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636756+00:00"
+        },
+        {
+          "id": 815,
+          "platform": "twitter",
+          "rank": 4,
+          "title": "#味ぽんの日",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%23%E5%91%B3%E3%81%BD%E3%82%93%E3%81%AE%E6%97%A5",
+          "hashtag": "#味ぽんの日",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636758+00:00"
+        },
+        {
+          "id": 816,
+          "platform": "twitter",
+          "rank": 5,
+          "title": "#ぽんまつり",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%23%E3%81%BD%E3%82%93%E3%81%BE%E3%81%A4%E3%82%8A",
+          "hashtag": "#ぽんまつり",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636759+00:00"
+        },
+        {
+          "id": 817,
+          "platform": "twitter",
+          "rank": 6,
+          "title": "#ローソンプリント10周年",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%23%E3%83%AD%E3%83%BC%E3%82%BD%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%83%8810%E5%91%A8%E5%B9%B4",
+          "hashtag": "#ローソンプリント10周年",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636760+00:00"
+        },
+        {
+          "id": 818,
+          "platform": "twitter",
+          "rank": 7,
+          "title": "国民健康保険料",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E5%9B%BD%E6%B0%91%E5%81%A5%E5%BA%B7%E4%BF%9D%E9%99%BA%E6%96%99",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636762+00:00"
+        },
+        {
+          "id": 819,
+          "platform": "twitter",
+          "rank": 8,
+          "title": "フジクラ",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%83%95%E3%82%B8%E3%82%AF%E3%83%A9",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636763+00:00"
+        },
+        {
+          "id": 820,
+          "platform": "twitter",
+          "rank": 9,
+          "title": "きみのなか",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%81%8D%E3%81%BF%E3%81%AE%E3%81%AA%E3%81%8B",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636764+00:00"
+        },
+        {
+          "id": 821,
+          "platform": "twitter",
+          "rank": 10,
+          "title": "My X",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=My+X",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636766+00:00"
+        },
+        {
+          "id": 822,
+          "platform": "twitter",
+          "rank": 11,
+          "title": "プーズー",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%83%97%E3%83%BC%E3%82%BA%E3%83%BC",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636767+00:00"
+        },
+        {
+          "id": 823,
+          "platform": "twitter",
+          "rank": 12,
+          "title": "無のグッズ",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E7%84%A1%E3%81%AE%E3%82%B0%E3%83%83%E3%82%BA",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636768+00:00"
+        },
+        {
+          "id": 824,
+          "platform": "twitter",
+          "rank": 13,
+          "title": "ウォークスルー改札",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%AF%E3%82%B9%E3%83%AB%E3%83%BC%E6%94%B9%E6%9C%AD",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636770+00:00"
+        },
+        {
+          "id": 825,
+          "platform": "twitter",
+          "rank": 14,
+          "title": "赤レンガ",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E8%B5%A4%E3%83%AC%E3%83%B3%E3%82%AC",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636771+00:00"
+        },
+        {
+          "id": 826,
+          "platform": "twitter",
+          "rank": 15,
+          "title": "THE MODS",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=THE+MODS",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636772+00:00"
+        },
+        {
+          "id": 827,
+          "platform": "twitter",
+          "rank": 16,
+          "title": "無のマグカップ",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E7%84%A1%E3%81%AE%E3%83%9E%E3%82%B0%E3%82%AB%E3%83%83%E3%83%97",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636773+00:00"
+        },
+        {
+          "id": 828,
+          "platform": "twitter",
+          "rank": 17,
+          "title": "モンハンコラボ",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%83%A2%E3%83%B3%E3%83%8F%E3%83%B3%E3%82%B3%E3%83%A9%E3%83%9C",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636775+00:00"
+        },
+        {
+          "id": 829,
+          "platform": "twitter",
+          "rank": 18,
+          "title": "デーセク",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%83%87%E3%83%BC%E3%82%BB%E3%82%AF",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636776+00:00"
+        },
+        {
+          "id": 830,
+          "platform": "twitter",
+          "rank": 19,
+          "title": "苣木さん",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E8%8B%A3%E6%9C%A8%E3%81%95%E3%82%93",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636777+00:00"
+        },
+        {
+          "id": 831,
+          "platform": "twitter",
+          "rank": 20,
+          "title": "ポッキーの日",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%83%9D%E3%83%83%E3%82%AD%E3%83%BC%E3%81%AE%E6%97%A5",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636779+00:00"
+        },
+        {
+          "id": 832,
+          "platform": "twitter",
+          "rank": 21,
+          "title": "東京地裁",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E6%9D%B1%E4%BA%AC%E5%9C%B0%E8%A3%81",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636780+00:00"
+        },
+        {
+          "id": 833,
+          "platform": "twitter",
+          "rank": 22,
+          "title": "モモジャン",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%83%A2%E3%83%A2%E3%82%B8%E3%83%A3%E3%83%B3",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636781+00:00"
+        },
+        {
+          "id": 834,
+          "platform": "twitter",
+          "rank": 23,
+          "title": "無ちゃん",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E7%84%A1%E3%81%A1%E3%82%83%E3%82%93",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636782+00:00"
+        },
+        {
+          "id": 835,
+          "platform": "twitter",
+          "rank": 24,
+          "title": "たんぱく質6.2gブランパン",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%81%9F%E3%82%93%E3%81%B1%E3%81%8F%E8%B3%AA6.2g%E3%83%96%E3%83%A9%E3%83%B3%E3%83%91%E3%83%B3",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636784+00:00"
+        },
+        {
+          "id": 836,
+          "platform": "twitter",
+          "rank": 25,
+          "title": "オベリスク",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%82%AA%E3%83%99%E3%83%AA%E3%82%B9%E3%82%AF",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636785+00:00"
+        },
+        {
+          "id": 837,
+          "platform": "twitter",
+          "rank": 26,
+          "title": "シーパラ",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%82%B7%E3%83%BC%E3%83%91%E3%83%A9",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636786+00:00"
+        },
+        {
+          "id": 838,
+          "platform": "twitter",
+          "rank": 27,
+          "title": "ホリデーシーズン",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%83%9B%E3%83%AA%E3%83%87%E3%83%BC%E3%82%B7%E3%83%BC%E3%82%BA%E3%83%B3",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636787+00:00"
+        },
+        {
+          "id": 839,
+          "platform": "twitter",
+          "rank": 28,
+          "title": "詐欺広告",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E8%A9%90%E6%AC%BA%E5%BA%83%E5%91%8A",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636789+00:00"
+        },
+        {
+          "id": 840,
+          "platform": "twitter",
+          "rank": 29,
+          "title": "シゲちゃん",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%82%B7%E3%82%B2%E3%81%A1%E3%82%83%E3%82%93",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636790+00:00"
+        },
+        {
+          "id": 841,
+          "platform": "twitter",
+          "rank": 30,
+          "title": "たまごっち",
+          "description": "Third-party trend ranking from trends24.in; volume unavailable.",
+          "url": "https://twitter.com/search?q=%E3%81%9F%E3%81%BE%E3%81%94%E3%81%A3%E3%81%A1",
+          "hashtag": "",
+          "volume": 0.0,
+          "volume_label": "",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://trends24.in/japan/",
+            "data_kind": "third_party_trend_ranking",
+            "volume": null
+          },
+          "created_at": "2026-11-10T08:35:21.636791+00:00"
+        }
+      ],
+      "snapshot": {
+        "id": 61,
+        "platform": "twitter",
+        "status": "success",
+        "region": "jp",
+        "error_message": "",
+        "topic_count": 30,
+        "duration_ms": 421,
+        "started_at": "2026-11-10T08:35:21.210812+00:00",
+        "finished_at": "2026-11-10T08:35:21.632166+00:00"
+      },
+      "freshness": {
+        "state": "fresh",
+        "age_seconds": 0,
+        "max_age_seconds": 43200
+      }
+    },
+    "youtube": {
+      "topics": [
+        {
+          "id": 842,
+          "platform": "youtube",
+          "rank": 1,
+          "title": "ザッツ！超常 - That's!Chojo",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=F8YyP5wtvVw",
+          "hashtag": "",
+          "volume": 4893747.0,
+          "volume_label": "4,893,747 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 4893747,
+            "channel": "M!LK",
+            "artists": [
+              "M!LK"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/F8YyP5wtvVw/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135654+00:00"
+        },
+        {
+          "id": 843,
+          "platform": "youtube",
+          "rank": 2,
+          "title": "Slidin",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=RbFJ-eb_7vs",
+          "hashtag": "",
+          "volume": 3579365.0,
+          "volume_label": "3,579,365 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 3579365,
+            "channel": "HANA official",
+            "artists": [
+              "HANA"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/RbFJ-eb_7vs/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135661+00:00"
+        },
+        {
+          "id": 844,
+          "platform": "youtube",
+          "rank": 3,
+          "title": "Original Love - 接吻 / THE FIRST TAKE",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=gqVNaKiGIJY",
+          "hashtag": "",
+          "volume": 3244976.0,
+          "volume_label": "3,244,976 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 3244976,
+            "channel": "THE FIRST TAKE",
+            "artists": [
+              "Ovall",
+              "Original Love"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/gqVNaKiGIJY/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135663+00:00"
+        },
+        {
+          "id": 845,
+          "platform": "youtube",
+          "rank": 4,
+          "title": "NOW U KNOW",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=I83-uq6iwcM",
+          "hashtag": "",
+          "volume": 2404486.0,
+          "volume_label": "2,404,486 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 2404486,
+            "channel": "BE:FIRST Official",
+            "artists": [
+              "BE:FIRST"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/I83-uq6iwcM/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135665+00:00"
+        },
+        {
+          "id": 846,
+          "platform": "youtube",
+          "rank": 5,
+          "title": "Yes! 東京",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=KsHKaP50FBE",
+          "hashtag": "",
+          "volume": 1959184.0,
+          "volume_label": "1,959,184 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1959184,
+            "channel": "EBiDAN",
+            "artists": [
+              "EBiDAN Ebisu Gakuen Boys Club"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/KsHKaP50FBE/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135666+00:00"
+        },
+        {
+          "id": 847,
+          "platform": "youtube",
+          "rank": 6,
+          "title": "爆裂愛してる",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=tpFDnOnOdSQ",
+          "hashtag": "",
+          "volume": 1882608.0,
+          "volume_label": "1,882,608 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1882608,
+            "channel": "M!LK",
+            "artists": [
+              "M!LK"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/tpFDnOnOdSQ/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135667+00:00"
+        },
+        {
+          "id": 848,
+          "platform": "youtube",
+          "rank": 7,
+          "title": "ILLIT (아일릿) '체포하겠어 (You’re Under Arrest)’ Official MV",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=V2V9-9VhYJo",
+          "hashtag": "",
+          "volume": 1790345.0,
+          "volume_label": "1,790,345 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1790345,
+            "channel": "HYBE LABELS",
+            "artists": [
+              "HYBE LABELS"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/V2V9-9VhYJo/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135669+00:00"
+        },
+        {
+          "id": 849,
+          "platform": "youtube",
+          "rank": 8,
+          "title": "シンデレラ - Cinderella",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=SWzfm9PED6s",
+          "hashtag": "",
+          "volume": 1582665.0,
+          "volume_label": "1,582,665 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1582665,
+            "channel": "Mrs. GREEN APPLE",
+            "artists": [
+              "Mrs. GREEN APPLE"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/SWzfm9PED6s/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135670+00:00"
+        },
+        {
+          "id": 850,
+          "platform": "youtube",
+          "rank": 9,
+          "title": "好きすぎて滅！ - I love it so much!",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=ZVUxJsPfoX8",
+          "hashtag": "",
+          "volume": 1571391.0,
+          "volume_label": "1,571,391 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1571391,
+            "channel": "M!LK",
+            "artists": [
+              "M!LK"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/ZVUxJsPfoX8/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135671+00:00"
+        },
+        {
+          "id": 851,
+          "platform": "youtube",
+          "rank": 10,
+          "title": "Yes! 東京",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=GlsmJsqXfcI",
+          "hashtag": "",
+          "volume": 1538062.0,
+          "volume_label": "1,538,062 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1538062,
+            "channel": "EBiDAN",
+            "artists": [
+              "EBiDAN Ebisu Gakuen Boys Club"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/GlsmJsqXfcI/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135673+00:00"
+        },
+        {
+          "id": 852,
+          "platform": "youtube",
+          "rank": 11,
+          "title": "AK-69 - SEASONS feat. ayumi hamasaki [One-Take Performance Film] Produced by ayumi hamasaki",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=Ln5KC1DWQpA",
+          "hashtag": "",
+          "volume": 1530055.0,
+          "volume_label": "1,530,055 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1530055,
+            "channel": "AK-69 Official Channel",
+            "artists": [
+              "AK-69"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/Ln5KC1DWQpA/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135674+00:00"
+        },
+        {
+          "id": 853,
+          "platform": "youtube",
+          "rank": 12,
+          "title": "It's Me",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=bMhDJ0S0OBA",
+          "hashtag": "",
+          "volume": 1372805.0,
+          "volume_label": "1,372,805 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1372805,
+            "channel": "HYBE LABELS",
+            "artists": [
+              "ILLIT"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/bMhDJ0S0OBA/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135675+00:00"
+        },
+        {
+          "id": 854,
+          "platform": "youtube",
+          "rank": 13,
+          "title": "マイオンリー",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=3lOsboT-IWU",
+          "hashtag": "",
+          "volume": 1348830.0,
+          "volume_label": "1,348,830 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1348830,
+            "channel": "SixTONES",
+            "artists": [
+              "SIXTONES"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/3lOsboT-IWU/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135677+00:00"
+        },
+        {
+          "id": 855,
+          "platform": "youtube",
+          "rank": 14,
+          "title": "一条ゆう「多摩川で、恋...したい♡」M/V",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=-0FGOgs8aAY",
+          "hashtag": "",
+          "volume": 1289348.0,
+          "volume_label": "1,289,348 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1289348,
+            "channel": "一条ゆう",
+            "artists": [
+              "Yuu Ichijo"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/-0FGOgs8aAY/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135678+00:00"
+        },
+        {
+          "id": 856,
+          "platform": "youtube",
+          "rank": 15,
+          "title": "時空超えてユニバース - Toki Koete Universe",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=JpIw7rSLRqc",
+          "hashtag": "",
+          "volume": 1208361.0,
+          "volume_label": "1,208,361 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1208361,
+            "channel": "M!LK",
+            "artists": [
+              "M!LK"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/JpIw7rSLRqc/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135680+00:00"
+        },
+        {
+          "id": 857,
+          "platform": "youtube",
+          "rank": 16,
+          "title": "KEY TO LIT - KEY TERUYA2 ～キテルヤツ～ [Music Video with lyrics]",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=br6ntQkeY7k",
+          "hashtag": "",
+          "volume": 1193216.0,
+          "volume_label": "1,193,216 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1193216,
+            "channel": "KEY TO LIT",
+            "artists": [
+              "KEY TO LIT"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/br6ntQkeY7k/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135681+00:00"
+        },
+        {
+          "id": 858,
+          "platform": "youtube",
+          "rank": 17,
+          "title": "Lemon",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=SX_ViT4Ra7k",
+          "hashtag": "",
+          "volume": 1117388.0,
+          "volume_label": "1,117,388 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 1117388,
+            "channel": "Kenshi Yonezu  米津玄師",
+            "artists": [
+              "Kenshi Yonezu"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/SX_ViT4Ra7k/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135682+00:00"
+        },
+        {
+          "id": 859,
+          "platform": "youtube",
+          "rank": 18,
+          "title": "NOW U KNOW",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=DBAmFLYbTWk",
+          "hashtag": "",
+          "volume": 992630.0,
+          "volume_label": "992,630 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 992630,
+            "channel": "BE:FIRST Official",
+            "artists": [
+              "BE:FIRST"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/DBAmFLYbTWk/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135683+00:00"
+        },
+        {
+          "id": 860,
+          "platform": "youtube",
+          "rank": 19,
+          "title": "共犯 - Kyohan",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=zq9B35oai2w",
+          "hashtag": "",
+          "volume": 963707.0,
+          "volume_label": "963,707 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 963707,
+            "channel": "Mrs. GREEN APPLE",
+            "artists": [
+              "Mrs. GREEN APPLE"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/zq9B35oai2w/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135685+00:00"
+        },
+        {
+          "id": 861,
+          "platform": "youtube",
+          "rank": 20,
+          "title": "奇跡の地球 (ライブ) - Kiseki no Hoshi (Live)",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=1mad1SxvQek",
+          "hashtag": "",
+          "volume": 958150.0,
+          "volume_label": "958,150 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 958150,
+            "channel": "桑田佳祐",
+            "artists": [
+              "Kuwata Keisuke",
+              "Kazutoshi Sakurai"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/1mad1SxvQek/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135686+00:00"
+        },
+        {
+          "id": 862,
+          "platform": "youtube",
+          "rank": 21,
+          "title": "しわあわせ - Shiwaawase",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=JwmGruvGt_I",
+          "hashtag": "",
+          "volume": 950450.0,
+          "volume_label": "950,450 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 950450,
+            "channel": "Vaundy",
+            "artists": [
+              "Vaundy"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/JwmGruvGt_I/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135687+00:00"
+        },
+        {
+          "id": 863,
+          "platform": "youtube",
+          "rank": 22,
+          "title": "クリスマスソング - Christmas Song (Live at NISSAN STADIUM, 2026)",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=7zBeQezaz4U",
+          "hashtag": "",
+          "volume": 892014.0,
+          "volume_label": "892,014 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 892014,
+            "channel": "BackNumberVEVO",
+            "artists": [
+              "back number"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/7zBeQezaz4U/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135689+00:00"
+        },
+        {
+          "id": 864,
+          "platform": "youtube",
+          "rank": 23,
+          "title": "結び - musubi",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=LnG4ekpYFug",
+          "hashtag": "",
+          "volume": 887391.0,
+          "volume_label": "887,391 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 887391,
+            "channel": "Ayumu Imazu",
+            "artists": [
+              "Ayumu Imazu"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/LnG4ekpYFug/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135690+00:00"
+        },
+        {
+          "id": 865,
+          "platform": "youtube",
+          "rank": 24,
+          "title": "Love Me Madly(Jugyonel ver.)【EBiDAN THE LIVE 2026 シャッフルユニット】",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=hNA6fHFNvoY",
+          "hashtag": "",
+          "volume": 886775.0,
+          "volume_label": "886,775 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 886775,
+            "channel": "EBiDAN",
+            "artists": [
+              "EBiDAN Ebisu Gakuen Boys Club"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/hNA6fHFNvoY/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135691+00:00"
+        },
+        {
+          "id": 866,
+          "platform": "youtube",
+          "rank": 25,
+          "title": "Kenshi Yonezu - Lemon  (Live)   Music Video 10億回記念 🍋  Celebrating 1 Billion Views",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=Hn0IiJlBV8Y",
+          "hashtag": "",
+          "volume": 846240.0,
+          "volume_label": "846,240 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 846240,
+            "channel": "Kenshi Yonezu  米津玄師",
+            "artists": [
+              "Kenshi Yonezu"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/Hn0IiJlBV8Y/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135692+00:00"
+        },
+        {
+          "id": 867,
+          "platform": "youtube",
+          "rank": 26,
+          "title": "YAO - ありふれた世界の果てに [ONE OK ROCK DETOX JAPAN TOUR FINAL 2026]",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=hcylLtgikpk",
+          "hashtag": "",
+          "volume": 839266.0,
+          "volume_label": "839,266 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 839266,
+            "channel": "ONE OK ROCK",
+            "artists": [
+              "YAO"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/hcylLtgikpk/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135694+00:00"
+        },
+        {
+          "id": 868,
+          "platform": "youtube",
+          "rank": 27,
+          "title": "NEON",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=D968qfUZMUE",
+          "hashtag": "",
+          "volume": 816631.0,
+          "volume_label": "816,631 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 816631,
+            "channel": "A2O WORLD",
+            "artists": [
+              "A2O LITE",
+              "A2O"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/D968qfUZMUE/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135695+00:00"
+        },
+        {
+          "id": 869,
+          "platform": "youtube",
+          "rank": 28,
+          "title": "どうして - Doshite",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=ZEBkfRxoHbQ",
+          "hashtag": "",
+          "volume": 787360.0,
+          "volume_label": "787,360 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 787360,
+            "channel": "LIGHTSUM",
+            "artists": [
+              "LIGHTSUM"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/ZEBkfRxoHbQ/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135696+00:00"
+        },
+        {
+          "id": 870,
+          "platform": "youtube",
+          "rank": 29,
+          "title": "Brand New",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=dePs7UPp6GQ",
+          "hashtag": "",
+          "volume": 784700.0,
+          "volume_label": "784,700 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 784700,
+            "channel": "Mrs. GREEN APPLE",
+            "artists": [
+              "Mrs. GREEN APPLE"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/dePs7UPp6GQ/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135698+00:00"
+        },
+        {
+          "id": 871,
+          "platform": "youtube",
+          "rank": 30,
+          "title": "ADDICTED",
+          "description": "Weekly top music videos (2026-10-30 to 2026-11-05); music category only.",
+          "url": "https://www.youtube.com/watch?v=Pksr9T8m_aA",
+          "hashtag": "",
+          "volume": 752902.0,
+          "volume_label": "752,902 weekly views",
+          "category": "music",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://charts.youtube.com/charts/TopVideos/jp/weekly",
+            "data_kind": "youtube_weekly_music_video_chart",
+            "chart": "Weekly top music videos",
+            "chart_period": "weekly",
+            "chart_start_date": "2026-10-30",
+            "chart_end_date": "2026-11-05",
+            "requested_region": "jp",
+            "actual_region": "jp",
+            "fetched_at": "2026-11-10T08:35:28.019684+00:00",
+            "views_available": true,
+            "view_count": 752902,
+            "channel": "JISOO",
+            "artists": [
+              "JISOO"
+            ],
+            "thumbnail": "https://i.ytimg.com/vi/Pksr9T8m_aA/maxresdefault.jpg"
+          },
+          "created_at": "2026-11-10T08:35:28.135699+00:00"
+        }
+      ],
+      "snapshot": {
+        "id": 62,
+        "platform": "youtube",
+        "status": "success",
+        "region": "jp",
+        "error_message": "",
+        "topic_count": 30,
+        "duration_ms": 6442,
+        "started_at": "2026-11-10T08:35:21.681693+00:00",
+        "finished_at": "2026-11-10T08:35:28.124732+00:00"
+      },
+      "freshness": {
+        "state": "fresh",
+        "age_seconds": 0,
+        "max_age_seconds": 43200
+      }
+    },
+    "tiktok": {
+      "topics": [
+        {
+          "id": 872,
+          "platform": "tiktok",
+          "rank": 1,
+          "title": "livefest2026",
+          "description": "TikTok One JP, last 7 days; limited logged-out public preview.",
+          "url": "https://www.tiktok.com/tag/livefest2026",
+          "hashtag": "#livefest2026",
+          "volume": 14579042.0,
+          "volume_label": "14.6M views",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://ads.tiktok.com/creative/creativeCenter/trends/hashtag?LanguageId=1&region=JP&period=7",
+            "data_kind": "official_public_trends_preview",
+            "post_count": 16499,
+            "period_days": 7,
+            "requested_region": "jp",
+            "public_preview_limited": true,
+            "hashtag_id": "7429226657900298257",
+            "popularity_curve": [
+              {
+                "timestamp": "1793577600",
+                "value": 0
+              },
+              {
+                "timestamp": "1793664000",
+                "value": 4.608104477787165
+              },
+              {
+                "timestamp": "1793750400",
+                "value": 16.14201140247148
+              },
+              {
+                "timestamp": "1793836800",
+                "value": 68.7094563912509
+              },
+              {
+                "timestamp": "1793923200",
+                "value": 94.06104653059971
+              },
+              {
+                "timestamp": "1794009600",
+                "value": 100
+              },
+              {
+                "timestamp": "1794096000",
+                "value": 98.6737872501573
+              }
+            ]
+          },
+          "created_at": "2026-11-10T08:35:28.308608+00:00"
+        },
+        {
+          "id": 873,
+          "platform": "tiktok",
+          "rank": 2,
+          "title": "いい推しの日",
+          "description": "TikTok One JP, last 7 days; limited logged-out public preview.",
+          "url": "https://www.tiktok.com/tag/%E3%81%84%E3%81%84%E6%8E%A8%E3%81%97%E3%81%AE%E6%97%A5",
+          "hashtag": "#いい推しの日",
+          "volume": 3482436.0,
+          "volume_label": "3.5M views",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://ads.tiktok.com/creative/creativeCenter/trends/hashtag?LanguageId=1&region=JP&period=7",
+            "data_kind": "official_public_trends_preview",
+            "post_count": 2845,
+            "period_days": 7,
+            "requested_region": "jp",
+            "public_preview_limited": true,
+            "hashtag_id": "1649227938822145",
+            "popularity_curve": [
+              {
+                "timestamp": "1793577600",
+                "value": 0
+              },
+              {
+                "timestamp": "1793664000",
+                "value": 47.07945884568264
+              },
+              {
+                "timestamp": "1793750400",
+                "value": 100
+              },
+              {
+                "timestamp": "1793836800",
+                "value": 72.75032813235669
+              },
+              {
+                "timestamp": "1793923200",
+                "value": 47.71605752630021
+              },
+              {
+                "timestamp": "1794009600",
+                "value": 37.971081514562464
+              },
+              {
+                "timestamp": "1794096000",
+                "value": 32.8284489995429
+              }
+            ]
+          },
+          "created_at": "2026-11-10T08:35:28.308614+00:00"
+        },
+        {
+          "id": 874,
+          "platform": "tiktok",
+          "rank": 3,
+          "title": "laxmipuja",
+          "description": "TikTok One JP, last 7 days; limited logged-out public preview.",
+          "url": "https://www.tiktok.com/tag/laxmipuja",
+          "hashtag": "#laxmipuja",
+          "volume": 2088412.0,
+          "volume_label": "2.1M views",
+          "category": "",
+          "region": "jp",
+          "extra_data": {
+            "source": "https://ads.tiktok.com/creative/creativeCenter/trends/hashtag?LanguageId=1&region=JP&period=7",
+            "data_kind": "official_public_trends_preview",
+            "post_count": 2486,
+            "period_days": 7,
+            "requested_region": "jp",
+            "public_preview_limited": true,
+            "hashtag_id": "36512485",
+            "popularity_curve": [
+              {
+                "timestamp": "1793577600",
+                "value": 0
+              },
+              {
+                "timestamp": "1793664000",
+                "value": 0.7380084255328603
+              },
+              {
+                "timestamp": "1793750400",
+                "value": 4.090706147045397
+              },
+              {
+                "timestamp": "1793836800",
+                "value": 9.353765703307076
+              },
+              {
+                "timestamp": "1793923200",
+                "value": 13.582121286534433
+              },
+              {
+                "timestamp": "1794009600",
+                "value": 35.50536689191894
+              },
+              {
+                "timestamp": "1794096000",
+                "value": 100
+              }
+            ]
+          },
+          "created_at": "2026-11-10T08:35:28.308616+00:00"
+        }
+      ],
+      "snapshot": {
+        "id": 63,
+        "platform": "tiktok",
+        "status": "success",
+        "region": "jp",
+        "error_message": "",
+        "topic_count": 3,
+        "duration_ms": 114,
+        "started_at": "2026-11-10T08:35:28.188900+00:00",
+        "finished_at": "2026-11-10T08:35:28.303942+00:00"
+      },
+      "freshness": {
+        "state": "fresh",
+        "age_seconds": 0,
+        "max_age_seconds": 43200
+      }
+    },
+    "douyin": {
+      "topics": [
+        {
+          "id": 875,
+          "platform": "douyin",
+          "rank": 1,
+          "title": "勇士51分大胜鹈鹕豪取8连胜",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%8B%87%E5%A3%AB51%E5%88%86%E5%A4%A7%E8%83%9C%E9%B9%88%E9%B9%95%E8%B1%AA%E5%8F%968%E8%BF%9E%E8%83%9C",
+          "hashtag": "",
+          "volume": 11114447.0,
+          "volume_label": "11114447 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843026+00:00"
+        },
+        {
+          "id": 876,
+          "platform": "douyin",
+          "rank": 2,
+          "title": "中美两军移交驼峰航线飞行员遗骸",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E4%B8%AD%E7%BE%8E%E4%B8%A4%E5%86%9B%E7%A7%BB%E4%BA%A4%E9%A9%BC%E5%B3%B0%E8%88%AA%E7%BA%BF%E9%A3%9E%E8%A1%8C%E5%91%98%E9%81%97%E9%AA%B8",
+          "hashtag": "",
+          "volume": 10899625.0,
+          "volume_label": "10899625 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843034+00:00"
+        },
+        {
+          "id": 877,
+          "platform": "douyin",
+          "rank": 3,
+          "title": "前10个月我国外贸保持强劲增长态势",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%89%8D10%E4%B8%AA%E6%9C%88%E6%88%91%E5%9B%BD%E5%A4%96%E8%B4%B8%E4%BF%9D%E6%8C%81%E5%BC%BA%E5%8A%B2%E5%A2%9E%E9%95%BF%E6%80%81%E5%8A%BF",
+          "hashtag": "",
+          "volume": 10887671.0,
+          "volume_label": "10887671 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843036+00:00"
+        },
+        {
+          "id": 878,
+          "platform": "douyin",
+          "rank": 4,
+          "title": "交换一张你拍到的秋天吧",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E4%BA%A4%E6%8D%A2%E4%B8%80%E5%BC%A0%E4%BD%A0%E6%8B%8D%E5%88%B0%E7%9A%84%E7%A7%8B%E5%A4%A9%E5%90%A7",
+          "hashtag": "",
+          "volume": 10854767.0,
+          "volume_label": "10854767 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843037+00:00"
+        },
+        {
+          "id": 879,
+          "platform": "douyin",
+          "rank": 5,
+          "title": "马刺122:96太阳",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E9%A9%AC%E5%88%BA122%3A96%E5%A4%AA%E9%98%B3",
+          "hashtag": "",
+          "volume": 10212923.0,
+          "volume_label": "10212923 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843038+00:00"
+        },
+        {
+          "id": 880,
+          "platform": "douyin",
+          "rank": 6,
+          "title": "中国乒协公布混团世界杯名单",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E4%B8%AD%E5%9B%BD%E4%B9%92%E5%8D%8F%E5%85%AC%E5%B8%83%E6%B7%B7%E5%9B%A2%E4%B8%96%E7%95%8C%E6%9D%AF%E5%90%8D%E5%8D%95",
+          "hashtag": "",
+          "volume": 10169536.0,
+          "volume_label": "10169536 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843040+00:00"
+        },
+        {
+          "id": 881,
+          "platform": "douyin",
+          "rank": 7,
+          "title": "乌方在三方会谈前表态",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E4%B9%8C%E6%96%B9%E5%9C%A8%E4%B8%89%E6%96%B9%E4%BC%9A%E8%B0%88%E5%89%8D%E8%A1%A8%E6%80%81",
+          "hashtag": "",
+          "volume": 9049115.0,
+          "volume_label": "9049115 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843041+00:00"
+        },
+        {
+          "id": 882,
+          "platform": "douyin",
+          "rank": 8,
+          "title": "湖人124:114老鹰",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E6%B9%96%E4%BA%BA124%3A114%E8%80%81%E9%B9%B0",
+          "hashtag": "",
+          "volume": 9041581.0,
+          "volume_label": "9041581 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843042+00:00"
+        },
+        {
+          "id": 883,
+          "platform": "douyin",
+          "rank": 9,
+          "title": "中医药传统知识保护条例公布",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E4%B8%AD%E5%8C%BB%E8%8D%AF%E4%BC%A0%E7%BB%9F%E7%9F%A5%E8%AF%86%E4%BF%9D%E6%8A%A4%E6%9D%A1%E4%BE%8B%E5%85%AC%E5%B8%83",
+          "hashtag": "",
+          "volume": 8989490.0,
+          "volume_label": "8989490 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843044+00:00"
+        },
+        {
+          "id": 884,
+          "platform": "douyin",
+          "rank": 10,
+          "title": "五官这下真的是各过各的了",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E4%BA%94%E5%AE%98%E8%BF%99%E4%B8%8B%E7%9C%9F%E7%9A%84%E6%98%AF%E5%90%84%E8%BF%87%E5%90%84%E7%9A%84%E4%BA%86",
+          "hashtag": "",
+          "volume": 8750980.0,
+          "volume_label": "8750980 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843045+00:00"
+        },
+        {
+          "id": 885,
+          "platform": "douyin",
+          "rank": 11,
+          "title": "在北京定格专属我们的浪漫瞬间",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%9C%A8%E5%8C%97%E4%BA%AC%E5%AE%9A%E6%A0%BC%E4%B8%93%E5%B1%9E%E6%88%91%E4%BB%AC%E7%9A%84%E6%B5%AA%E6%BC%AB%E7%9E%AC%E9%97%B4",
+          "hashtag": "",
+          "volume": 8291411.0,
+          "volume_label": "8291411 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843046+00:00"
+        },
+        {
+          "id": 886,
+          "platform": "douyin",
+          "rank": 12,
+          "title": "安徽肥东3.0级地震",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%AE%89%E5%BE%BD%E8%82%A5%E4%B8%9C3.0%E7%BA%A7%E5%9C%B0%E9%9C%87",
+          "hashtag": "",
+          "volume": 8274999.0,
+          "volume_label": "8274999 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843048+00:00"
+        },
+        {
+          "id": 887,
+          "platform": "douyin",
+          "rank": 13,
+          "title": "别把食物当“神药”",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%88%AB%E6%8A%8A%E9%A3%9F%E7%89%A9%E5%BD%93%E2%80%9C%E7%A5%9E%E8%8D%AF%E2%80%9D",
+          "hashtag": "",
+          "volume": 8094449.0,
+          "volume_label": "8094449 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843049+00:00"
+        },
+        {
+          "id": 888,
+          "platform": "douyin",
+          "rank": 14,
+          "title": "我们的三生三世微电影",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E6%88%91%E4%BB%AC%E7%9A%84%E4%B8%89%E7%94%9F%E4%B8%89%E4%B8%96%E5%BE%AE%E7%94%B5%E5%BD%B1",
+          "hashtag": "",
+          "volume": 8055468.0,
+          "volume_label": "8055468 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843050+00:00"
+        },
+        {
+          "id": 889,
+          "platform": "douyin",
+          "rank": 15,
+          "title": "当一次MV女主角",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%BD%93%E4%B8%80%E6%AC%A1MV%E5%A5%B3%E4%B8%BB%E8%A7%92",
+          "hashtag": "",
+          "volume": 8025493.0,
+          "volume_label": "8025493 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843052+00:00"
+        },
+        {
+          "id": 890,
+          "platform": "douyin",
+          "rank": 16,
+          "title": "人类有自己的毛茸茸宇宙",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E4%BA%BA%E7%B1%BB%E6%9C%89%E8%87%AA%E5%B7%B1%E7%9A%84%E6%AF%9B%E8%8C%B8%E8%8C%B8%E5%AE%87%E5%AE%99",
+          "hashtag": "",
+          "volume": 7827795.0,
+          "volume_label": "7827795 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843053+00:00"
+        },
+        {
+          "id": 891,
+          "platform": "douyin",
+          "rank": 17,
+          "title": "这次真让我装到了",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E8%BF%99%E6%AC%A1%E7%9C%9F%E8%AE%A9%E6%88%91%E8%A3%85%E5%88%B0%E4%BA%86",
+          "hashtag": "",
+          "volume": 7777154.0,
+          "volume_label": "7777154 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843054+00:00"
+        },
+        {
+          "id": 892,
+          "platform": "douyin",
+          "rank": 18,
+          "title": "拆你的正缘在干嘛测试盲盒",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E6%8B%86%E4%BD%A0%E7%9A%84%E6%AD%A3%E7%BC%98%E5%9C%A8%E5%B9%B2%E5%98%9B%E6%B5%8B%E8%AF%95%E7%9B%B2%E7%9B%92",
+          "hashtag": "",
+          "volume": 7770867.0,
+          "volume_label": "7770867 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843055+00:00"
+        },
+        {
+          "id": 893,
+          "platform": "douyin",
+          "rank": 19,
+          "title": "火箭110:100掘金",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E7%81%AB%E7%AE%AD110%3A100%E6%8E%98%E9%87%91",
+          "hashtag": "",
+          "volume": 7741331.0,
+          "volume_label": "7741331 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843057+00:00"
+        },
+        {
+          "id": 894,
+          "platform": "douyin",
+          "rank": 20,
+          "title": "谷雨张颂文喊李小冉妈",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E8%B0%B7%E9%9B%A8%E5%BC%A0%E9%A2%82%E6%96%87%E5%96%8A%E6%9D%8E%E5%B0%8F%E5%86%89%E5%A6%88",
+          "hashtag": "",
+          "volume": 7738128.0,
+          "volume_label": "7738128 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843058+00:00"
+        },
+        {
+          "id": 895,
+          "platform": "douyin",
+          "rank": 21,
+          "title": "昊天武道会复活成团之夜",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E6%98%8A%E5%A4%A9%E6%AD%A6%E9%81%93%E4%BC%9A%E5%A4%8D%E6%B4%BB%E6%88%90%E5%9B%A2%E4%B9%8B%E5%A4%9C",
+          "hashtag": "",
+          "volume": 7731778.0,
+          "volume_label": "7731778 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843059+00:00"
+        },
+        {
+          "id": 896,
+          "platform": "douyin",
+          "rank": 22,
+          "title": "嫁金钗收官",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%AB%81%E9%87%91%E9%92%97%E6%94%B6%E5%AE%98",
+          "hashtag": "",
+          "volume": 7731303.0,
+          "volume_label": "7731303 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843061+00:00"
+        },
+        {
+          "id": 897,
+          "platform": "douyin",
+          "rank": 23,
+          "title": "孟子义苏妲己好娇啊",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%AD%9F%E5%AD%90%E4%B9%89%E8%8B%8F%E5%A6%B2%E5%B7%B1%E5%A5%BD%E5%A8%87%E5%95%8A",
+          "hashtag": "",
+          "volume": 7729852.0,
+          "volume_label": "7729852 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843062+00:00"
+        },
+        {
+          "id": 898,
+          "platform": "douyin",
+          "rank": 24,
+          "title": "原来是冬天来了",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%8E%9F%E6%9D%A5%E6%98%AF%E5%86%AC%E5%A4%A9%E6%9D%A5%E4%BA%86",
+          "hashtag": "",
+          "volume": 7727021.0,
+          "volume_label": "7727021 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843063+00:00"
+        },
+        {
+          "id": 899,
+          "platform": "douyin",
+          "rank": 25,
+          "title": "偶遇火爆全网的漫剧神颜饭撒",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%81%B6%E9%81%87%E7%81%AB%E7%88%86%E5%85%A8%E7%BD%91%E7%9A%84%E6%BC%AB%E5%89%A7%E7%A5%9E%E9%A2%9C%E9%A5%AD%E6%92%92",
+          "hashtag": "",
+          "volume": 7722543.0,
+          "volume_label": "7722543 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843064+00:00"
+        },
+        {
+          "id": 900,
+          "platform": "douyin",
+          "rank": 26,
+          "title": "杨幂刘诗诗倪妮等同框秀肌肉",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E6%9D%A8%E5%B9%82%E5%88%98%E8%AF%97%E8%AF%97%E5%80%AA%E5%A6%AE%E7%AD%89%E5%90%8C%E6%A1%86%E7%A7%80%E8%82%8C%E8%82%89",
+          "hashtag": "",
+          "volume": 7717621.0,
+          "volume_label": "7717621 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843066+00:00"
+        },
+        {
+          "id": 901,
+          "platform": "douyin",
+          "rank": 27,
+          "title": "起猛了紫薯精变成多闪小火人了",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E8%B5%B7%E7%8C%9B%E4%BA%86%E7%B4%AB%E8%96%AF%E7%B2%BE%E5%8F%98%E6%88%90%E5%A4%9A%E9%97%AA%E5%B0%8F%E7%81%AB%E4%BA%BA%E4%BA%86",
+          "hashtag": "",
+          "volume": 7715127.0,
+          "volume_label": "7715127 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843067+00:00"
+        },
+        {
+          "id": 902,
+          "platform": "douyin",
+          "rank": 28,
+          "title": "表面心连心背后玩脑筋成气候了",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E8%A1%A8%E9%9D%A2%E5%BF%83%E8%BF%9E%E5%BF%83%E8%83%8C%E5%90%8E%E7%8E%A9%E8%84%91%E7%AD%8B%E6%88%90%E6%B0%94%E5%80%99%E4%BA%86",
+          "hashtag": "",
+          "volume": 7708071.0,
+          "volume_label": "7708071 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843068+00:00"
+        },
+        {
+          "id": 903,
+          "platform": "douyin",
+          "rank": 29,
+          "title": "后会友期二创大赛",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%90%8E%E4%BC%9A%E5%8F%8B%E6%9C%9F%E4%BA%8C%E5%88%9B%E5%A4%A7%E8%B5%9B",
+          "hashtag": "",
+          "volume": 7700314.0,
+          "volume_label": "7700314 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843070+00:00"
+        },
+        {
+          "id": 904,
+          "platform": "douyin",
+          "rank": 30,
+          "title": "十万狂花入梦来首发预告",
+          "description": "Official Douyin mainland China hot list; heat score is not views.",
+          "url": "https://www.douyin.com/search/%E5%8D%81%E4%B8%87%E7%8B%82%E8%8A%B1%E5%85%A5%E6%A2%A6%E6%9D%A5%E9%A6%96%E5%8F%91%E9%A2%84%E5%91%8A",
+          "hashtag": "",
+          "volume": 7697029.0,
+          "volume_label": "7697029 heat score",
+          "category": "",
+          "region": "cn",
+          "extra_data": {
+            "source": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+            "source_timestamp": "2026-11-10T16:34:29+08:00",
+            "data_kind": "official_public_hot_list",
+            "metric": "heat_score",
+            "requested_region": "cn"
+          },
+          "created_at": "2026-11-10T08:35:28.843071+00:00"
+        }
+      ],
+      "snapshot": {
+        "id": 64,
+        "platform": "douyin",
+        "status": "success",
+        "region": "cn",
+        "error_message": "",
+        "topic_count": 30,
+        "duration_ms": 501,
+        "started_at": "2026-11-10T08:35:28.334024+00:00",
+        "finished_at": "2026-11-10T08:35:28.835738+00:00"
+      },
+      "freshness": {
+        "state": "fresh",
+        "age_seconds": 0,
+        "max_age_seconds": 43200
+      }
+    }
+  },
+  "instagram": {
+    "topics": [
+      {
+        "id": 905,
+        "platform": "instagram",
+        "rank": 1,
+        "title": "Bro is down bad LOL",
+        "description": "Public Reels recommendation sample; not a global ranking. Bro is down bad LOL",
+        "url": "https://www.instagram.com/reel/DfdAxvzvRVV/",
+        "hashtag": "",
+        "volume": 410817.0,
+        "volume_label": "410,817 likes",
+        "category": "",
+        "region": "global",
+        "extra_data": {
+          "source": "https://www.instagram.com/reels/",
+          "data_kind": "public_reels_recommendation_sample",
+          "ranking": "public_feed_order",
+          "author": "ninamariedaniele",
+          "published_at": "2026-11-07T20:17:11+00:00",
+          "views": null,
+          "likes": 410817,
+          "comments": 4264
+        },
+        "created_at": "2026-11-10T08:35:31.883362+00:00"
+      },
+      {
+        "id": 906,
+        "platform": "instagram",
+        "rank": 2,
+        "title": "As the ghosts saying",
+        "description": "Public Reels recommendation sample; not a global ranking. As the ghosts saying",
+        "url": "https://www.instagram.com/reel/DfPQpEvShh2/",
+        "hashtag": "",
+        "volume": 24453.0,
+        "volume_label": "24,453 likes",
+        "category": "",
+        "region": "global",
+        "extra_data": {
+          "source": "https://www.instagram.com/reels/",
+          "data_kind": "public_reels_recommendation_sample",
+          "ranking": "public_feed_order",
+          "author": "heythomask",
+          "published_at": "2026-11-02T12:04:04+00:00",
+          "views": null,
+          "likes": 24453,
+          "comments": 218
+        },
+        "created_at": "2026-11-10T08:35:31.883369+00:00"
+      },
+      {
+        "id": 907,
+        "platform": "instagram",
+        "rank": 3,
+        "title": "Now I know why he isn’t afraid of me 😂",
+        "description": "Public Reels recommendation sample; not a global ranking. Now I know why he isn’t afraid of me 😂",
+        "url": "https://www.instagram.com/reel/DfMW9erPI0P/",
+        "hashtag": "",
+        "volume": 563613.0,
+        "volume_label": "563,613 likes",
+        "category": "",
+        "region": "global",
+        "extra_data": {
+          "source": "https://www.instagram.com/reels/",
+          "data_kind": "public_reels_recommendation_sample",
+          "ranking": "public_feed_order",
+          "author": "koeyeet",
+          "published_at": "2026-11-01T09:37:01+00:00",
+          "views": null,
+          "likes": 563613,
+          "comments": 3316
+        },
+        "created_at": "2026-11-10T08:35:31.883371+00:00"
+      },
+      {
+        "id": 908,
+        "platform": "instagram",
+        "rank": 4,
+        "title": "Wouldn’t have it any other way 🫶🏼",
+        "description": "Public Reels recommendation sample; not a global ranking. Wouldn’t have it any other way 🫶🏼",
+        "url": "https://www.instagram.com/reel/DfceatPNkAB/",
+        "hashtag": "",
+        "volume": 11525.0,
+        "volume_label": "11,525 likes",
+        "category": "",
+        "region": "global",
+        "extra_data": {
+          "source": "https://www.instagram.com/reels/",
+          "data_kind": "public_reels_recommendation_sample",
+          "ranking": "public_feed_order",
+          "author": "alyssasnida",
+          "published_at": "2026-11-07T15:13:03+00:00",
+          "views": null,
+          "likes": 11525,
+          "comments": 67
+        },
+        "created_at": "2026-11-10T08:35:31.883372+00:00"
+      },
+      {
+        "id": 909,
+        "platform": "instagram",
+        "rank": 5,
+        "title": "Warmest Deepavali wishes to all! Especially to our Hindus, as well as our Sikhs and other Indians for whom this is also an auspicious time. And to everyone else",
+        "description": "Public Reels recommendation sample; not a global ranking. Warmest Deepavali wishes to all! Especially to our Hindus, as well as our Sikhs and other Indians for whom this is also an auspicious time. And to everyone else too: for each of our ethnic festivals carries some meaning ",
+        "url": "https://www.instagram.com/reel/DfcPPiyOOEq/",
+        "hashtag": "",
+        "volume": 12938.0,
+        "volume_label": "12,938 likes",
+        "category": "",
+        "region": "global",
+        "extra_data": {
+          "source": "https://www.instagram.com/reels/",
+          "data_kind": "public_reels_recommendation_sample",
+          "ranking": "public_feed_order",
+          "author": "tharman.sg",
+          "published_at": "2026-11-07T13:01:11+00:00",
+          "views": null,
+          "likes": 12938,
+          "comments": 209
+        },
+        "created_at": "2026-11-10T08:35:31.883374+00:00"
+      },
+      {
+        "id": 910,
+        "platform": "instagram",
+        "rank": 6,
+        "title": "There’s always one patient child and one impatient child. Missing you Graffiti 🕊️🌈💔",
+        "description": "Public Reels recommendation sample; not a global ranking. There’s always one patient child and one impatient child. Missing you Graffiti 🕊️🌈💔",
+        "url": "https://www.instagram.com/reel/Dfe9c14RT2X/",
+        "hashtag": "",
+        "volume": 432882.0,
+        "volume_label": "432,882 likes",
+        "category": "",
+        "region": "global",
+        "extra_data": {
+          "source": "https://www.instagram.com/reels/",
+          "data_kind": "public_reels_recommendation_sample",
+          "ranking": "public_feed_order",
+          "author": "bradythecorgi",
+          "published_at": "2026-11-08T14:22:44+00:00",
+          "views": null,
+          "likes": 432882,
+          "comments": 102
+        },
+        "created_at": "2026-11-10T08:35:31.883375+00:00"
+      },
+      {
+        "id": 911,
+        "platform": "instagram",
+        "rank": 7,
+        "title": "My accent came out for this. 😂",
+        "description": "Public Reels recommendation sample; not a global ranking. My accent came out for this. 😂\n\n#CHENUP",
+        "url": "https://www.instagram.com/reel/DfdgXrjTYJ7/",
+        "hashtag": "",
+        "volume": 4634.0,
+        "volume_label": "4,634 likes",
+        "category": "",
+        "region": "global",
+        "extra_data": {
+          "source": "https://www.instagram.com/reels/",
+          "data_kind": "public_reels_recommendation_sample",
+          "ranking": "public_feed_order",
+          "author": "dantechenwwe",
+          "published_at": "2026-11-08T01:00:18+00:00",
+          "views": null,
+          "likes": 4634,
+          "comments": 123
+        },
+        "created_at": "2026-11-10T08:35:31.883377+00:00"
+      },
+      {
+        "id": 912,
+        "platform": "instagram",
+        "rank": 8,
+        "title": "THERE WAS A GIRL (song coming very soon❤️)",
+        "description": "Public Reels recommendation sample; not a global ranking. THERE WAS A GIRL (song coming very soon❤️)\n\nvideo edit by @nyxxxaryyl on tiktok",
+        "url": "https://www.instagram.com/reel/DfdNSp1S7Sf/",
+        "hashtag": "",
+        "volume": 692786.0,
+        "volume_label": "692,786 likes",
+        "category": "",
+        "region": "global",
+        "extra_data": {
+          "source": "https://www.instagram.com/reels/",
+          "data_kind": "public_reels_recommendation_sample",
+          "ranking": "public_feed_order",
+          "author": "scotthelman",
+          "published_at": "2026-11-07T22:02:48+00:00",
+          "views": null,
+          "likes": 692786,
+          "comments": 1123
+        },
+        "created_at": "2026-11-10T08:35:31.883378+00:00"
+      }
+    ],
+    "snapshot": {
+      "id": 65,
+      "platform": "instagram",
+      "status": "success",
+      "region": "global",
+      "error_message": "",
+      "topic_count": 8,
+      "duration_ms": 2991,
+      "started_at": "2026-11-10T08:35:28.883439+00:00",
+      "finished_at": "2026-11-10T08:35:31.875300+00:00"
+    },
+    "freshness": {
+      "state": "fresh",
+      "age_seconds": 0,
+      "max_age_seconds": 43200
+    }
+  },
+  "negative_search": {
+    "success": true,
+    "query": "zznotreal98765",
+    "type": "exact",
+    "scope": "observed trend feeds; not full platform search",
+    "region": "global",
+    "coverage": {
+      "twitter": {
+        "status": "ok",
+        "count": 30,
+        "source_regions": [
+          "global"
+        ]
+      }
+    },
+    "total": 0,
+    "results": []
+  },
+  "positive_search": {
+    "success": true,
+    "query": "勇士51分大胜鹈鹕豪取8连胜",
+    "type": "exact",
+    "scope": "observed trend feeds; not full platform search",
+    "region": "cn",
+    "coverage": {
+      "douyin": {
+        "status": "ok",
+        "count": 30,
+        "source_regions": [
+          "cn"
+        ]
+      }
+    },
+    "total": 1,
+    "results": [
+      {
+        "title": "勇士51分大胜鹈鹕豪取8连胜",
+        "platform": "douyin",
+        "rank": 1,
+        "volume": 11114447.0,
+        "volume_label": "11114447 heat score",
+        "url": "https://www.douyin.com/search/%E5%8B%87%E5%A3%AB51%E5%88%86%E5%A4%A7%E8%83%9C%E9%B9%88%E9%B9%95%E8%B1%AA%E5%8F%968%E8%BF%9E%E8%83%9C",
+        "relevance_score": 64.1,
+        "match_reason": "exact match | popularity bonus (+14.1)"
+      }
+    ]
+  },
+  "health": {
+    "status": "healthy",
+    "platforms": {
+      "twitter": {
+        "total_scrapes": 12,
+        "last_scrape": {
+          "id": 57,
+          "platform": "twitter",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 30,
+          "duration_ms": 1704,
+          "started_at": "2026-11-10T08:34:07.870036+00:00",
+          "finished_at": "2026-11-10T08:34:09.574217+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 82,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "tiktok": {
+        "total_scrapes": 14,
+        "last_scrape": {
+          "id": 56,
+          "platform": "tiktok",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 3,
+          "duration_ms": 219,
+          "started_at": "2026-11-10T08:34:08.050261+00:00",
+          "finished_at": "2026-11-10T08:34:08.270350+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 84,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "youtube": {
+        "total_scrapes": 10,
+        "last_scrape": {
+          "id": 60,
+          "platform": "youtube",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 30,
+          "duration_ms": 10475,
+          "started_at": "2026-11-10T08:34:08.058616+00:00",
+          "finished_at": "2026-11-10T08:34:18.534224+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 73,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "instagram": {
+        "total_scrapes": 17,
+        "last_scrape": {
+          "id": 65,
+          "platform": "instagram",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 8,
+          "duration_ms": 2991,
+          "started_at": "2026-11-10T08:35:28.883439+00:00",
+          "finished_at": "2026-11-10T08:35:31.875300+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 0,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      },
+      "douyin": {
+        "total_scrapes": 4,
+        "last_scrape": {
+          "id": 58,
+          "platform": "douyin",
+          "status": "success",
+          "region": "global",
+          "error_message": "",
+          "topic_count": 30,
+          "duration_ms": 1459,
+          "started_at": "2026-11-10T08:34:08.122018+00:00",
+          "finished_at": "2026-11-10T08:34:09.581486+00:00"
+        },
+        "region": "global",
+        "freshness": {
+          "state": "fresh",
+          "age_seconds": 82,
+          "max_age_seconds": 43200
+        },
+        "stale": false
+      }
+    }
+  },
+  "mcp_tools": [
+    "get_trends",
+    "get_all_trends",
+    "exact_search",
+    "search_trends",
+    "discover_search",
+    "list_regions"
+  ],
+  "mcp_all": "🔥 TWITTER — 🌍 Global (1 topics)\nFetched: 2026-11-10 08:35 UTC\n--------------------------------------------------\n\n#1 #10Kasım #10Kasım\n   Third-party trend ranking from trends24.in; volume unavailable.\n   🔗 https://twitter.com/search?q=%2310Kas%C4%B1m\n\n🔥 TIKTOK — 🌍 Global (1 topics)\nFetched: 2026-11-10 08:35 UTC\n--------------------------------------------------\n\n#1 piratetoken #piratetoken | 265.1M views\n   TikTok One US, last 7 days; limited logged-out public preview.\n   🔗 https://www.tiktok.com/tag/piratetoken\n\n🔥 YOUTUBE — 🌍 Global (1 topics)\nFetched: 2026-11-10 08:35 UTC\n--------------------------------------------------\n\n#1 Dai Dai | 2,338,755 weekly views\n   Weekly top music videos (2026-10-30 to 2026-11-05); music category only.\n   🔗 https://www.youtube.com/watch?v=fcnDmrtj6Sk\n\n🔥 INSTAGRAM — 🌍 Global (1 topics)\nFetched: 2026-11-10 08:35 UTC\n--------------------------------------------------\n\n#1 Almost always awful💛 | 441,029 likes\n   Public Reels recommendation sample; not a global ranking. Almost always awful💛\n   🔗 https://www.instagram.com/reel/DfffJrTvVHT/\n\n🔥 DOUYIN — 🌍 Global (1 topics)\nFetched: 2026-11-10 08:35 UTC\n--------------------------------------------------\n\n#1 勇士51分大胜鹈鹕豪取8连胜 | 11114447 heat score\n   Official Douyin mainland China hot list; heat score is not views.\n   🔗 https://www.douyin.com/search/%E5%8B%87%E5%A3%AB51%E5%88%86%E5%A4%A7%E8%83%9C%E9%B9%88%E9%B9%95%E8%B1%AA%E5%8F%968%E8%BF%9E%E8%83%9C",
+  "mcp_negative": "🔍 Exact Search: 'zznotreal98765' — 🌍 Global\nFound 0 relevant topics\n\nScope: observed current feeds only; not full-platform search."
+}
