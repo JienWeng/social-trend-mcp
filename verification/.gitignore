@@ -30,3 +30,6 @@
 !douyin/live.json
 
 !pr-endpoints.json
+
+!monitoring_live.py
+!monitoring-live.json

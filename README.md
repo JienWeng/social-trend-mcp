@@ -1,8 +1,6 @@
-# Social Trends MCP — repaired local service
+# Social Trends MCP
 
-All five sources are verified: X topics, TikTok's public preview, YouTube weekly music-video charts, Instagram public Reels samples, and Douyin hot topics. No API keys or paid providers are required for the defaults.
-
-See [current behavior, coverage and test evidence](CURRENT-STATUS.md). The feeds have different scopes: these are not five exhaustive global realtime rankings.
+Collect public social feeds, save PostgreSQL history and compare what changed. Default sources require no paid API or AI model. Coverage differs by source; see [current status](CURRENT-STATUS.md).
 
 ```bash
 ./setup.sh
@@ -10,22 +8,27 @@ See [current behavior, coverage and test evidence](CURRENT-STATUS.md). The feeds
 ./manage-service.sh status
 ```
 
-API docs on this host: http://127.0.0.1:8000/docs
+Requires Git, uv, Docker and Python 3.12. Setup installs Python dependencies and Chromium; Linux may also need `.venv/bin/python -m playwright install --with-deps chromium`. PostgreSQL uses loopback port 55433 and a named Docker volume. The API listens on http://127.0.0.1:8000; interactive documentation is at `/docs`.
 
-Use `./manage-service.sh restart` or `stop` to manage the API. The supervisor handles API crashes and orphan recovery; PostgreSQL data lives in a named Docker volume. `start-api.sh` is also available for foreground debugging.
+Use `./manage-service.sh restart` or `stop` to manage the API. The supervisor handles API crashes and orphan recovery; `start-api.sh` is available for foreground debugging.
 
-MCP clients can use `mcp-config.json` or `./start-mcp.sh`; its paths are for this machine. Supported tools: `get_trends`, `get_all_trends`, `exact_search`, `search_trends` (alias), `discover_search`, `list_regions`, `capture_trends`, and `analyze_trends`.
+## Use the data
 
-Run `./verification/run_tests.sh` for the regression suite and `.venv/bin/python verification/final_e2e.py` for live checks. The latter performs real scrapes and refreshes stored data.
+Run `./start-mcp.sh` from an MCP client; configure its absolute path on your machine (mcp-config.json shows this workspace's path). Nine tools cover live feeds, exact/discovery search, region lookup, persisted capture, historical momentum and checkpoint changes. Default fetch/search tools use the running API's shared cache; `MCP_FETCH_MODE=direct` explicitly enables standalone fetch/search.
 
-Upstream: https://github.com/caicai-yao/social-trends-mcp — tested base commit c9f413ad1c8c6b387e8cd1af5f0c709f263ceae2. Local repairs remain in `upstream/`, with a reproducible cumulative patch and tests in `verification/`. Changes are maintained in this repository rather than pushed to the original upstream project.
+Use `capture_trends` to save an observation, `analyze_trends` for sustained movement evidence, and `get_changes` with an ISO-8601 `since` checkpoint for additions, removals, movement and unchanged counts. Save a report's `generated_at` for your next check. These signals describe sampled observations, not future virality.
 
-## Stored trend intelligence
+- [Endpoint and MCP catalog](docs/ENDPOINTS.md): methods, parameters, persistence and source coverage.
+- [Trend analysis](TREND-ANALYSIS.md): rules, evidence and checkpoint semantics.
+- [Agent guide](llms.txt): also served by `GET /llms.txt`.
+- [Implemented changes](docs/CHANGES.md): repairs and optimizations.
 
-The MCP now exposes `capture_trends` (persist a real observation) and `analyze_trends` (analyze shared history). Latest suite: **104 passed**. Controlled and live checks passed; live Douyin evidence showed rank 29 → 28 → 20 across three observations. See [TREND-ANALYSIS.md](TREND-ANALYSIS.md) for rules, source limits and reproducible checks. Earlier Docker evidence below/above covers collection; that image predates this analysis addition.
+## Collection and verification
 
-## Interfaces and agent documentation
+Defaults: X/Douyin hourly, TikTok/Instagram every six hours, YouTube daily. Optional `SCRAPE_INTERVAL_HOURS` overrides all sources; `SOURCE_INTERVALS_HOURS` JSON overrides specific sources. Health and analysis share the same freshness policy. Unchanged new content reuses stored topic rows while preserving every capture and retrieval timestamp.
 
-See [supported endpoints and MCP tools](docs/ENDPOINTS.md), [implemented changes](docs/CHANGES.md), and [llms.txt](llms.txt). The running API also serves the guide at `/llms.txt`. Requires Git, uv, Docker, Python 3.12 and Playwright Chromium; setup installs the Python/browser dependencies. Linux may need Playwright system libraries (`.venv/bin/python -m playwright install --with-deps chromium`). PostgreSQL uses loopback port 55433 and the API uses 8000.
+Run `./verification/run_tests.sh` for isolated regression checks. `.venv/bin/python verification/monitoring_live.py` checks real capture reuse and REST/MCP checkpoint reports; it performs network requests and persists real snapshots. Latest evidence and limitations are in [current status](CURRENT-STATUS.md).
 
-The implementation is delivered as `verification/repairs.patch` against the pinned upstream commit plus `verification/regression-tests/`; `setup.sh` reconstructs the working source. Raw scrape pages, browser captures and transient logs are excluded from version control.
+## Reproduce the implementation
+
+[Original upstream](https://github.com/caicai-yao/social-trends-mcp) is pinned to commit `c9f413ad1c8c6b387e8cd1af5f0c709f263ceae2`. `setup.sh` clones it into ignored `upstream/`, applies `verification/repairs.patch`, and restores `verification/regression-tests/`. Review that patch for application changes. Raw scrape pages, temporary logs, backups and browser captures stay local. Earlier investigation reports are in [docs/archive](docs/archive).

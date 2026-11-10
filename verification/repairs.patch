@@ -1,8 +1,23 @@
 diff --git a/.env.example b/.env.example
-index e0fdcaa..1f86f9d 100644
+index e0fdcaa..00cb552 100644
 --- a/.env.example
 +++ b/.env.example
-@@ -32,6 +32,14 @@ TIKTOK_PROXY=
+@@ -12,7 +12,13 @@ SECRET_KEY=change-me-to-a-random-string
+ DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/social_trends
+ 
+ # ---- 定时任务 ----
+-SCRAPE_INTERVAL_HOURS=6
++# Defaults: X/Douyin 1h, TikTok/Instagram 6h, YouTube 24h.
++# Optional global override (1..168h); per-source overrides take precedence:
++# SCRAPE_INTERVAL_HOURS=6
++# SOURCE_INTERVALS_HOURS={"twitter":1,"youtube":24}
++# MCP uses shared API collection by default; standalone direct mode is explicit.
++API_BASE_URL=http://127.0.0.1:8000
++MCP_FETCH_MODE=api
+ 
+ # ---- X (Twitter) API ----
+ # 申请地址: https://developer.twitter.com/en/portal
+@@ -32,6 +38,14 @@ TIKTOK_PROXY=
  INSTAGRAM_ACCESS_TOKEN=your_instagram_access_token
  # 可选：配置代理
  INSTAGRAM_PROXY=
@@ -248,20 +263,21 @@ index 024dbbf..e9b5dcb 100644
 -[MIT](LICENSE)
 +MIT license; upstream attribution retained in LICENSE and project metadata.
 diff --git a/app/config.py b/app/config.py
-index 66e56b4..9f7831a 100644
+index 66e56b4..a646350 100644
 --- a/app/config.py
 +++ b/app/config.py
 @@ -1,4 +1,6 @@
  from pydantic_settings import BaseSettings
-+from pydantic import SecretStr, Field
++from pydantic import SecretStr, Field, field_validator
 +from typing import Literal
  from functools import lru_cache
  
  
-@@ -7,13 +9,14 @@ class Settings(BaseSettings):
+@@ -7,13 +9,24 @@ class Settings(BaseSettings):
      app_env: str = "development"
      app_host: str = "0.0.0.0"
      app_port: int = 8000
++    mcp_fetch_mode: Literal["api", "direct"] = "api"
 +    api_base_url: str = "http://127.0.0.1:8000"
      secret_key: str = "change-me"
  
@@ -270,11 +286,20 @@ index 66e56b4..9f7831a 100644
  
      # Scheduler
 -    scrape_interval_hours: int = 6
-+    scrape_interval_hours: int = Field(6, ge=1, le=168)
++    scrape_interval_hours: int | None = Field(None, ge=1, le=168)
++    source_intervals_hours: dict[str, float] = Field(default_factory=dict)
++
++    @field_validator("source_intervals_hours")
++    @classmethod
++    def validate_intervals(cls, value):
++        known={'twitter','douyin','tiktok','instagram','youtube'}
++        if any(name not in known or isinstance(hours,bool) or not 1<=hours<=168 for name,hours in value.items()):
++            raise ValueError("Source intervals must use known platforms and hours between 1 and 168")
++        return value
  
      # Twitter / X
      twitter_bearer_token: str = ""
-@@ -27,6 +30,9 @@ class Settings(BaseSettings):
+@@ -27,6 +40,9 @@ class Settings(BaseSettings):
      # Instagram
      instagram_access_token: str = ""
      instagram_proxy: str = ""
@@ -284,7 +309,7 @@ index 66e56b4..9f7831a 100644
  
      # LLM for keyword expansion (optional, falls back to local graph)
      llm_provider: str = ""  # anthropic / openai / empty = local
-@@ -40,7 +46,7 @@ class Settings(BaseSettings):
+@@ -40,7 +56,7 @@ class Settings(BaseSettings):
      # Logging
      log_level: str = "INFO"
  
@@ -294,10 +319,10 @@ index 66e56b4..9f7831a 100644
  
  @lru_cache()
 diff --git a/app/database.py b/app/database.py
-index 58ed2dc..4355ec7 100644
+index 58ed2dc..d59b60a 100644
 --- a/app/database.py
 +++ b/app/database.py
-@@ -29,3 +29,26 @@ async def get_db() -> AsyncSession:
+@@ -29,3 +29,30 @@ async def get_db() -> AsyncSession:
              raise
          finally:
              await session.close()
@@ -319,6 +344,10 @@ index 58ed2dc..4355ec7 100644
 +        await connection.run_sync(Base.metadata.create_all)
 +        if target_engine.dialect.name == "postgresql":
 +            await connection.execute(text("ALTER TABLE scrape_snapshots ADD COLUMN IF NOT EXISTS region VARCHAR(50) NOT NULL DEFAULT 'global'"))
++            await connection.execute(text("ALTER TABLE scrape_snapshots ADD COLUMN IF NOT EXISTS content_hash VARCHAR(64)"))
++            await connection.execute(text("ALTER TABLE scrape_snapshots ADD COLUMN IF NOT EXISTS content_snapshot_id INTEGER REFERENCES scrape_snapshots(id) ON DELETE RESTRICT"))
++            await connection.execute(text("ALTER TABLE scrape_snapshots ADD COLUMN IF NOT EXISTS fetched_at TIMESTAMP"))
++            await connection.execute(text("CREATE INDEX IF NOT EXISTS ix_snapshot_content_lookup ON scrape_snapshots (platform, region, content_hash)"))
 +            await connection.execute(text("CREATE INDEX IF NOT EXISTS ix_snapshot_platform_region_time ON scrape_snapshots (platform, region, started_at DESC)"))
 +            await connection.execute(text("""INSERT INTO platform_configs (platform, enabled, max_topics, region, updated_at)
 +                SELECT 'DOUYIN', 1, 30, 'global', now()
@@ -388,7 +417,7 @@ index c4b719c..ad79501 100644
 +async def llms_guide():
 +    return Path(__file__).with_name("llms.txt").read_text(encoding="utf-8")
 diff --git a/app/models/models.py b/app/models/models.py
-index fb57a1c..2c0c67a 100644
+index fb57a1c..02a3ae9 100644
 --- a/app/models/models.py
 +++ b/app/models/models.py
 @@ -1,5 +1,7 @@
@@ -426,7 +455,7 @@ index fb57a1c..2c0c67a 100644
          }
  
  
-@@ -78,11 +82,12 @@ class ScrapeSnapshot(Base):
+@@ -78,13 +82,18 @@ class ScrapeSnapshot(Base):
  
      id = Column(Integer, primary_key=True, autoincrement=True)
      platform = Column(Enum(Platform), nullable=False, index=True)
@@ -439,13 +468,22 @@ index fb57a1c..2c0c67a 100644
 +    started_at = Column(DateTime, nullable=False, default=utcnow)
      finished_at = Column(DateTime, default=None)
  
++    content_hash = Column(String(64), nullable=True)
++    content_snapshot_id = Column(Integer, ForeignKey("scrape_snapshots.id", ondelete="RESTRICT"), nullable=True)
++    fetched_at = Column(DateTime, nullable=True)
++
      topics = relationship("TrendTopic", back_populates="snapshot", cascade="all, delete-orphan")
-@@ -96,10 +101,12 @@ class ScrapeSnapshot(Base):
+ 
+     __table_args__ = (
+@@ -96,10 +105,15 @@ class ScrapeSnapshot(Base):
              "id": self.id,
              "platform": self.platform.value,
              "status": self.status.value,
 +            "region": self.region,
 +            "error_message": self.error_message,
++            "content_snapshot_id": self.content_snapshot_id,
++            "content_reused": self.content_snapshot_id is not None,
++            "fetched_at": iso_utc(self.fetched_at) if self.fetched_at else None,
              "topic_count": self.topic_count,
              "duration_ms": self.duration_ms,
 -            "started_at": self.started_at.isoformat() if self.started_at else None,
@@ -455,7 +493,7 @@ index fb57a1c..2c0c67a 100644
          }
  
  
-@@ -115,4 +122,4 @@ class PlatformConfig(Base):
+@@ -115,4 +129,4 @@ class PlatformConfig(Base):
      max_topics = Column(Integer, default=30)  # 最多获取多少条
      region = Column(String(50), default="global")
      extra_config = Column(Text, default="{}")  # JSON 扩展配置
@@ -512,10 +550,10 @@ index d01aede..e6d143d 100644
 +
 +from app.routers.analysis import router as analysis_router
 diff --git a/app/routers/trends.py b/app/routers/trends.py
-index 1fcdb0f..f2373a1 100644
+index 1fcdb0f..f392816 100644
 --- a/app/routers/trends.py
 +++ b/app/routers/trends.py
-@@ -1,184 +1,124 @@
+@@ -1,184 +1,136 @@
 -"""
 -API 路由：榜单 + 精搜 + 泛搜 + 地区
 -"""
@@ -524,6 +562,8 @@ index 1fcdb0f..f2373a1 100644
  from typing import Optional
 -
 -from fastapi import APIRouter, Depends, Query, HTTPException, BackgroundTasks
++from dataclasses import asdict
++from app.timeutils import iso_utc
 +from fastapi import APIRouter,Depends,Query,HTTPException,BackgroundTasks
  from sqlalchemy.ext.asyncio import AsyncSession
 -
@@ -725,7 +765,8 @@ index 1fcdb0f..f2373a1 100644
 +
 +
 +async def fetch(platform,region):
-+    return await get_scraper(platform,region=region).execute()
++    from app.fetching import coordinator
++    return await coordinator.fetch(platform,region,factory=get_scraper)
 +
 +
 +def scored_dict(result):
@@ -811,6 +852,15 @@ index 1fcdb0f..f2373a1 100644
 +            except ValueError:pass
 +        return result
 +    return {"platforms":[{"name":p.value,"label":labels[p.value],"regions":supports(p)} for p in Platform]}
++
++
++@router.get('/feeds/{platform}')
++async def public_feed(platform:str,region:str=Query('global'),limit:int=Query(30,ge=1,le=100)):
++    target=checked_platform(platform);region=checked_region(region,target)
++    from app.fetching import coordinator
++    result=await coordinator.fetch(target,region,max_topics=limit,factory=get_scraper)
++    data=asdict(result);data['platform']=target.value;data['fetched_at']=iso_utc(result.fetched_at)
++    return data
 diff --git a/app/routers/websocket.py b/app/routers/websocket.py
 index 691b2b1..2293748 100644
 --- a/app/routers/websocket.py
@@ -827,6 +877,65 @@ index 691b2b1..2293748 100644
          except Exception:
              disconnected.add(ws)
  
+diff --git a/app/scheduler.py b/app/scheduler.py
+index 46e24c5..2b77a32 100644
+--- a/app/scheduler.py
++++ b/app/scheduler.py
+@@ -7,17 +7,19 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
+ from apscheduler.triggers.interval import IntervalTrigger
+ from app.config import get_settings
+ from app.services import trend_service
++from app.models import Platform
++from app.policy import interval_hours
+ 
+ logger = logging.getLogger(__name__)
+ 
+ scheduler = AsyncIOScheduler()
+ 
+ 
+-async def scheduled_scrape():
++async def scheduled_scrape(platform=None):
+     """定时任务：全平台爬取"""
+     logger.info("========== 定时爬取任务开始 ==========")
+     try:
+-        result = await trend_service.run_full_scrape()
++        result = await trend_service.run_full_scrape(platform=platform) if platform else await trend_service.run_full_scrape()
+         logger.info(f"定时爬取完成: {result}")
+     except Exception as e:
+         logger.error(f"定时爬取异常: {e}", exc_info=True)
+@@ -27,17 +29,12 @@ async def scheduled_scrape():
+ def setup_scheduler():
+     """初始化调度器"""
+     settings = get_settings()
+-    interval_hours = settings.scrape_interval_hours
+-
+-    scheduler.add_job(
+-        scheduled_scrape,
+-        trigger=IntervalTrigger(hours=interval_hours),
+-        id="full_scrape",
+-        name=f"全平台趋势爬取 (每{interval_hours}小时)",
+-        replace_existing=True,
+-        max_instances=1,  # 防止重叠执行
+-        misfire_grace_time=3600,  # 如果错过了，1小时内补执行
+-    )
++    for platform in Platform:
++        hours=interval_hours(platform,settings)
++        scheduler.add_job(
++            scheduled_scrape, trigger=IntervalTrigger(hours=hours), args=[platform],
++            id=f"scrape_{platform.value}", name=f"{platform.value} every {hours} hours",
++            replace_existing=True,max_instances=1,coalesce=True,misfire_grace_time=3600)
+ 
+     # 启动时也立即执行一次
+     scheduler.add_job(
+@@ -48,7 +45,7 @@ def setup_scheduler():
+     )
+ 
+     scheduler.start()
+-    logger.info(f"调度器已启动，爬取间隔: {interval_hours}小时")
++    logger.info("Scheduler started with source-specific intervals")
+ 
+ 
+ def shutdown_scheduler():
 diff --git a/app/scrapers/__init__.py b/app/scrapers/__init__.py
 index c92f8a9..8bad998 100644
 --- a/app/scrapers/__init__.py
@@ -848,10 +957,26 @@ index c92f8a9..8bad998 100644
  
  
 diff --git a/app/scrapers/base.py b/app/scrapers/base.py
-index 0545c45..4680a48 100644
+index 0545c45..5afed7f 100644
 --- a/app/scrapers/base.py
 +++ b/app/scrapers/base.py
-@@ -60,7 +60,8 @@ class BaseScraper(ABC):
+@@ -2,6 +2,7 @@
+ 爬虫基类：定义统一接口 + 公共逻辑（重试、超时、日志、代理）
+ """
+ import time
++from datetime import datetime
+ import logging
+ import httpx
+ from abc import ABC, abstractmethod
+@@ -46,6 +47,7 @@ class ScrapeResult:
+     success: bool = True
+     error_message: str = ""
+     duration_ms: int = 0
++    fetched_at: datetime | None = None
+ 
+ 
+ class BaseScraper(ABC):
+@@ -60,7 +62,8 @@ class BaseScraper(ABC):
      def __init__(self, proxy: str = "", max_topics: int = 30, region: str = "global"):
          self.proxy = proxy
          self.max_topics = max_topics
@@ -861,7 +986,7 @@ index 0545c45..4680a48 100644
  
      def _get_client(self, **kwargs) -> httpx.AsyncClient:
          """创建 httpx 异步客户端"""
-@@ -86,6 +87,8 @@ class BaseScraper(ABC):
+@@ -86,6 +89,8 @@ class BaseScraper(ABC):
              try:
                  logger.info(f"[{self.platform.value}] 开始爬取 (第{attempt}次)")
                  items = await self.scrape()
@@ -1852,25 +1977,28 @@ index 3011424..1fc6a9c 100644
  
      @staticmethod
 diff --git a/app/services/trend_service.py b/app/services/trend_service.py
-index 1678387..a7f78c8 100644
+index 1678387..e821bab 100644
 --- a/app/services/trend_service.py
 +++ b/app/services/trend_service.py
-@@ -12,25 +12,43 @@ from sqlalchemy.ext.asyncio import AsyncSession
+@@ -12,25 +12,47 @@ from sqlalchemy.ext.asyncio import AsyncSession
  from app.models import Platform, ScrapeStatus, TrendTopic, ScrapeSnapshot, PlatformConfig
  from app.scrapers import get_scraper, ScrapeResult
  from app.database import async_session_factory
 +from app.config import get_settings
 +from app.timeutils import utcnow
 +from app.regions import get_region, validate_region
++from app.policy import max_age_seconds,interval_hours
++from app.fetching import coordinator
++from app.content import fingerprint,content_id,load_topics
  
  logger = logging.getLogger(__name__)
  
  
-+def freshness(snapshot):
-+    maximum = get_settings().scrape_interval_hours * 7200
++def freshness(snapshot,platform=None):
++    maximum = max_age_seconds(snapshot.platform if snapshot else platform)
 +    if snapshot is None:
 +        return {"state": "missing", "age_seconds": None, "max_age_seconds": maximum}
-+    timestamp = snapshot.finished_at or snapshot.started_at
++    timestamp = getattr(snapshot,"fetched_at",None) or snapshot.finished_at or snapshot.started_at
 +    age = max(0, int((utcnow() - timestamp).total_seconds()))
 +    state = "unavailable" if snapshot.status != ScrapeStatus.SUCCESS else "stale" if age > maximum else "fresh"
 +    return {"state": state, "age_seconds": age, "max_age_seconds": maximum}
@@ -1883,13 +2011,14 @@ index 1678387..a7f78c8 100644
 +    def __init__(self):
 +        self._locks = {}
 +
-+    async def run_full_scrape(self, region: str | None = None) -> dict:
++    async def run_full_scrape(self, region: str | None = None, platform: Platform | None = None) -> dict:
          """
          执行全平台爬取（由定时任务调用）
          并发爬取所有启用的平台，结果写入 DB
          """
          async with async_session_factory() as session:
              enabled_platforms = await self._get_enabled_platforms(session)
++            if platform is not None:enabled_platforms=[p for p in enabled_platforms if p==platform]
 +            configs = (await session.execute(select(PlatformConfig))).scalars().all()
 +            regions = {config.platform: config.region for config in configs}
  
@@ -1901,7 +2030,7 @@ index 1678387..a7f78c8 100644
          results = await asyncio.gather(*tasks, return_exceptions=True)
  
          summary = {}
-@@ -44,21 +62,24 @@ class TrendService:
+@@ -44,27 +66,43 @@ class TrendService:
          logger.info(f"全平台爬取完成: {summary}")
          return summary
  
@@ -1909,16 +2038,30 @@ index 1678387..a7f78c8 100644
 +    async def _scrape_and_save(self, platform: Platform, region: str = "global") -> dict:
          """爬取单个平台并保存到数据库"""
 -        scraper = get_scraper(platform)
+-        result: ScrapeResult = await scraper.execute()
 +        region = validate_region(platform, region)
 +        started_at = utcnow()
-+        scraper = get_scraper(platform, region=region)
-         result: ScrapeResult = await scraper.execute()
++        async with async_session_factory() as config_session:
++            config=(await config_session.execute(select(PlatformConfig).where(PlatformConfig.platform==platform))).scalar_one_or_none()
++            max_topics=max(1,min(100,config.max_topics)) if config and config.max_topics is not None else 30
++        result: ScrapeResult = await coordinator.fetch(platform,region,max_topics=max_topics,factory=get_scraper)
  
          async with async_session_factory() as session:
++            content_hash=fingerprint(result.items) if result.success else None
++            canonical=None
++            if content_hash:
++                canonical=(await session.execute(select(ScrapeSnapshot).where(
++                    ScrapeSnapshot.platform==platform,ScrapeSnapshot.region==region,
++                    ScrapeSnapshot.content_hash==content_hash,
++                    ScrapeSnapshot.content_snapshot_id.is_(None),
++                    ScrapeSnapshot.status==ScrapeStatus.SUCCESS).order_by(desc(ScrapeSnapshot.id)).limit(1))).scalar_one_or_none()
              # 创建快照记录
              snapshot = ScrapeSnapshot(
                  platform=platform,
 +                region=region,
++                content_hash=content_hash,
++                content_snapshot_id=canonical.id if canonical else None,
++                fetched_at=result.fetched_at,
                  status=ScrapeStatus.SUCCESS if result.success else ScrapeStatus.FAILED,
                  topic_count=len(result.items),
                  error_message=result.error_message,
@@ -1930,7 +2073,14 @@ index 1678387..a7f78c8 100644
              )
              session.add(snapshot)
              await session.flush()  # 获取 snapshot.id
-@@ -83,16 +104,37 @@ class TrendService:
+ 
+             # 写入话题数据
+-            for item in result.items:
++            for item in ([] if canonical else result.items):
+                 import json
+                 topic = TrendTopic(
+                     snapshot_id=snapshot.id,
+@@ -83,16 +121,37 @@ class TrendService:
                  session.add(topic)
  
              await session.commit()
@@ -1941,7 +2091,7 @@ index 1678387..a7f78c8 100644
 +            }
 +            # Query committed rows so websocket payload and REST agree.
 +            rows = await session.execute(select(TrendTopic).where(
-+                TrendTopic.snapshot_id == snapshot.id).order_by(TrendTopic.rank))
++                TrendTopic.snapshot_id == content_id(snapshot)).order_by(TrendTopic.rank))
 +            payload["topics"] = [topic.to_dict() for topic in rows.scalars().all()]
  
 +        from app.routers.websocket import broadcast_update
@@ -1970,7 +2120,7 @@ index 1678387..a7f78c8 100644
  
      # ===== 查询方法 =====
  
-@@ -101,18 +143,26 @@ class TrendService:
+@@ -101,18 +160,26 @@ class TrendService:
          session: AsyncSession,
          platform: Optional[Platform] = None,
          limit: int = 30,
@@ -1999,16 +2149,23 @@ index 1678387..a7f78c8 100644
                  )
                  .order_by(desc(ScrapeSnapshot.started_at))
                  .limit(1)
-@@ -121,7 +171,7 @@ class TrendService:
+@@ -121,13 +188,13 @@ class TrendService:
              snapshot = snapshot_result.scalar_one_or_none()
  
              if not snapshot:
 -                result[p.value] = {"topics": [], "snapshot": None}
-+                result[p.value] = {"topics": [], "snapshot": None, "freshness": freshness(None)}
++                result[p.value] = {"topics": [], "snapshot": None, "freshness": freshness(None,p)}
                  continue
  
              # 获取该快照下的话题
-@@ -137,6 +187,7 @@ class TrendService:
+             topics_q = (
+                 select(TrendTopic)
+-                .where(TrendTopic.snapshot_id == snapshot.id)
++                .where(TrendTopic.snapshot_id == content_id(snapshot))
+                 .order_by(TrendTopic.rank)
+                 .limit(limit)
+             )
+@@ -137,6 +204,7 @@ class TrendService:
              result[p.value] = {
                  "topics": [t.to_dict() for t in topics],
                  "snapshot": snapshot.to_dict(),
@@ -2016,7 +2173,7 @@ index 1678387..a7f78c8 100644
              }
  
          return result
-@@ -147,14 +198,16 @@ class TrendService:
+@@ -147,14 +215,16 @@ class TrendService:
          platform: Platform,
          hours: int = 72,
          limit: int = 10,
@@ -2034,7 +2191,27 @@ index 1678387..a7f78c8 100644
                  ScrapeSnapshot.status == ScrapeStatus.SUCCESS,
                  ScrapeSnapshot.started_at >= since,
              )
-@@ -182,16 +235,20 @@ class TrendService:
+@@ -164,34 +234,27 @@ class TrendService:
+         snapshots_result = await session.execute(snapshots_q)
+         snapshots = snapshots_result.scalars().all()
+ 
+-        history = []
+-        for snap in snapshots:
+-            topics_q = (
+-                select(TrendTopic)
+-                .where(TrendTopic.snapshot_id == snap.id)
+-                .order_by(TrendTopic.rank)
+-            )
+-            topics_result = await session.execute(topics_q)
+-            topics = topics_result.scalars().all()
+-            history.append({
+-                "snapshot": snap.to_dict(),
+-                "topics": [t.to_dict() for t in topics],
+-            })
++        by_id=await load_topics(session,snapshots)
++        history=[{'snapshot':snap.to_dict(),'topics':by_id[snap.id]} for snap in snapshots]
+         return history
+ 
      async def get_stats(self, session: AsyncSession) -> dict:
          """服务统计信息"""
          stats = {}
@@ -2058,17 +2235,19 @@ index 1678387..a7f78c8 100644
                  .order_by(desc(ScrapeSnapshot.started_at))
                  .limit(1)
              )
-@@ -201,6 +258,9 @@ class TrendService:
+@@ -200,7 +263,11 @@ class TrendService:
+ 
              stats[p.value] = {
                  "total_scrapes": total_scrapes,
++                "collection_interval_hours": interval_hours(p),
                  "last_scrape": last_snapshot.to_dict() if last_snapshot else None,
 +                "region": region,
-+                "freshness": freshness(last_snapshot),
-+                "stale": freshness(last_snapshot)["state"] != "fresh",
++                "freshness": freshness(last_snapshot,p),
++                "stale": freshness(last_snapshot,p)["state"] != "fresh",
              }
          return stats
  
-@@ -208,12 +268,12 @@ class TrendService:
+@@ -208,12 +275,12 @@ class TrendService:
  
      async def _get_enabled_platforms(self, session: AsyncSession) -> list[Platform]:
          """获取所有启用的平台"""
@@ -2115,10 +2294,10 @@ index 3452474..d22bb30 100644
              seen.add(key)
              unique.append(r)
 diff --git a/mcp_server.py b/mcp_server.py
-index 2c2ad0e..706affb 100644
+index 2c2ad0e..fefd7da 100644
 --- a/mcp_server.py
 +++ b/mcp_server.py
-@@ -10,7 +10,10 @@ MCP tools:
+@@ -10,16 +10,21 @@ MCP tools:
  """
  import asyncio
  import logging
@@ -2129,9 +2308,12 @@ index 2c2ad0e..706affb 100644
  
  from mcp.server import Server
  from mcp.server.stdio import stdio_server
-@@ -19,7 +22,8 @@ from mcp.types import Tool, TextContent
+ from mcp.types import Tool, TextContent
+ 
  from app.scrapers import get_scraper
- from app.scrapers.base import ScrapeResult
+-from app.scrapers.base import ScrapeResult
++from app.scrapers.base import ScrapeResult,TrendItem
++from app.config import get_settings
  from app.models import Platform
 -from app.regions import REGIONS, get_region, get_region_codes
 +from app.regions import REGIONS, get_region, get_region_codes, validate_region
@@ -2139,26 +2321,50 @@ index 2c2ad0e..706affb 100644
  from app.topic_intelligence import expand_keywords, find_related_from_trends, ScoredTopic
  
  logging.basicConfig(level=logging.INFO)
-@@ -38,13 +42,15 @@ def _ck(platform: str, region: str) -> str:
+@@ -27,9 +32,7 @@ logger = logging.getLogger(__name__)
+ 
+ server = Server("social-trends")
+ 
+-_cache: dict[str, ScrapeResult] = {}
+ _cache_time: dict[str, datetime] = {}
+-CACHE_TTL = 1800
+ 
+ 
+ def _ck(platform: str, region: str) -> str:
+@@ -38,13 +41,25 @@ def _ck(platform: str, region: str) -> str:
  
  async def _fetch(platform: Platform, region: str = "global") -> ScrapeResult:
      key = _ck(platform.value, region)
 -    now = datetime.utcnow()
-+    validate_region(platform, region)
-+    now = utcnow()
-     if key in _cache_time and (now - _cache_time[key]).total_seconds() < CACHE_TTL and key in _cache:
-         return _cache[key]
-     scraper = get_scraper(platform, region=region)
-     result = await scraper.execute()
+-    if key in _cache_time and (now - _cache_time[key]).total_seconds() < CACHE_TTL and key in _cache:
+-        return _cache[key]
+-    scraper = get_scraper(platform, region=region)
+-    result = await scraper.execute()
 -    _cache[key] = result
 -    _cache_time[key] = now
++    validate_region(platform, region)
++    settings=get_settings()
++    if settings.mcp_fetch_mode=='direct':
++        from app.fetching import coordinator
++        result=await coordinator.fetch(platform,region,factory=get_scraper)
++    else:
++        try:
++            async with httpx.AsyncClient(timeout=90) as client:
++                response=await client.get(settings.api_base_url.rstrip('/')+f'/api/v1/feeds/{platform.value}',params={'region':region})
++                response.raise_for_status();data=response.json()
++            result=ScrapeResult(platform,[TrendItem(**item) for item in data['items']],
++                success=data['success'],error_message=data.get('error_message',''),duration_ms=data.get('duration_ms',0))
++            if data.get('fetched_at'):
++                from app.services.trend_analysis import timestamp
++                result.fetched_at=timestamp(data['fetched_at'])
++        except (httpx.HTTPError,ValueError,KeyError,TypeError):
++            return ScrapeResult(platform,[],False,'Shared collection backend unavailable. Start ./manage-service.sh start; standalone collection requires MCP_FETCH_MODE=direct.')
 +    if result.success and result.items:
-+        _cache[key] = result
-+        _cache_time[key] = now
++        _cache_time[key] = result.fetched_at or utcnow()
      return result
  
  
-@@ -53,7 +59,7 @@ def _fmt_trends(items, platform: str, region: str) -> str:
+@@ -53,7 +68,7 @@ def _fmt_trends(items, platform: str, region: str) -> str:
          return f"No data for {platform} in {region}."
      label = get_region(region).get("label", region)
      lines = [f"🔥 {platform.upper()} — {label} ({len(items)} topics)",
@@ -2167,7 +2373,7 @@ index 2c2ad0e..706affb 100644
      for item in items:
          vol = f" | {item.volume_label}" if item.volume_label else ""
          tag = f" {item.hashtag}" if item.hashtag else ""
-@@ -89,7 +95,7 @@ async def list_tools() -> list[Tool]:
+@@ -89,7 +104,7 @@ async def list_tools() -> list[Tool]:
          Tool(name="get_trends",
               description="Get trending topics from a specific platform and region.",
               inputSchema={"type": "object", "properties": {
@@ -2176,7 +2382,7 @@ index 2c2ad0e..706affb 100644
                   "region": {"type": "string", "description": f"Region: {', '.join(rc)}", "default": "global"},
                   "limit": {"type": "integer", "default": 20, "minimum": 1, "maximum": 50},
               }, "required": ["platform"]}),
-@@ -98,7 +104,7 @@ async def list_tools() -> list[Tool]:
+@@ -98,7 +113,7 @@ async def list_tools() -> list[Tool]:
               description="Get trending topics from ALL platforms at once for a region.",
               inputSchema={"type": "object", "properties": {
                   "region": {"type": "string", "default": "global"},
@@ -2185,7 +2391,7 @@ index 2c2ad0e..706affb 100644
               }}),
  
          Tool(name="exact_search",
-@@ -107,18 +113,36 @@ async def list_tools() -> list[Tool]:
+@@ -107,18 +122,42 @@ async def list_tools() -> list[Tool]:
                   "query": {"type": "string", "description": "Exact keyword to search"},
                   "region": {"type": "string", "default": "global"},
                   "platforms": {"type": "array", "items": {"type": "string",
@@ -2216,6 +2422,12 @@ index 2c2ad0e..706affb 100644
 +                 "region":{"type":"string","default":"global"},
 +                 "hours":{"type":"integer","minimum":1,"maximum":720,"default":48},
 +                 "limit":{"type":"integer","minimum":1,"maximum":100,"default":20}}}),
++        Tool(name="get_changes", description="Read changes in stored samples since an ISO-8601 checkpoint: additions, removals, movement and sustained momentum evidence. No automatic scrape.",
++             inputSchema={"type":"object","properties":{
++                 "since":{"type":"string","format":"date-time"},
++                 "platform":{"type":"string","enum":[p.value for p in Platform]},
++                 "region":{"type":"string","default":"global"},
++                 "limit":{"type":"integer","minimum":1,"maximum":100,"default":20}},"required":["since"]}),
 +        Tool(name="capture_trends", description="Fetch and persist one observation in shared PostgreSQL history through the REST backend. Use before future analysis; repeated rapid captures do not create independent history.",
 +             inputSchema={"type":"object","properties":{
 +                 "platform":{"type":"string","enum":[p.value for p in Platform]},
@@ -2224,7 +2436,7 @@ index 2c2ad0e..706affb 100644
          Tool(name="list_regions",
               description="List all supported countries and regions.",
               inputSchema={"type": "object", "properties": {}}),
-@@ -127,139 +151,106 @@ async def list_tools() -> list[Tool]:
+@@ -127,139 +166,118 @@ async def list_tools() -> list[Tool]:
  
  @server.call_tool()
  async def call_tool(name: str, arguments: dict) -> list[TextContent]:
@@ -2242,15 +2454,25 @@ index 2c2ad0e..706affb 100644
 +async def _call_tool(name: str, arguments: dict) -> list[TextContent]:
 +    region = arguments.get("region", "global").strip().lower()
 +    get_region(region)
-+    if name in {"analyze_trends", "capture_trends"}:
-+        from app.config import get_settings
++    if name in {"analyze_trends", "capture_trends", "get_changes"}:
 +        platform = Platform(arguments['platform']) if arguments.get('platform') else None
 +        if platform is not None:
 +            validate_region(platform, region)
 +        if name == "capture_trends" and platform is None:
 +            raise ValueError("capture_trends requires a platform")
 +        params = {"region": region}
-+        if name == "analyze_trends":
++        if name == "get_changes":
++            from app.services.trend_analysis import timestamp
++            since=arguments.get('since')
++            if not isinstance(since,str):raise ValueError("get_changes requires an ISO-8601 since timestamp")
++            try:timestamp(since)
++            except (ValueError,TypeError,OverflowError):raise ValueError("since must be an ISO-8601 timestamp")
++            limit=arguments.get('limit',20)
++            if isinstance(limit,bool) or not isinstance(limit,int) or not 1<=limit<=100:raise ValueError("limit must be between 1 and 100")
++            params.update(since=since,limit=limit)
++            if platform:params['platform']=platform.value
++            method,path='GET','/api/v1/analysis/changes'
++        elif name == "analyze_trends":
 +            hours, limit = arguments.get('hours',48), arguments.get('limit',20)
 +            if isinstance(hours,bool) or not isinstance(hours,int) or not 1<=hours<=720:
 +                raise ValueError("hours must be between 1 and 720")
@@ -2292,6 +2514,8 @@ index 2c2ad0e..706affb 100644
 -
 +            async with httpx.AsyncClient(timeout=90) as client:
 +                response=await client.request(method,get_settings().api_base_url.rstrip('/')+path,params=params)
++                if response.status_code in {400,422}:
++                    return [TextContent(type="text",text="Invalid request: "+response.text)]
 +                if response.status_code not in {200,202,502}:
 +                    response.raise_for_status()
 +                return [TextContent(type='text',text=json.dumps(response.json(),ensure_ascii=False))]
@@ -2419,7 +2643,7 @@ index 2c2ad0e..706affb 100644
 -        if expansion["domains"]:
 -            lines.append(f"   Domains: {', '.join(expansion['domains'])}")
 -        lines.append("")
--
+ 
 -        if scored:
 -            lines.append(_fmt_scored(scored, query, region, "discover"))
 -        else:
@@ -2438,7 +2662,7 @@ index 2c2ad0e..706affb 100644
 -            lines.append(f"  {info['label']}  →  code: {code}")
 -        lines.append(f"\nTotal: {len(REGIONS)} regions")
 -        return [TextContent(type="text", text="\n".join(lines))]
- 
+-
 -    return [TextContent(type="text", text=f"Unknown tool: {name}")]
 -
 -
@@ -2550,12 +2774,82 @@ index 0000000..6935ec8
 +    items = [item for rows, _ in results for item in rows]
 +    coverage = {platform.value: status for platform, (_, status) in zip(platforms, results)}
 +    return items, coverage
+diff --git a/app/content.py b/app/content.py
+new file mode 100644
+index 0000000..533b2ab
+--- /dev/null
++++ b/app/content.py
+@@ -0,0 +1,21 @@
++"""Canonical content reuse; capture snapshots remain independent audit records."""
++from collections import defaultdict
++from dataclasses import asdict
++import hashlib,json
++from sqlalchemy import select
++from app.models import TrendTopic
++
++def fingerprint(items):
++    # Includes all source metadata, units, regions and editions, not just titles.
++    encoded=json.dumps([asdict(item) for item in items],sort_keys=True,ensure_ascii=False,separators=(',',':'))
++    return hashlib.sha256(encoded.encode()).hexdigest()
++
++def content_id(snapshot):
++    return getattr(snapshot,'content_snapshot_id',None) or snapshot.id
++
++async def load_topics(session,snapshots):
++    ids={content_id(snapshot) for snapshot in snapshots};by_id=defaultdict(list)
++    if ids:
++        topics=(await session.execute(select(TrendTopic).where(TrendTopic.snapshot_id.in_(ids)).order_by(TrendTopic.rank,TrendTopic.id))).scalars().all()
++        for topic in topics:by_id[topic.snapshot_id].append(topic.to_dict())
++    return {snapshot.id:by_id[content_id(snapshot)] for snapshot in snapshots}
+diff --git a/app/fetching.py b/app/fetching.py
+new file mode 100644
+index 0000000..55a945b
+--- /dev/null
++++ b/app/fetching.py
+@@ -0,0 +1,37 @@
++"""Bounded, process-local single-flight cache shared by all collection interfaces."""
++import asyncio
++from collections import OrderedDict
++from copy import deepcopy
++import time
++from app.scrapers import get_scraper
++from app.regions import validate_region
++from app.timeutils import utcnow
++
++class FetchCoordinator:
++    def __init__(self,ttl=120,capacity=128):
++        self.ttl=ttl;self.capacity=capacity;self.cache=OrderedDict();self.inflight={}
++
++    async def fetch(self,platform,region='global',max_topics=30,factory=None):
++        region=validate_region(platform,region);factory=factory or get_scraper
++        key=(platform,region,max_topics,factory)
++        entry=self.cache.get(key)
++        if entry and time.monotonic()-entry[0]<self.ttl:
++            self.cache.move_to_end(key)
++            return deepcopy(entry[1])
++        if key not in self.inflight:
++            async def load():
++                result=await factory(platform,region=region,max_topics=max_topics).execute()
++                result.fetched_at=utcnow()
++                if result.success and result.items:
++                    self.cache[key]=(time.monotonic(),deepcopy(result))
++                    self.cache.move_to_end(key)
++                    while len(self.cache)>self.capacity:self.cache.popitem(last=False)
++                return result
++            task=asyncio.create_task(load());self.inflight[key]=task
++            def done(completed):
++                if self.inflight.get(key) is completed:self.inflight.pop(key,None)
++                if not completed.cancelled():completed.exception()
++            task.add_done_callback(done)
++        return deepcopy(await asyncio.shield(self.inflight[key]))
++
++coordinator=FetchCoordinator()
 diff --git a/app/llms.txt b/app/llms.txt
 new file mode 100644
-index 0000000..b20c46f
+index 0000000..c93cf1e
 --- /dev/null
 +++ b/app/llms.txt
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,46 @@
 +# Social Trends MCP
 +
 +> Public social trend collection, PostgreSQL history, REST/WebSocket and stdio MCP tools with evidence-based movement analysis. Default sources require no paid API or AI model.
@@ -2570,49 +2864,75 @@ index 0000000..b20c46f
 +## Local interfaces
 +REST base: http://127.0.0.1:8000. GET /openapi.json is the live schema; GET /docs is interactive documentation. GET /llms.txt serves this guide.
 +GET /api/v1/platforms and /api/v1/regions enumerate supported choices. Platform IDs: twitter, tiktok, youtube, instagram, douyin.
++GET /api/v1/feeds/{platform}?region=global&limit=30 fetches a public feed through the shared 120-second cache without persistence.
 +GET /api/v1/trends and /api/v1/trends/{platform} read stored snapshots. GET /api/v1/trends/history/{platform} reads history.
 +GET /api/v1/search/exact?q=... and /api/v1/search/discover?q=... fetch observed feeds without persistence.
 +POST /api/v1/refresh queues persisted collection and returns 202.
 +POST /api/v1/analysis/capture/{platform}?region=global fetches and persists; 200 means captured, 202 means another capture is running, 502 means collection failed and its failure snapshot was recorded.
 +GET /api/v1/analysis/trends?region=global&hours=48&limit=20 reads historical movement signals; optional platform. hours:1–720, limit:1–100.
++GET /api/v1/analysis/changes?since=ISO-8601 compares stored samples to a checkpoint within the past 30 days; optional platform, region and limit (1–100 per section). Returns added/removed/changed topics, unchanged counts, evidence and separate sustained momentum. Save generated_at as your next checkpoint. Baseline data must have been fetched and completed at/before since.
 +GET /api/v1/health reports healthy/degraded in its JSON body.
 +WebSocket /ws/trends broadcasts committed updates; text ping returns pong. Single-worker operation only.
 +
 +## MCP
 +Transport: stdio via ./start-mcp.sh; there is no HTTP MCP endpoint.
-+Tools: get_trends, get_all_trends, exact_search, search_trends (alias), discover_search, list_regions, capture_trends, analyze_trends.
-+Direct fetch/search tools use source data/cache and do not save history.
++Tools: get_trends, get_all_trends, exact_search, search_trends (alias), discover_search, list_regions, capture_trends, analyze_trends, get_changes.
++Default fetch/search tools use the running API’s shared source cache and do not save history. MCP_FETCH_MODE=direct explicitly enables standalone fetch/search with a process-local cache.
 +capture_trends requires platform and optionally region; it persists through the API.
 +analyze_trends accepts optional platform, region, hours and limit; it reads shared stored history.
-+These last two tools require the API at API_BASE_URL, default http://127.0.0.1:8000.
++get_changes requires since (ISO-8601), optional platform, region and limit; reads checkpoint changes without scraping.
++Capture, analysis and change-report tools always require the API at API_BASE_URL, default http://127.0.0.1:8000.
 +
 +## Interpretation rules
 +Report source scope, actual region, observation times, missing metrics and coverage failures.
 +X is a third-party ranking. TikTok is a limited preview; global maps to US. YouTube keyless data is weekly music charts; global maps to US. Instagram is a global public Reels recommendation sample, not a platform-wide trends ranking. Douyin is a China hot list; heat scores are not views.
 +Search covers observed feeds, not full-platform content. Empty results do not prove platform-wide absence.
 +A rising candidate needs three independent observations over at least one hour, spaced at least 15 minutes, plus sustained rank improvement or comparable metric growth. Repeated source editions count once.
-+Use returned evidence and warnings. Confidence is qualitative, not a probability. First appearance in a sample is not proof of a newly emerging topic. Do not claim future virality or exhaustive platform coverage.
++Use returned evidence and warnings. Confidence is qualitative, not a probability. Added/removed in a checkpoint report describe the sampled feed, not platform-wide creation/disappearance. Two-point changes are not sustained momentum. First appearance in a sample is not proof of a newly emerging topic. Do not claim future virality or exhaustive platform coverage.
 +AI can interpret these signals; the service does not call a paid LLM or validate predictive accuracy.
-+Collection defaults to every six hours. Do not create synthetic observations in the service database to simulate history.
++Collection defaults: X/Douyin hourly, TikTok/Instagram every six hours, YouTube daily. SCRAPE_INTERVAL_HOURS overrides all; SOURCE_INTERVALS_HOURS JSON overrides specific sources. Retrieval freshness is twice the applicable interval. Identical new source-aware content reuses topic rows while preserving every capture and fetched_at retrieval time; existing historical duplicates remain. Referenced canonical snapshots must not be deleted. Do not create synthetic observations in the service database to simulate history.
 +
 +## Repository layout
 +The upstream source is pinned to caicai-yao/social-trends-mcp commit c9f413ad1c8c6b387e8cd1af5f0c709f263ceae2.
 +setup.sh clones it into ignored upstream/, applies verification/repairs.patch and restores verification/regression-tests/. The patch contains the implementation changes; upstream/ is not a Git submodule.
 +Use ./verification/run_tests.sh for isolated regression checks. Live verification scripts perform network requests and may persist real captures.
+diff --git a/app/policy.py b/app/policy.py
+new file mode 100644
+index 0000000..eda0543
+--- /dev/null
++++ b/app/policy.py
+@@ -0,0 +1,12 @@
++"""One collection and retrieval-freshness policy for scheduler, health and analysis."""
++from app.config import get_settings
++DEFAULT_INTERVALS={'twitter':1,'douyin':1,'tiktok':6,'instagram':6,'youtube':24}
++
++def interval_hours(platform,settings=None):
++    settings=settings or get_settings()
++    name=getattr(platform,'value',platform)
++    overrides=getattr(settings,'source_intervals_hours',{})
++    return overrides.get(name) or getattr(settings,'scrape_interval_hours',None) or DEFAULT_INTERVALS[name]
++
++def max_age_seconds(platform,settings=None):
++    return interval_hours(platform or 'twitter',settings)*7200
 diff --git a/app/routers/analysis.py b/app/routers/analysis.py
 new file mode 100644
-index 0000000..cdac242
+index 0000000..6ef0cf7
 --- /dev/null
 +++ b/app/routers/analysis.py
-@@ -0,0 +1,32 @@
+@@ -0,0 +1,47 @@
 +"""Shared PostgreSQL-backed captures and evidence-based analysis."""
-+from fastapi import APIRouter,Depends,Query
++from fastapi import APIRouter,Depends,Query,HTTPException
++from datetime import datetime,timedelta
++from app.timeutils import utcnow
++from app.services.trend_analysis import timestamp
++from app.services.change_report import get_changes
 +from fastapi.responses import JSONResponse
 +from sqlalchemy import select
 +from sqlalchemy.ext.asyncio import AsyncSession
 +from app.database import get_db
 +from app.models import ScrapeSnapshot,TrendTopic
 +from app.services import trend_service
++from app.content import load_topics
 +from app.services.trend_analysis import analyze_database
 +from app.routers.trends import checked_platform,checked_region
 +
@@ -2635,8 +2955,18 @@ index 0000000..cdac242
 +    if not result['success']:
 +        return JSONResponse(status_code=502,content={**result,'persisted':True,'state':'failure_recorded'})
 +    snapshot=await db.get(ScrapeSnapshot,result['snapshot_id'])
-+    topics=(await db.execute(select(TrendTopic).where(TrendTopic.snapshot_id==snapshot.id).order_by(TrendTopic.rank))).scalars().all()
-+    return {'persisted':True,'state':'captured','snapshot':snapshot.to_dict(),'topics':[topic.to_dict() for topic in topics]}
++    topics=(await load_topics(db,[snapshot]))[snapshot.id]
++    return {'persisted':True,'state':'captured','snapshot':snapshot.to_dict(),'topics':topics}
++
++
++@router.get('/changes')
++async def changes(since:datetime=Query(...),platform:str|None=Query(None),region:str=Query('global'),limit:int=Query(20,ge=1,le=100),db:AsyncSession=Depends(get_db)):
++    target=checked_platform(platform) if platform else None
++    region=checked_region(region,target)
++    checkpoint=timestamp(since);now=utcnow()
++    if checkpoint>now or checkpoint<now-timedelta(days=30):
++        raise HTTPException(400,'since must be within the past 30 days')
++    return await get_changes(db,checkpoint,platform=target,region=region,limit=limit)
 diff --git a/app/scrapers/douyin_scraper.py b/app/scrapers/douyin_scraper.py
 new file mode 100644
 index 0000000..4dd6393
@@ -2733,12 +3063,109 @@ index 0000000..4dd6393
 +            if len(items) >= self.max_topics:
 +                break
 +        return items
+diff --git a/app/services/change_report.py b/app/services/change_report.py
+new file mode 100644
+index 0000000..daf7557
+--- /dev/null
++++ b/app/services/change_report.py
+@@ -0,0 +1,91 @@
++"""Changes in observed samples since a caller-supplied checkpoint, never forecasts."""
++from datetime import timedelta
++from sqlalchemy import select,desc,func
++from app.models import Platform,ScrapeSnapshot,ScrapeStatus
++from app.content import load_topics
++from app.regions import validate_region
++from app.policy import max_age_seconds
++from app.timeutils import utcnow,iso_utc
++from app.services.trend_analysis import identity,timestamp,metric_context,measurement,source_context,analyze_database
++
++UNRANKED={'public_reels_recommendation_sample','sampled_trending_reels','third_party_hashtag_suggestions','public_hashtag_listing'}
++
++def compare_snapshots(platform,baseline,current,limit=20,now=None):
++    report={'status':'ok','baseline':baseline['snapshot'] if baseline else None,
++            'current':current['snapshot'] if current else None,'added':[],'removed':[],'changed':[],
++            'counts':{'added':0,'removed':0,'changed':0,'unchanged':0},
++            'scope':'Changes in observed samples only. Missing from a sample does not mean platform-wide disappearance.'}
++    if not current:report['status']='missing';return report
++    latest=current['snapshot']
++    if latest['status']!='success':report['status']='unavailable';return report
++    age=(timestamp(now or utcnow())-timestamp(latest.get('fetched_at') or latest.get('finished_at') or latest['started_at'])).total_seconds()
++    if age>max_age_seconds(platform):report['status']='stale'
++    if not baseline:report['status']='no_baseline';return report
++    before={identity(platform,item):item for item in baseline['topics']}
++    after={identity(platform,item):item for item in current['topics']}
++    evidence={'baseline_snapshot_id':baseline['snapshot']['id'],'current_snapshot_id':latest['id']}
++    def entry(key,item):return {'topic_key':key,'title':item['title'],'url':item.get('url',''),'evidence':evidence.copy()}
++    for key,item in after.items():
++        if key not in before:
++            report['added'].append({**entry(key,item),'meaning':'new_to_sample_since_checkpoint'});continue
++        old=before[key];warnings=[];rank_change=None;delta=percent=None
++        same_source=source_context(old)==source_context(item)
++        kind=(item.get('extra_data') or {}).get('data_kind','unknown')
++        if not same_source:warnings.append('source_context_changed')
++        ranked=kind not in UNRANKED and same_source
++        if not ranked:warnings.append('order_not_comparable_ranking')
++        if ranked and all(isinstance(x,int) and x>0 for x in [old.get('rank'),item.get('rank')]):
++            rank_change=old['rank']-item['rank']
++        context=metric_context(item);a,b=measurement(old),measurement(item)
++        comparable=same_source and context==metric_context(old) and a is not None and b is not None
++        if context!=metric_context(old):warnings.append('metric_context_changed')
++        if comparable:
++            delta=b-a
++            if delta<0 and context[0] not in {'heat score','weekly views'} and not context[1][2]:
++                warnings.append('metric_decreased_or_reset');delta=None
++            else:percent=round(delta/a*100,2) if a else None
++        changed=(rank_change not in {None,0} or (a!=b and (a is not None or b is not None)) or not same_source or context!=metric_context(old))
++        if changed:
++            report['changed'].append({**entry(key,item),'rank_before':old.get('rank') if ranked else None,
++                'rank_now':item.get('rank') if ranked else None,'rank_change':rank_change,
++                'metric':{'unit':context[0],'change':delta,'change_percent':percent},
++                'warnings':warnings,'meaning':'two_point_change_only_not_sustained_momentum'})
++        else:report['counts']['unchanged']+=1
++    report['removed']=[{**entry(key,item),'meaning':'missing_from_latest_sample'} for key,item in before.items() if key not in after]
++    report['changed'].sort(key=lambda item:abs(item['rank_change'] or 0),reverse=True)
++    for section in ['added','removed','changed']:
++        report['counts'][section]=len(report[section]);report[section]=report[section][:limit]
++    report['sections_truncated']=any(report['counts'][k]>len(report[k]) for k in ['added','removed','changed'])
++    if latest['id']==baseline['snapshot']['id']:report['status']='no_new_capture'
++    return report
++
++async def get_changes(session,since,platform=None,region='global',limit=20):
++    since=timestamp(since);now=utcnow()
++    targets=[platform] if platform else list(Platform)
++    result={'since':iso_utc(since),'generated_at':iso_utc(now),'region':region,'platforms':{},
++            'note':'Two-point changes are separate from sustained momentum. Capture times and source editions affect evidence.'}
++    pairs={};snapshots=[]
++    for target in targets:
++        try:validate_region(target,region)
++        except ValueError as error:
++            result['platforms'][target.value]={'status':'unsupported','error':str(error)};continue
++        query=select(ScrapeSnapshot).where(ScrapeSnapshot.platform==target,ScrapeSnapshot.region==region)
++        order=(desc(ScrapeSnapshot.started_at),desc(ScrapeSnapshot.id))
++        current=(await session.execute(query.order_by(*order).limit(1))).scalar_one_or_none()
++        observed_at=func.coalesce(ScrapeSnapshot.fetched_at,ScrapeSnapshot.finished_at,ScrapeSnapshot.started_at)
++        available_at=func.coalesce(ScrapeSnapshot.finished_at,ScrapeSnapshot.started_at)
++        baseline=(await session.execute(query.where(observed_at<=since,available_at<=since,
++            ScrapeSnapshot.status==ScrapeStatus.SUCCESS).order_by(desc(observed_at),desc(available_at),desc(ScrapeSnapshot.id)).limit(1))).scalar_one_or_none()
++        pairs[target]=(baseline,current)
++        snapshots.extend(row for row in [baseline,current] if row is not None)
++    contents=await load_topics(session,snapshots)
++    momentum=await analyze_database(session,platform=platform,region=region,hours=min(720,max(48,int((now-since).total_seconds()/3600)+1)),limit=limit)
++    for target,(baseline,current) in pairs.items():
++        def packed(row):return {'snapshot':row.to_dict(),'topics':contents[row.id]} if row else None
++        report=compare_snapshots(target.value,packed(baseline),packed(current),limit=limit,now=now)
++        state=momentum['platforms'].get(target.value,{})
++        report['momentum']={'status':state.get('status'),'rising_candidates':state.get('rising_candidates',0),
++            'history_truncated':state.get('history_truncated',False),
++            'topics':[t for t in state.get('topics',[]) if t['signal']=='rising_candidate']}
++        result['platforms'][target.value]=report
++    return result
 diff --git a/app/services/trend_analysis.py b/app/services/trend_analysis.py
 new file mode 100644
-index 0000000..5149b3a
+index 0000000..63c0505
 --- /dev/null
 +++ b/app/services/trend_analysis.py
-@@ -0,0 +1,194 @@
+@@ -0,0 +1,193 @@
 +"""Evidence-based movement signals over stored observations; never predictions."""
 +from collections import defaultdict
 +from datetime import datetime,timezone,timedelta
@@ -2748,6 +3175,8 @@ index 0000000..5149b3a
 +from app.models import Platform,ScrapeSnapshot,TrendTopic
 +from app.timeutils import utcnow,iso_utc
 +from app.regions import validate_region
++from app.policy import max_age_seconds
++from app.content import load_topics
 +
 +
 +def timestamp(value):
@@ -2815,12 +3244,12 @@ index 0000000..5149b3a
 +            'platforms':{}}
 +    for platform,rows in groups.items():
 +        rows.sort(key=lambda row:(timestamp(row['snapshot']['started_at']),row['snapshot']['id']))
-+        latest=rows[-1];snapshot=latest['snapshot'];age=max(0,(now-timestamp(snapshot.get('finished_at') or snapshot['started_at'])).total_seconds())
-+        state={'status':'ok','snapshot_id':snapshot['id'],'snapshot_count':len(rows),'latest_age_hours':round(age/3600,3),'topics':[]}
++        latest=rows[-1];snapshot=latest['snapshot'];age=max(0,(now-timestamp(snapshot.get('fetched_at') or snapshot.get('finished_at') or snapshot['started_at'])).total_seconds())
++        state={'status':'ok','snapshot_id':snapshot['id'],'snapshot_count':len(rows),'latest_age_hours':round(age/3600,3),'max_age_hours':max_age_seconds(platform)/3600,'topics':[]}
 +        output['platforms'][platform]=state
 +        if snapshot['status']!='success':
 +            state.update(status='unavailable',error=snapshot.get('error_message','Latest collection failed'));continue
-+        if age>43200:state['status']='stale'
++        if age>max_age_seconds(platform):state['status']='stale'
 +        observed=defaultdict(list)
 +        successful=[row for row in rows if row['snapshot']['status']=='success']
 +        for row in successful:
@@ -2829,7 +3258,7 @@ index 0000000..5149b3a
 +                key=identity(platform,item)
 +                if key in seen:continue
 +                seen.add(key)
-+                observed[key].append({'item':item,'time':timestamp(row['snapshot']['started_at']),'snapshot_id':row['snapshot']['id']})
++                observed[key].append({'item':item,'time':timestamp(row['snapshot'].get('fetched_at') or row['snapshot']['started_at']),'snapshot_id':row['snapshot']['id']})
 +        for current in latest['topics']:
 +            key=identity(platform,current);raw=observed[key]
 +            same=[row for row in raw if source_context(row['item'])==source_context(current)]
@@ -2918,10 +3347,7 @@ index 0000000..5149b3a
 +        rows=(await session.execute(query.order_by(desc(ScrapeSnapshot.started_at),desc(ScrapeSnapshot.id)).limit(501))).scalars().all()
 +        truncated[target.value]=len(rows)>500
 +        snapshots.extend(rows[:500])
-+    by_id=defaultdict(list)
-+    if snapshots:
-+        topics=(await session.execute(select(TrendTopic).where(TrendTopic.snapshot_id.in_([row.id for row in snapshots])).order_by(TrendTopic.rank))).scalars().all()
-+        for topic in topics:by_id[topic.snapshot_id].append(topic.to_dict())
++    by_id=await load_topics(session,snapshots)
 +    result=analyze_history([{'snapshot':row.to_dict(),'topics':by_id[row.id]} for row in snapshots],region=region,limit=limit)
 +    for target in targets:
 +        try:

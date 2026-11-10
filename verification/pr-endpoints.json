@@ -2,6 +2,15 @@
   "guide_status": 200,
   "guide_matches_repository": true,
   "openapi_status": 200,
+  "all_paths_documented": true,
+  "health_status": "healthy",
+  "interval_hours": {
+    "twitter": 1,
+    "tiktok": 6,
+    "youtube": 24,
+    "instagram": 6,
+    "douyin": 1
+  },
   "paths": {
     "/api/v1/trends": [
       "get"
@@ -30,11 +39,17 @@
     "/api/v1/platforms": [
       "get"
     ],
+    "/api/v1/feeds/{platform}": [
+      "get"
+    ],
     "/api/v1/analysis/trends": [
       "get"
     ],
     "/api/v1/analysis/capture/{platform}": [
       "post"
+    ],
+    "/api/v1/analysis/changes": [
+      "get"
     ],
     "/": [
       "get"

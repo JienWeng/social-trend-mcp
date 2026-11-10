@@ -11,6 +11,7 @@ Default local base URL: http://127.0.0.1:8000. REST responses are JSON unless no
 | GET | `/redoc` | Alternative API documentation (HTML). |
 | GET | `/openapi.json` | Machine-readable OpenAPI schema. |
 | GET | `/llms.txt` | Plain-text agent guide with interfaces, persistence rules and source limits. |
+| GET | `/api/v1/feeds/{platform}` | Shared live/cache feed; `region=global`, `limit=30` (1–100). Does not persist. Successful results cached up to 120 seconds; failures are not cached. |
 | GET | `/api/v1/trends` | Latest stored snapshots; `region=global`, `limit=30` (1–100). Does not fetch upstream. |
 | GET | `/api/v1/trends/{platform}` | Latest stored snapshot for a platform; same region/limit parameters. |
 | GET | `/api/v1/trends/history/{platform}` | Stored history; `region=global`, `hours=72` (1–8760), `limit=12` snapshots (1–100). |
@@ -21,6 +22,7 @@ Default local base URL: http://127.0.0.1:8000. REST responses are JSON unless no
 | GET | `/api/v1/platforms` | Platforms and supported region combinations. |
 | GET | `/api/v1/health` | Healthy/degraded collection state, freshness and per-platform statistics. HTTP 200 can contain degraded status. |
 | GET | `/api/v1/analysis/trends` | Stored momentum signals; optional `platform`, `region=global`, `hours=48` (1–720), `limit=20` topics/platform (1–100). |
+| GET | `/api/v1/analysis/changes` | Required `since` ISO-8601 checkpoint within past 30 days; optional `platform`, `region=global`, `limit=20` (1–100 per section). Added/removed/changed sample topics, unchanged count, snapshot evidence and separate momentum. No scrape. |
 | POST | `/api/v1/analysis/capture/{platform}` | Fetches and persists a snapshot; `region=global`. 200 captured, 202 capture already running (not persisted by this call), 502 failed capture recorded. |
 | WebSocket | `/ws/trends` | Persisted collection updates after database commit. Send text `ping` to receive `pong`. In-process broadcast: run one worker. |
 
@@ -32,16 +34,17 @@ Launch `./start-mcp.sh` after setup. There is no HTTP MCP endpoint. Paths in mcp
 
 | Tool | Arguments | Behavior |
 | --- | --- | --- |
-| `get_trends` | Required `platform`; `region=global`, `limit=20` (1–50). | Direct feed fetch with 30-minute cache; does not persist. |
-| `get_all_trends` | `region=global`, `limit=10` (1–50). | Direct fetch/cache across available sources; reports coverage. Does not persist. |
+| `get_trends` | Required `platform`; `region=global`, `limit=20` (1–50). | Shared API feed fetch/cache (up to 120 seconds); does not persist. |
+| `get_all_trends` | `region=global`, `limit=10` (1–50). | Shared API fetch/cache across available sources; reports coverage. Does not persist. |
 | `exact_search` | Required `query`; optional `region`, `platforms` array. | Exact matches in observed feeds, not full-platform search. Does not persist. |
 | `search_trends` | Same as exact_search. | Alias for exact_search. |
 | `discover_search` | Required `query`; optional `region`, `min_relevance` (default 10). | Related observed topics from keyword expansion and relevance scoring. Does not persist. |
 | `list_regions` | None. | Region catalog; check platform-specific availability. |
+| `get_changes` | Required `since` ISO-8601; optional `platform`, `region=global`, `limit=20` (1–100). | Compare current stored sample with last successful data fetched and completed at/before checkpoint; returns evidence and separate sustained momentum. |
 | `capture_trends` | Required `platform`; `region=global`. | Calls the REST capture endpoint, saving shared PostgreSQL history. |
 | `analyze_trends` | Optional `platform`, `region=global`, `hours=48` (1–720), `limit=20` (1–100). | Calls shared stored-history analysis; evidence, warnings and qualitative confidence. |
 
-Capture/analysis tools require the running API at `API_BASE_URL`, default http://127.0.0.1:8000. Other MCP tools query sources directly.
+Fetch/search/capture/analysis/change-report tools use the running API at `API_BASE_URL`, default http://127.0.0.1:8000, sharing one collection cache and in-flight requests. `MCP_FETCH_MODE=direct` explicitly enables standalone fetch/search (process-local cache); capture/analysis/changes still require the API. `list_regions` is local.
 
 ## Source coverage
 
@@ -52,3 +55,9 @@ Capture/analysis tools require the running API at `API_BASE_URL`, default http:/
 - Douyin: public China hot-topic list; accepts global/cn and reports actual source region cn. Heat scores are not views.
 
 Use the live platform/region catalog rather than assuming every region works everywhere. Public endpoints may change or block collection. Optional paid adapters are explicit opt-ins. Analysis rules and evidence are documented in [TREND-ANALYSIS.md](../TREND-ANALYSIS.md).
+
+## Collection and storage policy
+
+Defaults: X/Douyin hourly; TikTok/Instagram every six hours; YouTube daily. `SCRAPE_INTERVAL_HOURS` overrides all sources; `SOURCE_INTERVALS_HOURS` JSON overrides specific sources and takes precedence. Freshness is twice the applicable interval in health, latest trends, analysis and change reports. Scheduling honors enabled platforms and configured regions; saved captures honor configured max_topics (clamped to 1–100).
+
+Captures retain separate IDs/timestamps. New identical source-aware payloads reuse earlier topic rows via content_snapshot_id; content_reused identifies this and fetched_at retains the actual retrieval time. Legacy rows remain readable. Referenced canonical snapshots must not be deleted; no automatic retention deletion is configured. Existing historical duplicates are retained.

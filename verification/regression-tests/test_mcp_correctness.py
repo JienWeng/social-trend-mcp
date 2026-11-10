@@ -26,7 +26,9 @@ async def test_mcp_validates_limits_regions_and_filters():
 @pytest.mark.asyncio
 async def test_failed_fetch_is_not_cached(monkeypatch):
     import mcp_server as m
-    m._cache.clear();m._cache_time.clear()
+    m._cache_time.clear()
+    from app.config import Settings
+    monkeypatch.setattr(m,"get_settings",lambda:Settings(_env_file=None,mcp_fetch_mode="direct"))
     calls=[]
     class Scraper:
         async def execute(self):

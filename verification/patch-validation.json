@@ -4,9 +4,13 @@
   "new_source_files": [
     ".dockerignore",
     "app/collection.py",
+    "app/content.py",
+    "app/fetching.py",
     "app/llms.txt",
+    "app/policy.py",
     "app/routers/analysis.py",
     "app/scrapers/douyin_scraper.py",
+    "app/services/change_report.py",
     "app/services/trend_analysis.py",
     "app/timeutils.py"
   ]

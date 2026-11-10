@@ -1,3 +1,5 @@
+> Historical investigation. Current behavior: [current status](../../CURRENT-STATUS.md).
+
 # Repairs and remaining data-access limits
 
 **Superseded by the deeper diagnosis in `CURRENT-STATUS.md`: TikTok now works through its current public endpoint. Instagram suggestions are now opt-in.**

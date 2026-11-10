@@ -1,3 +1,5 @@
+> Historical investigation. Current behavior: [current status](../../CURRENT-STATUS.md).
+
 # Setup and verification — 2026-11-10 UTC
 
 Update: local repairs have since been applied; see `REPAIR-REPORT.md` for current behavior. The findings below describe the original upstream baseline.
