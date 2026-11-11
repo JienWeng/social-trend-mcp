@@ -109,3 +109,10 @@ The regression suite exercises actual FFmpeg/OCR on a generated four-second red/
 ```
 
 The first script persists a clearly labeled synthetic reference and verifies the real MCP upload/analysis/image/context flow. The second replays an original example draft authored after actual frame inspection; it does not invoke a fresh generation model. See verification/creative-reference-demo.json for the saved example, evidence and unreviewed draft. These scripts write library records/files, not synthetic trend snapshots.
+
+
+## Real video test
+
+A later real-world check used an unmodified openly licensed17.7-second vertical coffee video from Wikimedia Commons, matched its published checksum, returned7 image blocks and saved an original20-second storyboard through MCP. Analysis took3.745 seconds on the test host. All five public sources also returned fresh captures.
+
+The test exposed noisy OCR on non-caption imagery; that output was excluded from caption evidence. Speech remained unconfigured. See [real test report](../verification/real-testing-report.md) for attribution, exact outcomes, reproduction and limitations. This validates supplied-video processing, not automatic Instagram media downloading or viral prediction.
