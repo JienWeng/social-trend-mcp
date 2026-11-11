@@ -11,7 +11,9 @@
     "app/routers/analysis.py",
     "app/scrapers/douyin_scraper.py",
     "app/services/change_report.py",
+    "app/services/evidence_report.py",
     "app/services/trend_analysis.py",
+    "app/source_control.py",
     "app/timeutils.py"
   ]
 }

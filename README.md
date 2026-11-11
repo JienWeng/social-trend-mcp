@@ -6,17 +6,18 @@ Collect public social feeds, save PostgreSQL history and compare what changed. D
 ./setup.sh
 ./manage-service.sh start
 ./manage-service.sh status
+./check-service.sh
 ```
 
-Requires Git, uv, Docker and Python 3.12. Setup installs Python dependencies and Chromium; Linux may also need `.venv/bin/python -m playwright install --with-deps chromium`. PostgreSQL uses loopback port 55433 and a named Docker volume. The API listens on http://127.0.0.1:8000; interactive documentation is at `/docs`.
+Requires Git, uv, Docker and Python 3.12. Setup installs Python dependencies and Chromium; Linux may also need `.venv/bin/python -m playwright install --with-deps chromium`. PostgreSQL uses loopback port 55433 and a named Docker volume. The API listens on http://127.0.0.1:8000; interactive documentation is at `/docs`. On first startup, let initial collection finish before expecting the readiness check to report healthy.
 
 Use `./manage-service.sh restart` or `stop` to manage the API. The supervisor handles API crashes and orphan recovery; `start-api.sh` is available for foreground debugging.
 
 ## Use the data
 
-Run `./start-mcp.sh` from an MCP client; configure its absolute path on your machine (mcp-config.json shows this workspace's path). Nine tools cover live feeds, exact/discovery search, region lookup, persisted capture, historical momentum and checkpoint changes. Default fetch/search tools use the running API's shared cache; `MCP_FETCH_MODE=direct` explicitly enables standalone fetch/search.
+Run `./start-mcp.sh` from an MCP client; configure its absolute path on your machine (mcp-config.json shows this workspace's path). Ten tools cover live feeds, exact/discovery search, region lookup, persisted capture, historical momentum and checkpoint changes. Default fetch/search tools use the running API's shared cache; `MCP_FETCH_MODE=direct` explicitly enables standalone fetch/search.
 
-Use `capture_trends` to save an observation, `analyze_trends` for sustained movement evidence, and `get_changes` with an ISO-8601 `since` checkpoint for additions, removals, movement and unchanged counts. Save a report's `generated_at` for your next check. These signals describe sampled observations, not future virality.
+**Start with `get_report` (no arguments)** for stored freshness, coverage, evidence and next actions; it does not scrape or assign a truth probability. See the [evidence guide](docs/EVIDENCE.md). Use `capture_trends` to save an observation, `analyze_trends` for sustained movement evidence, and `get_changes` with an ISO-8601 `since` checkpoint for additions, removals, movement and unchanged counts. Save a report's `generated_at` for your next check. These signals describe sampled observations, not future virality.
 
 - [Endpoint and MCP catalog](docs/ENDPOINTS.md): methods, parameters, persistence and source coverage.
 - [Trend analysis](TREND-ANALYSIS.md): rules, evidence and checkpoint semantics.
@@ -31,4 +32,6 @@ Run `./verification/run_tests.sh` for isolated regression checks. `.venv/bin/pyt
 
 ## Reproduce the implementation
 
-[Original upstream](https://github.com/caicai-yao/social-trends-mcp) is pinned to commit `c9f413ad1c8c6b387e8cd1af5f0c709f263ceae2`. `setup.sh` clones it into ignored `upstream/`, applies `verification/repairs.patch`, and restores `verification/regression-tests/`. Review that patch for application changes. Raw scrape pages, temporary logs, backups and browser captures stay local. Earlier investigation reports are in [docs/archive](docs/archive).
+[Original upstream](https://github.com/caicai-yao/social-trends-mcp) is pinned to commit `c9f413ad1c8c6b387e8cd1af5f0c709f263ceae2`. `setup.sh` clones it into ignored `upstream/`, applies `verification/repairs.patch`, and restores `verification/regression-tests/`. Review that patch for application changes. Raw scrape pages, temporary logs, backups, collection-control state and browser captures stay local. Earlier investigation reports are in [docs/archive](docs/archive).
+
+Source controls now honor Retry-After, pause access-denied/challenge responses and enforce shared attempt budgets. They reduce repeated collection but cannot guarantee that public sources will remain accessible. Use the [evidence guide](docs/EVIDENCE.md) for verification and recovery limits.

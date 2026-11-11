@@ -42,6 +42,9 @@
     "/api/v1/feeds/{platform}": [
       "get"
     ],
+    "/api/v1/collection/status": [
+      "get"
+    ],
     "/api/v1/analysis/trends": [
       "get"
     ],
@@ -49,6 +52,9 @@
       "post"
     ],
     "/api/v1/analysis/changes": [
+      "get"
+    ],
+    "/api/v1/analysis/report": [
       "get"
     ],
     "/": [

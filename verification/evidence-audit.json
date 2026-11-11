@@ -1,0 +1,49 @@
+{
+  "audited_at": "2026-11-11T05:40:43.146688+00:00",
+  "method": "Recorded raw-field comparison, not independent live verification",
+  "datasets": [
+    {
+      "dataset": "douyin_billboard.json",
+      "records_checked": 50,
+      "field_checks": 300,
+      "mismatches": 0,
+      "result": "matches_recorded_source_fields"
+    },
+    {
+      "dataset": "douyin_hot_search.json",
+      "records_checked": 48,
+      "field_checks": 288,
+      "mismatches": 0,
+      "result": "matches_recorded_source_fields"
+    },
+    {
+      "dataset": "instagram-public-records.json",
+      "records_checked": 8,
+      "field_checks": 48,
+      "mismatches": 0,
+      "result": "matches_recorded_source_fields"
+    },
+    {
+      "dataset": "youtube_charts.json",
+      "records_checked": 2,
+      "field_checks": 12,
+      "mismatches": 0,
+      "result": "matches_recorded_source_fields"
+    }
+  ],
+  "records_checked": 108,
+  "field_checks": 648,
+  "mismatches": 0,
+  "untested_platforms": [
+    "twitter",
+    "tiktok"
+  ],
+  "factual_truth_checked": false,
+  "truth_probability": null,
+  "limits": [
+    "Recorded fixtures are a small selected historical sample.",
+    "Checks do not establish current source availability, representativeness, or future trend accuracy.",
+    "Checks do not verify factual claims in titles/captions.",
+    "This is a deterministic field-mapping audit, not a calibrated accuracy estimate."
+  ]
+}

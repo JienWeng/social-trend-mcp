@@ -20,10 +20,12 @@ Default local base URL: http://127.0.0.1:8000. REST responses are JSON unless no
 | POST | `/api/v1/refresh` | Queues persisted collection; optional `platform`, `region=global`. Returns 202 before collection completes. |
 | GET | `/api/v1/regions` | Region catalog. Availability varies by platform. |
 | GET | `/api/v1/platforms` | Platforms and supported region combinations. |
+| GET | `/api/v1/collection/status` | Shared per-platform attempt budgets, cooldown reasons, counters and next eligibility. Does not collect. |
 | GET | `/api/v1/health` | Healthy/degraded collection state, freshness and per-platform statistics. HTTP 200 can contain degraded status. |
+| GET | `/api/v1/analysis/report` | Start here: read-only evidence report. Optional `platform`, `region=global`, `since` (past30 days; default24h ago), `limit=5` (1–20). Stored data, provenance/metric checks, movement, changes and next actions. No truth probability or scrape. |
 | GET | `/api/v1/analysis/trends` | Stored momentum signals; optional `platform`, `region=global`, `hours=48` (1–720), `limit=20` topics/platform (1–100). |
 | GET | `/api/v1/analysis/changes` | Required `since` ISO-8601 checkpoint within past 30 days; optional `platform`, `region=global`, `limit=20` (1–100 per section). Added/removed/changed sample topics, unchanged count, snapshot evidence and separate momentum. No scrape. |
-| POST | `/api/v1/analysis/capture/{platform}` | Fetches and persists a snapshot; `region=global`. 200 captured, 202 capture already running (not persisted by this call), 502 failed capture recorded. |
+| POST | `/api/v1/analysis/capture/{platform}` | Fetches and persists a snapshot; `region=global`. 200 captured, 202 capture already running (not persisted by this call), 502 failed capture recorded; 429 source collection deferred (persisted=false, optional Retry-After). |
 | WebSocket | `/ws/trends` | Persisted collection updates after database commit. Send text `ping` to receive `pong`. In-process broadcast: run one worker. |
 
 Invalid platform/region combinations return 400; parameter validation failures return 422. Empty results or a source failure do not establish that a topic is absent from the entire platform. Search responses include per-platform coverage.
@@ -34,6 +36,7 @@ Launch `./start-mcp.sh` after setup. There is no HTTP MCP endpoint. Paths in mcp
 
 | Tool | Arguments | Behavior |
 | --- | --- | --- |
+| `get_report` | No required arguments; optional `platform`, `region=global`, `since`, `limit=5` (1–20). | Read-only stored evidence, source coverage, metric availability, momentum, changes, collection controls and next actions. Start here. |
 | `get_trends` | Required `platform`; `region=global`, `limit=20` (1–50). | Shared API feed fetch/cache (up to 120 seconds); does not persist. |
 | `get_all_trends` | `region=global`, `limit=10` (1–50). | Shared API fetch/cache across available sources; reports coverage. Does not persist. |
 | `exact_search` | Required `query`; optional `region`, `platforms` array. | Exact matches in observed feeds, not full-platform search. Does not persist. |
@@ -61,3 +64,5 @@ Use the live platform/region catalog rather than assuming every region works eve
 Defaults: X/Douyin hourly; TikTok/Instagram every six hours; YouTube daily. `SCRAPE_INTERVAL_HOURS` overrides all sources; `SOURCE_INTERVALS_HOURS` JSON overrides specific sources and takes precedence. Freshness is twice the applicable interval in health, latest trends, analysis and change reports. Scheduling honors enabled platforms and configured regions; saved captures honor configured max_topics (clamped to 1–100).
 
 Captures retain separate IDs/timestamps. New identical source-aware payloads reuse earlier topic rows via content_snapshot_id; content_reused identifies this and fetched_at retains the actual retrieval time. Legacy rows remain readable. Referenced canonical snapshots must not be deleted; no automatic retention deletion is configured. Existing historical duplicates are retained.
+
+Collection protections and the difference between field fidelity and factual truth are documented in [EVIDENCE.md](EVIDENCE.md). Use `./check-service.sh` for a read-only readiness check.

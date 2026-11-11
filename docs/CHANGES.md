@@ -48,3 +48,14 @@ See CURRENT-STATUS.md and TREND-ANALYSIS.md for dated evidence. Public sources c
 - Checkpoint selection excludes data fetched or completed after since, including legacy rows. Regression reproduced the review finding before repair.
 - Historical reports archived; README is setup/operation, endpoint catalog is the interface contract, and the analysis guide explains evidence.
 - Full regression suite now 120 passed. Live monitoring evidence is verification/monitoring-live.json. Existing historical duplicates remain; no retention deletion, watchlist delivery or semantic cross-platform clustering is introduced.
+
+
+## Evidence-first usability and safer collection
+
+- Added the no-argument get_report MCP tool (ten total), GET /api/v1/analysis/report and GET /api/v1/collection/status.
+- Evidence report reads one repeatable-read, read-only PostgreSQL snapshot and gives freshness/coverage, provenance/metric checks, existing momentum/changes and next actions. Recorded source URLs do not authenticate claims; factual truth remains not_checked with no probability.
+- Added ./check-service.sh for read-only API/MCP readiness and report checks.
+- Shared per-platform controls honor429 Retry-After/date values and longer401/403 instructions, stop restricted-source fallback, and apply budgets/minimum intervals and increasing cooldowns.
+- Saved control state survives process restart. Unfinished admissions and failed state writes fail closed instead of silently resetting pauses. Capture deferrals return429/persisted=false and do not overwrite good history.
+- Recorded-fixture audit checked108 records648 fields with zero mismatches across Douyin/Instagram/YouTube; X/TikTok remain unaudited, and this is not a factual-truth estimate.
+- Full suite139 passed. Review findings about pause-write recovery and403 Retry-After were reproduced before repair and verified in follow-up review.

@@ -1,6 +1,6 @@
-# Verified current state — November 10, 2026
+# Verified current state — November 11, 2026
 
-The local single-worker service collects all five keyless default sources and exposes REST, WebSocket and nine stdio MCP tools. Public endpoints can change; these feeds are not exhaustive global realtime rankings.
+The local single-worker service collects all five keyless default sources and exposes REST, WebSocket and ten stdio MCP tools. Public endpoints can change; these feeds are not exhaustive global realtime rankings.
 
 ## Coverage
 
@@ -25,11 +25,22 @@ See [endpoint catalog](docs/ENDPOINTS.md) and [Instagram details](INSTAGRAM-SETU
 - Search covers observed feeds and reports coverage. No fabricated matches or popularity-only unrelated results.
 - WebSocket updates follow commit. Single-instance supervisor, API crash/orphan recovery, named-volume PostgreSQL and idempotent schema upgrades remain supported.
 
+## Evidence-first usability and collection controls
+
+Start with MCP get_report({}) or GET /api/v1/analysis/report. This read-only report combines stored freshness/coverage, source/metric checks, momentum, checkpoint changes and next actions. ./check-service.sh verifies API/MCP readiness without collecting.
+
+Source controls share budgets across region/limit/client keys: default6 collection attempts/hour/platform, minimum60sec uncached interval, exponential failure cooldown, Retry-After handling and >=24h access-denial/challenge pause. Longer Retry-After values are honored. Deferrals do not create failure snapshots. Persistent unfinished attempts or bad state require operator review; failed pause writes cannot silently clear a restriction on restart.
+
+Field-fidelity audit: **108 historical records,648 field checks,zero mismatches** across Douyin/Instagram/YouTube fixtures; X/TikTok were not audited. Latest runtime extraction remains not_independently_verified. Factual truth is explicitly not_checked, probability=null. See [evidence guide](docs/EVIDENCE.md); these results are not a factual-accuracy rate.
+
 ## Verification
 
-Latest suite: **120 passed**, including isolated PostgreSQL, cache/single-flight behavior, failure retries, configuration/cadence, content reuse, source-edition separation, batched history, change reports, counter resets and checkpoint availability. Tests use social_trends_regression, not the service database.
+Latest suite: **139 passed**, including isolated PostgreSQL, cache/single-flight behavior, failure retries, configuration/cadence, content reuse, source-edition separation, batched history, change reports, counter resets and checkpoint availability. Tests use social_trends_regression, not the service database.
 
 Focused evidence:
+
+- `verification/evidence-audit.json`: selected recorded-field fidelity audit and its explicit limits.
+- `verification/evidence-live.json`: live read-only REST/MCP report, unchanged source-attempt counters and saved-state checks.
 
 - `verification/pr-tests.txt`: latest full suite.
 - `verification/monitoring-live.json`: real unchanged-content capture reuse, preserved retrieval time and matching REST/MCP checkpoint reports.
@@ -38,12 +49,12 @@ Focused evidence:
 - `verification/recovery.json`, `orphan-recovery.json`: actual process recovery.
 - `verification/patch-validation.json`: cumulative patch applies to pristine pinned upstream, including all new source files.
 
-Review reproduced and fixed the post-checkpoint baseline bug; follow-up static review found no concrete blockers. No synthetic service history, paid provider accounts or paid subscriptions were created.
+Review reproduced and fixed the post-checkpoint baseline bug and, in this round, failed pause-write recovery and longer403 Retry-After. Follow-up static review found no concrete blockers. No synthetic service history, paid provider accounts or paid subscriptions were created.
 
 ## Operation and limits
 
 Use README for setup/service commands, docs/ENDPOINTS.md for interface contracts and TREND-ANALYSIS.md for interpretation. Older reports are archived rather than maintained as competing setup guides.
 
-The running local API includes these optimizations. Previously verified Docker collection-image evidence predates analysis/llms.txt/monitoring changes: rebuild to include them. Public HTTPS and multiple replicas remain unverified. Cache/locks/WebSocket are process-local; run one worker. Canonical content snapshots are protected by references and must not be deleted while referenced; automatic retention deletion is intentionally absent.
+The running local API includes these optimizations. Previously verified Docker collection-image evidence predates analysis/llms.txt/monitoring changes: rebuild to include them. Public HTTPS and multiple replicas remain unverified. Cache/locks/WebSocket are process-local; run one worker. Collection controls count scraper attempts, not each browser asset, and do not guarantee continued access or absence of IP blocking. State needs persistent writable storage to survive container replacement. Canonical content snapshots are protected by references and must not be deleted while referenced; automatic retention deletion is intentionally absent.
 
 No cross-platform semantic clustering, watchlist notifications or predictive accuracy claim is included. The useful output is an evidence-based report of what changed in the feeds actually observed.

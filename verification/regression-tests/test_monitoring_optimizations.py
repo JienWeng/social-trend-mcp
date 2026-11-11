@@ -9,7 +9,7 @@ from app.timeutils import utcnow
 @pytest.mark.asyncio
 async def test_fetch_coalesces_concurrent_calls_and_reuses_success_only():
     from app.fetching import FetchCoordinator
-    coordinator=FetchCoordinator(ttl=60);calls=[]
+    coordinator=FetchCoordinator(ttl=60,guard=False);calls=[]
     class Scraper:
         async def execute(self):
             calls.append(1);await asyncio.sleep(.01)
@@ -81,7 +81,7 @@ async def test_identical_capture_reuses_content_but_keeps_observation_and_config
     def build(*a,**kw):calls.append(kw);return Scraper()
     monkeypatch.setattr(module,'get_scraper',build)
     from app.fetching import FetchCoordinator
-    monkeypatch.setattr(module,'coordinator',FetchCoordinator(ttl=0))
+    monkeypatch.setattr(module,'coordinator',FetchCoordinator(ttl=0,guard=False))
     try:
         async with factory() as session:
             config=(await session.execute(select(PlatformConfig).where(PlatformConfig.platform==Platform.TWITTER))).scalar_one_or_none()
