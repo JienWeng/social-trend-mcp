@@ -4,13 +4,7 @@
   "openapi_status": 200,
   "all_paths_documented": true,
   "health_status": "healthy",
-  "interval_hours": {
-    "twitter": 1,
-    "tiktok": 6,
-    "youtube": 24,
-    "instagram": 6,
-    "douyin": 1
-  },
+  "application_http_path_count": 29,
   "paths": {
     "/api/v1/trends": [
       "get"
@@ -55,6 +49,44 @@
       "get"
     ],
     "/api/v1/analysis/report": [
+      "get"
+    ],
+    "/api/v1/references": [
+      "post",
+      "get"
+    ],
+    "/api/v1/references/{reference_id}": [
+      "get"
+    ],
+    "/api/v1/references/{reference_id}/media": [
+      "put"
+    ],
+    "/api/v1/references/{reference_id}/analyze": [
+      "post"
+    ],
+    "/api/v1/references/{reference_id}/frames/{frame_id}": [
+      "get"
+    ],
+    "/api/v1/references/{reference_id}/transcript": [
+      "put"
+    ],
+    "/api/v1/references/{reference_id}/annotations": [
+      "post"
+    ],
+    "/api/v1/creation/context": [
+      "post"
+    ],
+    "/api/v1/creation/briefs": [
+      "post",
+      "get"
+    ],
+    "/api/v1/creation/briefs/{brief_id}": [
+      "get"
+    ],
+    "/api/v1/references/{reference_id}/metrics": [
+      "post"
+    ],
+    "/api/v1/references/{reference_id}/performance": [
       "get"
     ],
     "/": [

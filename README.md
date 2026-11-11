@@ -15,7 +15,7 @@ Use `./manage-service.sh restart` or `stop` to manage the API. The supervisor ha
 
 ## Use the data
 
-Run `./start-mcp.sh` from an MCP client; configure its absolute path on your machine (mcp-config.json shows this workspace's path). Ten tools cover live feeds, exact/discovery search, region lookup, persisted capture, historical momentum and checkpoint changes. Default fetch/search tools use the running API's shared cache; `MCP_FETCH_MODE=direct` explicitly enables standalone fetch/search.
+Run `./start-mcp.sh` from an MCP client; configure its absolute path on your machine (mcp-config.json shows this workspace's path). Twenty-two tools cover live feeds, exact/discovery search, region lookup, persisted capture, historical momentum and checkpoint changes. Default fetch/search tools use the running API's shared cache; `MCP_FETCH_MODE=direct` explicitly enables standalone fetch/search.
 
 **Start with `get_report` (no arguments)** for stored freshness, coverage, evidence and next actions; it does not scrape or assign a truth probability. See the [evidence guide](docs/EVIDENCE.md). Use `capture_trends` to save an observation, `analyze_trends` for sustained movement evidence, and `get_changes` with an ISO-8601 `since` checkpoint for additions, removals, movement and unchanged counts. Save a report's `generated_at` for your next check. These signals describe sampled observations, not future virality.
 
@@ -23,6 +23,20 @@ Run `./start-mcp.sh` from an MCP client; configure its absolute path on your mac
 - [Trend analysis](TREND-ANALYSIS.md): rules, evidence and checkpoint semantics.
 - [Agent guide](llms.txt): also served by `GET /llms.txt`.
 - [Implemented changes](docs/CHANGES.md): repairs and optimizations.
+
+## Create original video briefs
+
+See [creative-reference workflow](docs/CREATIVE-REFERENCES.md). Save curated references, supply a local video, inspect timestamped frames/OCR/scene/audio evidence, then let your connected AI write and save an original script/storyboard.
+
+```bash
+./setup-media.sh
+mkdir -p .run/reference-inbox
+# Put your authorized reference.mp4 here, then use the MCP workflow:
+# add_reference → attach_reference_media → analyze_reference
+# → inspect_reference/get_creation_context → save_creative_brief
+```
+
+A Reel link alone does not provide video inspection. The backend never downloads source URLs, invents missing speech, verifies audience geography or renders the final video. Source matching, model annotations, supplied counters and generated drafts remain explicitly unverified.
 
 ## Collection and verification
 

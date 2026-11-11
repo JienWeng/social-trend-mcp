@@ -22,3 +22,8 @@ if ! docker container inspect social-trends-db >/dev/null 2>&1; then
 else
   docker start social-trends-db
 fi
+
+mkdir -p .run/reference-inbox
+if ! command -v ffmpeg >/dev/null || ! command -v tesseract >/dev/null; then
+  echo "For video-reference inspection, run ./setup-media.sh to install FFmpeg/FFprobe and OCR."
+fi

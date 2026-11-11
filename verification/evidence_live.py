@@ -33,7 +33,7 @@ async def main():
             async with ClientSession(reader,writer) as session:
                 await session.initialize()
                 tools=[t.name for t in (await session.list_tools()).tools]
-                assert len(tools)==10 and 'get_report' in tools
+                assert len(tools)==22 and 'get_report' in tools
                 response=await session.call_tool('get_report',{})
                 mcp_report=json.loads(response.content[0].text)
                 assert mcp_report['read_only'] and set(mcp_report['platforms'])==set(report['platforms'])
