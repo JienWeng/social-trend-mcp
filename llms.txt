@@ -4,6 +4,8 @@
 
 ## Guides
 
+- [podframes](https://github.com/JienWeng/podframes) consumes trend evidence as optional research for original two-host podcast video topics; see its [agent guide](https://github.com/JienWeng/podframes/blob/main/AGENTS.md).
+
 Use documents from the same checkout/version as the service:
 
 - [Setup and agent workflow](https://github.com/JienWeng/social-trend-mcp/blob/main/docs/AGENT-SETUP.md): prerequisites, installation, stdio configuration and ordered usage.
