@@ -1,73 +1,13 @@
-# Implemented changes
+# Change summary
 
-This repository reconstructs a repaired version of caicai-yao/social-trends-mcp at commit c9f413ad1c8c6b387e8cd1af5f0c709f263ceae2. Source changes are reviewable in verification/repairs.patch; regression tests live in verification/regression-tests/. setup.sh applies both to the ignored upstream/ checkout.
+The tracked `verification/repairs.patch` contains application changes against pinned upstream. `setup.sh` restores it and the regression tests.
 
-## Collection and truthful coverage
+- **Collection:** repaired five public sources, added Douyin, validated actual regions and preserved source URLs, dates and metric units. Paid adapters remain explicit opt-ins.
+- **Efficiency:** shared 120-second cache, concurrent-request coalescing, source-specific cadences, canonical content reuse and batched history queries.
+- **Reliability:** committed WebSocket updates, supervised API recovery, PostgreSQL named volume and idempotent schema upgrades.
+- **Evidence:** persisted captures, checkpoint comparisons and sustained movement rules; failures, missing metrics and limited coverage stay visible.
+- **Collection controls:** shared attempt budgets, exponential backoff, Retry-After, access-denial pauses and persistent unfinished-attempt recovery.
+- **Creative references:** supplied-video storage, bounded frame/OCR/audio inspection, optional offline transcription, attributed annotations, manual metrics and unreviewed creative briefs.
+- **Agent access:** 22 stdio MCP tools, REST/OpenAPI, `llms.txt`, readiness checks and setup/usage instructions.
 
-- Restored five keyless default sources: X third-party rankings, TikTok official public preview, YouTube weekly music-video charts, Instagram public Reels recommendation samples, and official public Douyin hot topics.
-- Added Douyin enum, scraper, configuration seeding and idempotent database initialization for existing installations.
-- Separated requested snapshot region from the actual source region. Unsupported combinations fail clearly; generic TikTok fallbacks cannot manufacture country attribution.
-- Preserved source URLs, chart periods/source timestamps, Unicode and metric units. Missing views remain unknown; heat scores and likes are not presented as views.
-- Kept paid Instagram adapters explicit opt-ins; no automatic paid fallback.
-- Bounded source attempts/timeouts and prevented duplicate concurrent captures.
-
-## Persistence, search and realtime delivery
-
-- Stored collection outcomes, topics and region-specific history in PostgreSQL.
-- Made exact search and discovery operate on observed feeds with per-platform coverage. Removed fabricated search results and unrelated popularity-only matches.
-- Broadcast WebSocket updates after commit, with snapshot/topic payloads, safe connection iteration and send timeouts.
-- Added freshness and degraded health reporting. Failed sources do not populate successful fetch caches.
-- Added a local supervisor with single-instance locking, API crash restart and verified orphan reconciliation. PostgreSQL uses a named Docker volume.
-- Repaired Chromium container dependencies, settings parsing, UTC handling and single-worker Docker configuration.
-
-## Stored trend analysis
-
-- Added shared REST/MCP capture and analysis. capture_trends persists real observations; analyze_trends reads shared history. Existing fetch/search tools remain non-persisting queries.
-- Added minimum independent evidence, rank and metric comparisons, source/window compatibility checks, stale/failed-data suppression, and explicit uncertainty.
-- Added stable, falling, new_to_sample, mixed_movement, insufficient_history and insufficient_evidence signals.
-- Guarded against counter resets hidden by downsampling and against high capture volume starving another platform's history.
-- Returned snapshot-linked evidence, warnings, qualitative confidence and per-platform truncation flags. No paid LLM call or forecast is involved.
-
-## Documentation and validation
-
-- Added the complete endpoint/MCP catalog, coverage limits, setup/service commands and analysis guide.
-- Added repository llms.txt and a matching GET /llms.txt plain-text API route.
-- Verified isolated PostgreSQL regression tests, controlled synthetic analysis without production writes, and real REST/MCP persistence and analysis.
-- Earlier live checks covered all five sources, regional history/search, committed WebSocket delivery, process recovery and the collection Docker image.
-- The previously built Docker image predates analysis and llms.txt; rebuild from reconstructed upstream/ to deploy those additions. Public HTTPS, multiple replicas and predictive accuracy have not been validated.
-
-See CURRENT-STATUS.md and TREND-ANALYSIS.md for dated evidence. Public sources can change; Instagram remains a recommendation sample, YouTube fallback remains weekly music only, and no source set guarantees exhaustive platform-wide trend discovery.
-
-
-## Monitoring optimizations
-
-- Shared 120-second successful-result cache and in-flight coalescing across REST, saved captures and default MCP fetch/search. Explicit direct MCP mode remains available for standalone fetch/search.
-- Source-specific scheduling with per-source/global overrides; one freshness policy and configured saved topic limits.
-- Canonical content references for identical new payloads, distinct capture/fetch timestamps and legacy-compatible reads. History topic loading is batched.
-- GET /api/v1/feeds/{platform}, GET /api/v1/analysis/changes and MCP get_changes. Reports distinguish sample additions/removals, two-point movement, unchanged content and sustained evidence.
-- Checkpoint selection excludes data fetched or completed after since, including legacy rows. Regression reproduced the review finding before repair.
-- Historical reports archived; README is setup/operation, endpoint catalog is the interface contract, and the analysis guide explains evidence.
-- Full regression suite now 120 passed. Live monitoring evidence is verification/monitoring-live.json. Existing historical duplicates remain; no retention deletion, watchlist delivery or semantic cross-platform clustering is introduced.
-
-
-## Evidence-first usability and safer collection
-
-- Added the no-argument get_report MCP tool (ten total), GET /api/v1/analysis/report and GET /api/v1/collection/status.
-- Evidence report reads one repeatable-read, read-only PostgreSQL snapshot and gives freshness/coverage, provenance/metric checks, existing momentum/changes and next actions. Recorded source URLs do not authenticate claims; factual truth remains not_checked with no probability.
-- Added ./check-service.sh for read-only API/MCP readiness and report checks.
-- Shared per-platform controls honor429 Retry-After/date values and longer401/403 instructions, stop restricted-source fallback, and apply budgets/minimum intervals and increasing cooldowns.
-- Saved control state survives process restart. Unfinished admissions and failed state writes fail closed instead of silently resetting pauses. Capture deferrals return429/persisted=false and do not overwrite good history.
-- Recorded-fixture audit checked108 records648 fields with zero mismatches across Douyin/Instagram/YouTube; X/TikTok remain unaudited, and this is not a factual-truth estimate.
-- Full suite139 passed. Review findings about pause-write recovery and403 Retry-After were reproduced before repair and verified in follow-up review.
-
-
-## Creative reference and original-brief layer
-
-- Added curated reference metadata, immutable streamed local media, frame assets and declared country/language/niche/audience labels. Source links are never downloaded or presumed to match supplied videos.
-- Added actual FFprobe/FFmpeg frame/scene/audio inspection, optional OCR and explicitly configured offline ASR. Missing transcript/style semantics are not invented.
-- Added multimodal MCP image blocks, bounded evidence/creation contexts, timestamp/frame validation and attributed observed/inferred annotations.
-- Added original concept/hook/timed storyboard/script/edit notes with source evidence and unreviewed client-submitted provenance. No hidden backend generation or final video rendering.
-- Added optional declared counters/history with reset/source-change warnings; no platform-verified metric claim.
-- Twelve additional MCP tools (22total) and12 additional application HTTP paths (29total). Setup-media helper and Docker media dependencies documented.
--153 regression tests pass. Real MCP synthetic demo extracted6 frames and a known scene change, returned images/context and saved an original example draft after frame inspection.
-- Review failures reproduced then fixed: live subprocess output cap, decoder/filter input thread bounds and concurrent annotation loss. Row locks protect append/metric bounds; context truncation is explicit and remains marked across compaction.
+See [current verification](../CURRENT-STATUS.md), [interface contracts](ENDPOINTS.md) and [agent setup](AGENT-SETUP.md). Git history retains earlier implementation reports and planning notes.

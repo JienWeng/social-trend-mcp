@@ -90,7 +90,7 @@ See [creative-reference guide](CREATIVE-REFERENCES.md) for exact REST examples, 
 - `./manage-service.sh status|restart|stop` manages the local API supervisor. Restarting does not clear source restrictions.
 - Preserve `.run/source-control.json`; corrupt state and unfinished attempts require operator investigation. Respect access-denial pauses and Retry-After.
 - Back up the PostgreSQL volume `social-trends-pgdata` **and** `.run/references` for reference metadata/media. Keep inbox files separately as needed. These files are not committed.
-- Environment changes must reach the API supervisor at startup; restart it after changing configuration. Storage and optional ASR variables are documented in the creative guide. Source cadence variables are in the README/evidence guide.
+- Environment changes must reach the API supervisor at startup; restart it after changing configuration. Storage and optional ASR variables are documented in the creative guide. Source cadence variables are in the endpoint catalog.
 - `./verification/run_tests.sh` uses the isolated regression database. Read-only `./check-service.sh --json` checks API/MCP integration. Other live verification scripts may contact sources and persist records; read them before running.
 
 Recorded verification is historical evidence, not a guarantee of present source availability. Consult [current status](../CURRENT-STATUS.md) and perform the readiness check on the installed machine.

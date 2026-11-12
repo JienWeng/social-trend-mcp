@@ -12,7 +12,7 @@ The local single-worker service collects all five keyless default sources and ex
 | Instagram | 8 Reels | Logged-out public recommendation sample, global only; no login or automatic paid fallback. |
 | Douyin | 30 topics | Official public China hot list; global/cn map to cn. Direct requests returned 50. Heat scores are not views. |
 
-See [endpoint catalog](docs/ENDPOINTS.md) and [Instagram details](INSTAGRAM-SETUP.md). No login/challenge bypass is implemented.
+See [endpoint catalog](docs/ENDPOINTS.md). No login/challenge bypass is implemented.
 
 ## Current improvements
 
@@ -55,8 +55,6 @@ Focused evidence:
 
 - `verification/pr-tests.txt`: latest full suite.
 - `verification/monitoring-live.json`: real unchanged-content capture reuse, preserved retrieval time and matching REST/MCP checkpoint reports.
-- `verification/analysis-demo.json`, `analysis-live.json`: controlled and earlier real momentum evidence. The earlier Douyin rank 29 → 28 → 20 candidate is a dated observation, not a prediction.
-- `verification/final-e2e.json`: earlier five-source, regional, search and committed WebSocket checks.
 - `verification/recovery.json`, `orphan-recovery.json`: actual process recovery.
 - `verification/patch-validation.json`: cumulative patch applies to pristine pinned upstream, including all new source files.
 
@@ -64,7 +62,7 @@ Review reproduced and fixed the post-checkpoint baseline bug and, in this round,
 
 ## Operation and limits
 
-Use README for setup/service commands, docs/ENDPOINTS.md for interface contracts and TREND-ANALYSIS.md for interpretation. Older reports are archived rather than maintained as competing setup guides.
+Use README for setup/service commands, docs/ENDPOINTS.md for interface contracts and TREND-ANALYSIS.md for interpretation. Historical reports remain in Git history; [verification commands](verification/README.md) describe the maintained checks.
 
 The running local API includes these optimizations. Previously verified Docker collection-image evidence predates analysis/llms.txt/monitoring changes: rebuild to include them. Public HTTPS and multiple replicas remain unverified. Cache/locks/WebSocket are process-local; run one worker. Collection controls count scraper attempts, not each browser asset, and do not guarantee continued access or absence of IP blocking. State needs persistent writable storage to survive container replacement. Canonical content snapshots are protected by references and must not be deleted while referenced; automatic retention deletion is intentionally absent.
 
