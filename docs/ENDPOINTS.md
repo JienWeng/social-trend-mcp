@@ -66,3 +66,29 @@ Defaults: X/Douyin hourly; TikTok/Instagram every six hours; YouTube daily. `SCR
 Captures retain separate IDs/timestamps. New identical source-aware payloads reuse earlier topic rows via content_snapshot_id; content_reused identifies this and fetched_at retains the actual retrieval time. Legacy rows remain readable. Referenced canonical snapshots must not be deleted; no automatic retention deletion is configured. Existing historical duplicates are retained.
 
 Collection protections and the difference between field fidelity and factual truth are documented in [EVIDENCE.md](EVIDENCE.md). Use `./check-service.sh` for a read-only readiness check.
+
+
+## Creative reference library and briefs
+
+These interfaces inspect explicitly supplied local media. Source links remain metadata and are not downloaded. See [creative-reference guide](CREATIVE-REFERENCES.md) for the workflow, schemas and limits.
+
+| Method | Path | Behavior |
+| --- | --- | --- |
+| POST | `/api/v1/references` | Create curated metadata; source URL, country/language/niche/audience labels are declared/unverified. |
+| GET | `/api/v1/references` | List metadata summaries; optional platform/niche/target_country/language, limit1–50. |
+| GET | `/api/v1/references/{reference_id}` | Full saved metadata, analysis, transcript and attributed annotations. |
+| PUT | `/api/v1/references/{reference_id}/media` | Stream raw binary upload; default100MiB, immutable media identity. |
+| POST | `/api/v1/references/{reference_id}/analyze` | Bounded local FFprobe/FFmpeg/OCR and optional offline ASR. |
+| GET | `/api/v1/references/{reference_id}/frames/{frame_id}` | Hash-checked JPEG frame. |
+| PUT | `/api/v1/references/{reference_id}/transcript` | Explicit timed transcript, user-supplied/unverified. |
+| POST | `/api/v1/references/{reference_id}/annotations` | Append observed/inferred client claims with validated source times/evidence. |
+| POST | `/api/v1/references/{reference_id}/metrics` | Record supplied counters/time; no platform fetch/verification. |
+| GET | `/api/v1/references/{reference_id}/performance` | Counter history/deltas with reset/source-change warnings. |
+| POST | `/api/v1/creation/context` | Evidence and schema for the connected AI to create an original draft; backend generation_performed=false. |
+| POST | `/api/v1/creation/briefs` | Save a client-generated, unreviewed original script/storyboard with cited frame evidence. |
+| GET | `/api/v1/creation/briefs` | List saved drafts, limit1–20. |
+| GET | `/api/v1/creation/briefs/{brief_id}` | Retrieve one draft. |
+
+Library failures:400/422 invalid metadata/media/evidence,404 missing records/frames,409 immutable media or concurrent operation,413 size limit,503 missing processing tools,504 timeout. All creation/reference JSON bodies are limited to2MiB.
+
+Twelve additional MCP tools (22 total): `add_reference`, `list_references`, `attach_reference_media`, `analyze_reference`, `inspect_reference`, `set_reference_transcript`, `annotate_reference`, `record_reference_metrics`, `get_reference_performance`, `get_creation_context`, `save_creative_brief`, `list_creative_briefs`. inspect_reference returns up to7 JPEG image blocks; get_creation_context caps images at8 across references. All use the backend; local media imports are restricted to REFERENCE_INBOX_DIR.

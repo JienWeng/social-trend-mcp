@@ -1,0 +1,446 @@
+{
+  "dataset": "EXPLICIT SYNTHETIC DEMONSTRATION — not organic social-trend evidence",
+  "reference_id": "bd188bc45f4e446b928f401983de3e40",
+  "tool_count": 22,
+  "target": {
+    "reference_ids": [
+      "bd188bc45f4e446b928f401983de3e40"
+    ],
+    "goal": "An original short desk-reset routine, using broad caption/cut techniques as inspiration",
+    "niche": "productivity",
+    "language": "en",
+    "target_country": "MY",
+    "audience": "English-speaking office workers",
+    "duration_seconds": 20,
+    "target_aspect_ratio": "9:16"
+  },
+  "analysis": {
+    "duration_seconds": 4.0,
+    "width": 320,
+    "height": 240,
+    "fps": 10.0,
+    "video_index": 0,
+    "video_codec": "h264",
+    "audio_index": 1,
+    "audio_codec": "aac",
+    "measured_at": "2026-11-11T06:49:13.701095+00:00",
+    "method": "local_ffprobe_ffmpeg",
+    "frames": [
+      {
+        "id": "frame_00",
+        "timestamp": 0,
+        "timestamp_basis": "requested_seek_time_approximate",
+        "filename": "frame_00.jpg",
+        "sha256": "e02eeb94fe645a743673aa5e266b3f0f39ad6ebe2d0dea88409434c7bd6eb77d",
+        "ocr": {
+          "status": "machine_extracted_unverified",
+          "text": "SAVE TEN MINUTES",
+          "words": [
+            {
+              "text": "SAVE",
+              "engine_confidence": 96.893082,
+              "box": [
+                19,
+                97,
+                103,
+                37
+              ]
+            },
+            {
+              "text": "TEN",
+              "engine_confidence": 94.774757,
+              "box": [
+                134,
+                97,
+                81,
+                37
+              ]
+            },
+            {
+              "text": "MINUTES",
+              "engine_confidence": 96.50042,
+              "box": [
+                230,
+                97,
+                180,
+                36
+              ]
+            }
+          ],
+          "engine": "tesseract",
+          "confidence_is_truth_probability": false
+        },
+        "url": "/api/v1/references/bd188bc45f4e446b928f401983de3e40/frames/frame_00"
+      },
+      {
+        "id": "frame_01",
+        "timestamp": 1,
+        "timestamp_basis": "requested_seek_time_approximate",
+        "filename": "frame_01.jpg",
+        "sha256": "fdcff986a93be9ae764cfec83fc0fab0132a5307e6db5216be2f4a73cb48c1a2",
+        "ocr": {
+          "status": "machine_extracted_unverified",
+          "text": "SAVE TEN MINUTES",
+          "words": [
+            {
+              "text": "SAVE",
+              "engine_confidence": 96.527794,
+              "box": [
+                19,
+                97,
+                103,
+                37
+              ]
+            },
+            {
+              "text": "TEN",
+              "engine_confidence": 96.067635,
+              "box": [
+                134,
+                97,
+                81,
+                37
+              ]
+            },
+            {
+              "text": "MINUTES",
+              "engine_confidence": 90.628494,
+              "box": [
+                230,
+                97,
+                180,
+                36
+              ]
+            }
+          ],
+          "engine": "tesseract",
+          "confidence_is_truth_probability": false
+        },
+        "url": "/api/v1/references/bd188bc45f4e446b928f401983de3e40/frames/frame_01"
+      },
+      {
+        "id": "frame_02",
+        "timestamp": 1.333,
+        "timestamp_basis": "requested_seek_time_approximate",
+        "filename": "frame_02.jpg",
+        "sha256": "fdcff986a93be9ae764cfec83fc0fab0132a5307e6db5216be2f4a73cb48c1a2",
+        "ocr": {
+          "status": "machine_extracted_unverified",
+          "text": "SAVE TEN MINUTES",
+          "words": [
+            {
+              "text": "SAVE",
+              "engine_confidence": 96.527794,
+              "box": [
+                19,
+                97,
+                103,
+                37
+              ]
+            },
+            {
+              "text": "TEN",
+              "engine_confidence": 96.067635,
+              "box": [
+                134,
+                97,
+                81,
+                37
+              ]
+            },
+            {
+              "text": "MINUTES",
+              "engine_confidence": 90.628494,
+              "box": [
+                230,
+                97,
+                180,
+                36
+              ]
+            }
+          ],
+          "engine": "tesseract",
+          "confidence_is_truth_probability": false
+        },
+        "url": "/api/v1/references/bd188bc45f4e446b928f401983de3e40/frames/frame_02"
+      },
+      {
+        "id": "frame_03",
+        "timestamp": 2.0,
+        "timestamp_basis": "requested_seek_time_approximate",
+        "filename": "frame_03.jpg",
+        "sha256": "85dcc50bb50cf3328da7119059382d7775d9b4be3e4add8f11ffc0f3bd9d378f",
+        "ocr": {
+          "status": "machine_extracted_unverified",
+          "text": "SAVE TEN MINUTES",
+          "words": [
+            {
+              "text": "SAVE",
+              "engine_confidence": 96.909378,
+              "box": [
+                19,
+                97,
+                103,
+                37
+              ]
+            },
+            {
+              "text": "TEN",
+              "engine_confidence": 94.80735,
+              "box": [
+                134,
+                97,
+                81,
+                37
+              ]
+            },
+            {
+              "text": "MINUTES",
+              "engine_confidence": 96.119354,
+              "box": [
+                230,
+                97,
+                180,
+                37
+              ]
+            }
+          ],
+          "engine": "tesseract",
+          "confidence_is_truth_probability": false
+        },
+        "url": "/api/v1/references/bd188bc45f4e446b928f401983de3e40/frames/frame_03"
+      },
+      {
+        "id": "frame_04",
+        "timestamp": 3.0,
+        "timestamp_basis": "requested_seek_time_approximate",
+        "filename": "frame_04.jpg",
+        "sha256": "85dcc50bb50cf3328da7119059382d7775d9b4be3e4add8f11ffc0f3bd9d378f",
+        "ocr": {
+          "status": "machine_extracted_unverified",
+          "text": "SAVE TEN MINUTES",
+          "words": [
+            {
+              "text": "SAVE",
+              "engine_confidence": 96.909378,
+              "box": [
+                19,
+                97,
+                103,
+                37
+              ]
+            },
+            {
+              "text": "TEN",
+              "engine_confidence": 94.80735,
+              "box": [
+                134,
+                97,
+                81,
+                37
+              ]
+            },
+            {
+              "text": "MINUTES",
+              "engine_confidence": 96.119354,
+              "box": [
+                230,
+                97,
+                180,
+                37
+              ]
+            }
+          ],
+          "engine": "tesseract",
+          "confidence_is_truth_probability": false
+        },
+        "url": "/api/v1/references/bd188bc45f4e446b928f401983de3e40/frames/frame_04"
+      },
+      {
+        "id": "frame_05",
+        "timestamp": 3.8,
+        "timestamp_basis": "requested_seek_time_approximate",
+        "filename": "frame_05.jpg",
+        "sha256": "85dcc50bb50cf3328da7119059382d7775d9b4be3e4add8f11ffc0f3bd9d378f",
+        "ocr": {
+          "status": "machine_extracted_unverified",
+          "text": "SAVE TEN MINUTES",
+          "words": [
+            {
+              "text": "SAVE",
+              "engine_confidence": 96.909378,
+              "box": [
+                19,
+                97,
+                103,
+                37
+              ]
+            },
+            {
+              "text": "TEN",
+              "engine_confidence": 94.80735,
+              "box": [
+                134,
+                97,
+                81,
+                37
+              ]
+            },
+            {
+              "text": "MINUTES",
+              "engine_confidence": 96.119354,
+              "box": [
+                230,
+                97,
+                180,
+                37
+              ]
+            }
+          ],
+          "engine": "tesseract",
+          "confidence_is_truth_probability": false
+        },
+        "url": "/api/v1/references/bd188bc45f4e446b928f401983de3e40/frames/frame_05"
+      }
+    ],
+    "scene_changes": {
+      "timestamps": [
+        2.0
+      ],
+      "count": 1,
+      "threshold": 0.35,
+      "truncated": false,
+      "meaning": "Heuristic scene-change estimates; motion/flashes can trigger false cuts"
+    },
+    "audio": {
+      "present": true,
+      "rms_dbfs": -21.09,
+      "peak_dbfs": -17.84,
+      "meaning": "Signal amplitude measurements, not speech/music/emotion recognition"
+    },
+    "speech": {
+      "status": "not_configured",
+      "segments": [],
+      "meaning": "No speech transcript was inferred. Supply timed transcript or configure an offline ASR model."
+    },
+    "visual_interpretation": {
+      "status": "requires_client_model"
+    },
+    "coverage": "Sampled keyframes and technical measurements, not continuous visual understanding.",
+    "factual_truth": "not_checked",
+    "media_sha256": "f5178246da30a64172b20303f0cef6db42f8cb02f1e8afa13f869312671383a1"
+  },
+  "context_image_count": 6,
+  "mcp_protocol_passed": true,
+  "reference_url": "http://127.0.0.1:8000/api/v1/references/bd188bc45f4e446b928f401983de3e40",
+  "media_source_match": "not_independently_verified",
+  "audience_geography_verified": false,
+  "saved_brief": {
+    "id": "2c9765cb2daf4e65ad74774917c619db",
+    "title": "One clear space, one next action",
+    "reference_ids": [
+      "bd188bc45f4e446b928f401983de3e40"
+    ],
+    "brief": {
+      "reference_ids": [
+        "bd188bc45f4e446b928f401983de3e40"
+      ],
+      "goal": "An original short desk-reset routine, using broad caption/cut techniques as inspiration",
+      "niche": "productivity",
+      "language": "en",
+      "target_country": "MY",
+      "audience": "English-speaking office workers",
+      "duration_seconds": 20.0,
+      "target_aspect_ratio": "9:16",
+      "generator": "client_model",
+      "title": "One clear space, one next action",
+      "concept": "An original vertical desk-reset routine for office workers, using broad high-contrast caption and section-cut techniques.",
+      "hook": "Before your next meeting, reset this one thing.",
+      "storyboard": [
+        {
+          "start": 0.0,
+          "end": 3.0,
+          "visual": "Original close-up of a cluttered desk; hand pauses above it.",
+          "spoken_text": "Before your next meeting, reset this one thing.",
+          "on_screen_text": "RESET YOUR NEXT STEP",
+          "editing": "Immediate opening shot; high-contrast caption."
+        },
+        {
+          "start": 3.0,
+          "end": 6.0,
+          "visual": "Overhead original footage clearing a small working area.",
+          "spoken_text": "You only need one clear space.",
+          "on_screen_text": "ONE CLEAR SPACE",
+          "editing": "Hard cut to an overhead angle."
+        },
+        {
+          "start": 6.0,
+          "end": 11.0,
+          "visual": "Place water beside a notebook; keep the composition simple.",
+          "spoken_text": "Put the essentials within reach.",
+          "on_screen_text": "KEEP WHAT YOU NEED",
+          "editing": "Two short original detail shots; no reference footage reused."
+        },
+        {
+          "start": 11.0,
+          "end": 16.0,
+          "visual": "Write one next action on a new note and place it in the clear area.",
+          "spoken_text": "Write the next action, not the whole to-do list.",
+          "on_screen_text": "ONE NEXT ACTION",
+          "editing": "Cut to close-up; hold long enough for the words to be read."
+        },
+        {
+          "start": 16.0,
+          "end": 20.0,
+          "visual": "Wider original shot of the clean working area as the person starts.",
+          "spoken_text": "Try this before your next call.",
+          "on_screen_text": "START SMALL",
+          "editing": "A simple closing shot; avoid claiming measured productivity benefits."
+        }
+      ],
+      "editing_notes": [
+        "Use broad high-contrast typography and clear section cuts as inspiration.",
+        "Shoot entirely original desk footage; do not copy source text, footage, branding or assets.",
+        "Voiceover is a new suggestion, not a description of the reference audio."
+      ],
+      "reference_evidence": [
+        {
+          "reference_id": "bd188bc45f4e446b928f401983de3e40",
+          "frame_ids": [
+            "frame_00"
+          ],
+          "start": 0.0,
+          "end": 1.0,
+          "statement": "White uppercase text over a solid red field supports using broad high-contrast caption techniques.",
+          "kind": "observed"
+        },
+        {
+          "reference_id": "bd188bc45f4e446b928f401983de3e40",
+          "frame_ids": [
+            "frame_03"
+          ],
+          "start": 2.0,
+          "end": 2.5,
+          "statement": "The blue sampled title card contrasts with the red opening frame.",
+          "kind": "observed"
+        }
+      ],
+      "unknowns": [
+        "Reference audio meaning/music style was not analyzed; no ASR model was configured.",
+        "Target country MY is a requested market, not verified audience geography.",
+        "This example uses a synthetic reference, not organic social-trend evidence.",
+        "Originality and likely audience performance have not been independently evaluated."
+      ],
+      "evidence_origin": "client_submitted_unverified",
+      "source_media_hashes": {
+        "bd188bc45f4e446b928f401983de3e40": "f5178246da30a64172b20303f0cef6db42f8cb02f1e8afa13f869312671383a1"
+      }
+    },
+    "generation_method": "client_submitted",
+    "declared_generator": "client_model",
+    "review_status": "unreviewed",
+    "originality": "requested_not_independently_verified",
+    "created_at": "2026-11-11T06:49:16.815804+00:00"
+  },
+  "frame_inspection": "Connected assistant inspected red and blue extracted JPEG frames before authoring this example."
+}

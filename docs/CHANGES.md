@@ -59,3 +59,15 @@ See CURRENT-STATUS.md and TREND-ANALYSIS.md for dated evidence. Public sources c
 - Saved control state survives process restart. Unfinished admissions and failed state writes fail closed instead of silently resetting pauses. Capture deferrals return429/persisted=false and do not overwrite good history.
 - Recorded-fixture audit checked108 records648 fields with zero mismatches across Douyin/Instagram/YouTube; X/TikTok remain unaudited, and this is not a factual-truth estimate.
 - Full suite139 passed. Review findings about pause-write recovery and403 Retry-After were reproduced before repair and verified in follow-up review.
+
+
+## Creative reference and original-brief layer
+
+- Added curated reference metadata, immutable streamed local media, frame assets and declared country/language/niche/audience labels. Source links are never downloaded or presumed to match supplied videos.
+- Added actual FFprobe/FFmpeg frame/scene/audio inspection, optional OCR and explicitly configured offline ASR. Missing transcript/style semantics are not invented.
+- Added multimodal MCP image blocks, bounded evidence/creation contexts, timestamp/frame validation and attributed observed/inferred annotations.
+- Added original concept/hook/timed storyboard/script/edit notes with source evidence and unreviewed client-submitted provenance. No hidden backend generation or final video rendering.
+- Added optional declared counters/history with reset/source-change warnings; no platform-verified metric claim.
+- Twelve additional MCP tools (22total) and12 additional application HTTP paths (29total). Setup-media helper and Docker media dependencies documented.
+-153 regression tests pass. Real MCP synthetic demo extracted6 frames and a known scene change, returned images/context and saved an original example draft after frame inspection.
+- Review failures reproduced then fixed: live subprocess output cap, decoder/filter input thread bounds and concurrent annotation loss. Row locks protect append/metric bounds; context truncation is explicit and remains marked across compaction.

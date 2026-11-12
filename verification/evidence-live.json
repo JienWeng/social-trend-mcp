@@ -1,17 +1,17 @@
 {
-  "verified_at": "2026-11-11T05:51:42.657409+00:00",
+  "verified_at": "2026-11-11T06:49:19.665247+00:00",
   "health": "healthy",
   "read_only": true,
   "source_attempt_counters_unchanged": true,
   "saved_state_counters_match": true,
-  "mcp_tool_count": 10,
-  "http_report_seconds": 0.301,
-  "documented_application_http_paths": 17,
+  "mcp_tool_count": 22,
+  "http_report_seconds": 0.308,
+  "documented_application_http_paths": 29,
   "platforms": {
     "twitter": {
       "freshness": {
         "state": "fresh",
-        "age_seconds": 5,
+        "age_seconds": 7,
         "max_age_seconds": 7200
       },
       "sample_count": 30,
@@ -25,7 +25,7 @@
         "unknown": 30,
         "units": []
       },
-      "headline": "No supported rising candidates in the available sample.",
+      "headline": "1 rising candidate(s) supported by sampled history.",
       "truth": {
         "status": "not_checked",
         "probability": null,
@@ -34,13 +34,13 @@
       "next_action": {
         "action": "wait",
         "reason": "minimum_interval",
-        "next_eligible_at": "2026-11-11T05:52:35.112059+00:00"
+        "next_eligible_at": "2026-11-11T06:50:08.528099+00:00"
       }
     },
     "tiktok": {
       "freshness": {
         "state": "fresh",
-        "age_seconds": 4,
+        "age_seconds": 9,
         "max_age_seconds": 43200
       },
       "sample_count": 3,
@@ -65,13 +65,13 @@
       "next_action": {
         "action": "wait",
         "reason": "minimum_interval",
-        "next_eligible_at": "2026-11-11T05:52:36.145807+00:00"
+        "next_eligible_at": "2026-11-11T06:50:08.760170+00:00"
       }
     },
     "youtube": {
       "freshness": {
         "state": "fresh",
-        "age_seconds": 404,
+        "age_seconds": 0,
         "max_age_seconds": 172800
       },
       "sample_count": 30,
@@ -96,13 +96,13 @@
       "next_action": {
         "action": "wait",
         "reason": "minimum_interval",
-        "next_eligible_at": "2026-11-11T05:52:35.408410+00:00"
+        "next_eligible_at": "2026-11-11T06:50:08.830290+00:00"
       }
     },
     "instagram": {
       "freshness": {
         "state": "fresh",
-        "age_seconds": 2,
+        "age_seconds": 5,
         "max_age_seconds": 43200
       },
       "sample_count": 8,
@@ -127,13 +127,13 @@
       "next_action": {
         "action": "wait",
         "reason": "minimum_interval",
-        "next_eligible_at": "2026-11-11T05:52:35.316216+00:00"
+        "next_eligible_at": "2026-11-11T06:50:08.936986+00:00"
       }
     },
     "douyin": {
       "freshness": {
         "state": "fresh",
-        "age_seconds": 4,
+        "age_seconds": 7,
         "max_age_seconds": 7200
       },
       "sample_count": 30,
@@ -149,7 +149,7 @@
           "heat score"
         ]
       },
-      "headline": "1 rising candidate(s) supported by sampled history.",
+      "headline": "No supported rising candidates in the available sample.",
       "truth": {
         "status": "not_checked",
         "probability": null,
@@ -158,7 +158,7 @@
       "next_action": {
         "action": "wait",
         "reason": "minimum_interval",
-        "next_eligible_at": "2026-11-11T05:52:36.156397+00:00"
+        "next_eligible_at": "2026-11-11T06:50:08.820685+00:00"
       }
     }
   },
