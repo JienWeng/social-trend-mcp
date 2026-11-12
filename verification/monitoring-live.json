@@ -1,0 +1,59 @@
+{
+  "verified_at": "2026-11-10T11:52:13.562363+00:00",
+  "first": {
+    "id": 97,
+    "platform": "twitter",
+    "status": "success",
+    "region": "global",
+    "error_message": "",
+    "content_snapshot_id": 88,
+    "content_reused": true,
+    "fetched_at": "2026-11-10T11:52:10.793517+00:00",
+    "topic_count": 30,
+    "duration_ms": 585,
+    "started_at": "2026-11-10T11:52:11.009608+00:00",
+    "finished_at": "2026-11-10T11:52:11.032702+00:00"
+  },
+  "second": {
+    "id": 98,
+    "platform": "twitter",
+    "status": "success",
+    "region": "global",
+    "error_message": "",
+    "content_snapshot_id": 88,
+    "content_reused": true,
+    "fetched_at": "2026-11-10T11:52:10.793517+00:00",
+    "topic_count": 30,
+    "duration_ms": 585,
+    "started_at": "2026-11-10T11:52:11.072110+00:00",
+    "finished_at": "2026-11-10T11:52:11.105017+00:00"
+  },
+  "counts": {
+    "added": 0,
+    "removed": 0,
+    "changed": 0,
+    "unchanged": 30
+  },
+  "content_topic_ids_reused": true,
+  "retrieval_timestamp_preserved": true,
+  "mcp_tool_count": 9,
+  "rest_mcp_report_agree": true,
+  "application_http_paths": [
+    "/",
+    "/api/v1/analysis/capture/{platform}",
+    "/api/v1/analysis/changes",
+    "/api/v1/analysis/trends",
+    "/api/v1/feeds/{platform}",
+    "/api/v1/health",
+    "/api/v1/platforms",
+    "/api/v1/refresh",
+    "/api/v1/regions",
+    "/api/v1/search/discover",
+    "/api/v1/search/exact",
+    "/api/v1/trends",
+    "/api/v1/trends/history/{platform}",
+    "/api/v1/trends/{platform}",
+    "/llms.txt"
+  ],
+  "note": "Real public source data only. New captures persisted; no synthetic service-history writes."
+}

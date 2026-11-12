@@ -60,7 +60,7 @@ async def test_scheduler_runs_initial_and_interval_jobs_and_stops(monkeypatch):
     monkeypatch.setattr(module,'scheduler',scheduler)
     monkeypatch.setattr(module,'get_settings',lambda:SimpleNamespace(scrape_interval_hours=.08/3600))
     calls=[];twice=asyncio.Event()
-    async def scrape():
+    async def scrape(platform=None):
         calls.append(1)
         if len(calls)>=2:twice.set()
         return {}
