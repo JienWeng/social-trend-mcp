@@ -3021,15 +3021,16 @@ index 0000000..19f70e8
 +    budget=settings.collection_attempts_per_hour,min_interval=settings.collection_min_interval_seconds))
 diff --git a/app/llms.txt b/app/llms.txt
 new file mode 100644
-index 0000000..7ff4800
+index 0000000..e27ef5e
 --- /dev/null
 +++ b/app/llms.txt
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,77 @@
 +# Social Trends MCP
 +
 +> Public social trend collection, PostgreSQL history, REST/WebSocket and stdio MCP tools with evidence-based movement analysis. Default sources require no paid API or AI model.
 +
 +## Documentation
++- [Agent setup and ordered usage](https://github.com/JienWeng/social-trend-mcp/blob/main/docs/AGENT-SETUP.md): installation, client configuration, readiness, evidence and creative workflows. Use the same branch/version as the installed service; unmerged PR documentation may not yet exist on main.
 +- [Setup and operation](https://github.com/JienWeng/social-trend-mcp/blob/main/README.md): prerequisites, setup and service commands.
 +- [Supported endpoints and MCP tools](https://github.com/JienWeng/social-trend-mcp/blob/main/docs/ENDPOINTS.md): methods, arguments, persistence and source coverage.
 +- [Trend analysis](https://github.com/JienWeng/social-trend-mcp/blob/main/TREND-ANALYSIS.md): evidence rules, verification and limitations.
@@ -3039,6 +3040,12 @@ index 0000000..7ff4800
 +- [Evidence and safe collection](https://github.com/JienWeng/social-trend-mcp/blob/main/docs/EVIDENCE.md): start-here report, checks, cooldowns and truth limitations.
 +
 +- [Creative reference workflow](https://github.com/JienWeng/social-trend-mcp/blob/main/docs/CREATIVE-REFERENCES.md): supplied videos, timestamped evidence and original creative briefs.
++
++## Agent setup and first use
++Read docs/AGENT-SETUP.md in this checkout before installation. It contains prerequisites, executable setup commands, portable stdio client configuration, readiness checks and ordered trend/reference workflows.
++Use Python 3.12, Git, uv and Docker; run ./setup.sh, optionally ./setup-media.sh, then ./manage-service.sh start and ./check-service.sh. Configure the absolute path to start-mcp.sh in your MCP client. Keep the API running separately.
++Discover tools/list and follow returned schemas. Start with get_report({}); capture only when needed and eligible. Preserve returned IDs, timestamps, image blocks, warnings and unknowns. Do not invent successful operations.
++For HTTP-only agents, GET /openapi.json is authoritative. The setup guide is a repository document; it is not a separate API route.
 +
 +## Local interfaces
 +REST base: http://127.0.0.1:8000. GET /openapi.json is the live schema; GET /docs is interactive documentation. GET /llms.txt serves this guide.

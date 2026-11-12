@@ -9,6 +9,8 @@ Collect public social feeds, save PostgreSQL history and compare what changed. D
 ./check-service.sh
 ```
 
+For installation from a fresh clone and MCP client configuration, follow the [agent setup and usage guide](docs/AGENT-SETUP.md).
+
 Requires Git, uv, Docker and Python 3.12. Setup installs Python dependencies and Chromium; Linux may also need `.venv/bin/python -m playwright install --with-deps chromium`. PostgreSQL uses loopback port 55433 and a named Docker volume. The API listens on http://127.0.0.1:8000; interactive documentation is at `/docs`. On first startup, let initial collection finish before expecting the readiness check to report healthy.
 
 Use `./manage-service.sh restart` or `stop` to manage the API. The supervisor handles API crashes and orphan recovery; `start-api.sh` is available for foreground debugging.
